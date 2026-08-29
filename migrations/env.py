@@ -1,18 +1,19 @@
-from logging.config import fileConfig
+﻿from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 
-# ── Project imports ──────────────────────────────────────────────────────────
+# â”€â”€ Project imports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Import settings so DATABASE_URL comes from .env (never hard-coded here)
 from app.core.config import settings
 
 # Import Base + all models so autogenerate can detect them
 from app.core.database import Base
-import app.models.user  # noqa: F401 — registers User table with Base.metadata
+import app.models.user  # noqa: F401 -- registers User table with Base.metadata
+import app.models.job   # noqa: F401 -- registers Job table with Base.metadata
 
-# ── Alembic Config ───────────────────────────────────────────────────────────
+# â”€â”€ Alembic Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 config = context.config
 
 # Override sqlalchemy.url from environment (not from alembic.ini plain text)
@@ -56,3 +57,4 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+

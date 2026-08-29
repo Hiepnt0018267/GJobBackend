@@ -1,0 +1,80 @@
+﻿"""
+Job router — public endpoints (Task 04).
+No authentication required for listing or detail.
+Query parameters are declared via FastAPI Query() for proper 422 handling.
+"""
+import uuid
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.orm import Session
+
+from app.core.database import get_db
+from app.models.job import EmploymentType, ExperienceLevel
+from app.schemas.job import JobListResponse, JobResponse, JobSortOption
+from app.services.job_service import JobService
+
+router = APIRouter(prefix="/jobs", tags=["Jobs"])
+
+
+@router.get(
+    "",
+    response_model=JobListResponse,
+    status_code=status.HTTP_200_OK,
+    summary="List / search / filter jobs (public)",
+)
+def list_jobs(
+    keyword: Optional[str] = Query(None, description="Search in title, description, company, skills"),
+    location: Optional[str] = Query(None, description="Partial match on location"),
+    employment_type: Optional[EmploymentType] = Query(None),
+    experience_level: Optional[ExperienceLevel] = Query(None),
+    salary_min: Optional[int] = Query(None, ge=0, description="Minimum salary filter"),
+    salary_max: Optional[int] = Query(None, ge=0, description="Maximum salary filter"),
+    page: int = Query(1, ge=1, description="Page number (1-indexed)"),
+    page_size: int = Query(10, ge=1, le=100, description="Items per page (max 100)"),
+    sort: JobSortOption = Query(JobSortOption.newest, description="Sort order"),
+    db: Session = Depends(get_db),
+):
+    """
+    Public job listing with search and filtering.
+
+    Only **APPROVED** jobs are returned.
+
+    **Sort options:** newest | oldest | salary_high | salary_low
+    """
+    if salary_min is not None and salary_max is not None and salary_min > salary_max:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="salary_min must be less than or equal to salary_max",
+        )
+
+    service = JobService(db)
+    return service.list_jobs(
+        keyword=keyword,
+        location=location,
+        employment_type=employment_type,
+        experience_level=experience_level,
+        salary_min=salary_min,
+        salary_max=salary_max,
+        page=page,
+        page_size=page_size,
+        sort=sort,
+    )
+
+
+@router.get(
+    "/{job_id}",
+    response_model=JobResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Get job detail (public)",
+)
+def get_job_detail(
+    job_id: uuid.UUID,
+    db: Session = Depends(get_db),
+):
+    """
+    Return full detail for a single job.
+    Returns **404** if the job does not exist or is PENDING/REJECTED.
+    """
+    service = JobService(db)
+    return service.get_job_detail(job_id)
