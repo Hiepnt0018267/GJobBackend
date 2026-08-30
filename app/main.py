@@ -6,6 +6,7 @@ from app.core.database import engine
 from app.routers.auth import router as auth_router
 from app.routers.users import router as users_router
 from app.routers.jobs import router as jobs_router
+from app.routers.recruiters import router as recruiters_router
 
 app = FastAPI(
     title="GJob Backend API",
@@ -34,6 +35,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")
 app.include_router(jobs_router, prefix="/api/v1")
+app.include_router(recruiters_router, prefix="/api/v1")
 
 
 # â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
