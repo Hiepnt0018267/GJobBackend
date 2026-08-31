@@ -13,6 +13,7 @@ from app.core.database import Base
 import app.models.user  # noqa: F401 -- registers User table with Base.metadata
 import app.models.job   # noqa: F401 -- registers Job table with Base.metadata
 import app.models.recruiter_profile  # noqa: F401 -- registers RecruiterProfile table
+import app.models.cv  # noqa: F401 -- registers CV table
 
 # â”€â”€ Alembic Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 config = context.config

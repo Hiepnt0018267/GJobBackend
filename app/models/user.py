@@ -37,6 +37,9 @@ class User(Base):
     recruiter_profile: Mapped[Optional["RecruiterProfile"]] = relationship(
         back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
+    cvs: Mapped[list["CV"]] = relationship(
+        back_populates="candidate", cascade="all, delete-orphan"
+    )
     # ─────────────────────────────────────────────────────
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc)
