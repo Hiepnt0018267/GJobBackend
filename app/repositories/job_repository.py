@@ -10,7 +10,7 @@ from sqlalchemy import or_, func
 from sqlalchemy.orm import Session
 
 from app.models.job import Job, JobStatus, EmploymentType, ExperienceLevel
-from app.schemas.job import JobSortOption
+from app.schemas.job import JobSortOption, RecruiterJobSortOption
 
 
 # ── Sort helpers ──────────────────────────────────────────────────────────────
@@ -118,3 +118,37 @@ class JobRepository:
         self.db.commit()
         self.db.refresh(job)
         return job
+
+    # ── Recruiter management ─────────────────────────────────────────────────
+
+    def get_for_recruiter(self, job_id: uuid.UUID, recruiter_id: uuid.UUID) -> Optional[Job]:
+        return self.db.query(Job).filter(Job.id == job_id, Job.recruiter_id == recruiter_id).first()
+
+    def get_recruiter_jobs(
+        self, recruiter_id: uuid.UUID, keyword: Optional[str], job_status: Optional[JobStatus],
+        page: int, page_size: int, sort: RecruiterJobSortOption,
+    ) -> Tuple[List[Job], int]:
+        q = self.db.query(Job).filter(Job.recruiter_id == recruiter_id)
+        if keyword:
+            kw = f"%{keyword.strip()}%"
+            q = q.filter(or_(Job.title.ilike(kw), Job.company_name.ilike(kw), Job.description.ilike(kw)))
+        if job_status:
+            q = q.filter(Job.status == job_status)
+        total = q.count()
+        if sort == RecruiterJobSortOption.oldest:
+            q = q.order_by(Job.created_at.asc())
+        elif sort == RecruiterJobSortOption.updated:
+            q = q.order_by(Job.updated_at.desc())
+        else:
+            q = q.order_by(Job.created_at.desc())
+        return q.offset((page - 1) * page_size).limit(page_size).all(), total
+
+    def save(self, job: Job) -> Job:
+        self.db.add(job)
+        self.db.commit()
+        self.db.refresh(job)
+        return job
+
+    def delete(self, job: Job) -> None:
+        self.db.delete(job)
+        self.db.commit()
