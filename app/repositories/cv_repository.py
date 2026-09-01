@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.models.cv import CV
 
@@ -11,14 +11,18 @@ class CVRepository:
 
     def list_for_candidate(self, candidate_id: uuid.UUID) -> list[CV]:
         return (
-            self.db.query(CV)
+            self.db.query(CV).options(joinedload(CV.template))
             .filter(CV.candidate_id == candidate_id)
             .order_by(CV.is_default.desc(), CV.updated_at.desc())
             .all()
         )
 
     def get_for_candidate(self, cv_id: uuid.UUID, candidate_id: uuid.UUID) -> CV | None:
-        return self.db.query(CV).filter(CV.id == cv_id, CV.candidate_id == candidate_id).first()
+        return (
+            self.db.query(CV).options(joinedload(CV.template))
+            .filter(CV.id == cv_id, CV.candidate_id == candidate_id)
+            .first()
+        )
 
     def has_for_candidate(self, candidate_id: uuid.UUID) -> bool:
         return self.db.query(CV.id).filter(CV.candidate_id == candidate_id).first() is not None
@@ -49,6 +53,9 @@ class CVRepository:
         except Exception:
             self.db.rollback()
             raise
+
+    def rollback(self) -> None:
+        self.db.rollback()
 
     def refresh(self, cv: CV) -> CV:
         self.db.refresh(cv)

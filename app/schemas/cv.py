@@ -5,6 +5,8 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, HttpUrl, field_validator, model_validator
 
+from app.schemas.cv_template import CVTemplateSummary
+
 
 class CVSkillLevel(str, Enum):
     BEGINNER = "BEGINNER"
@@ -139,6 +141,7 @@ class CVLanguageItem(_StrictModel):
 
 class CVCreateRequest(_StrictModel):
     title: str = Field(min_length=1, max_length=255)
+    template_id: uuid.UUID
     personal_info: CVPersonalInfo = Field(default_factory=CVPersonalInfo)
     career_objective: str | None = Field(default=None, max_length=5000)
     educations: list[CVEducationItem] = Field(default_factory=list, max_length=100)
@@ -153,6 +156,7 @@ class CVCreateRequest(_StrictModel):
 
 class CVUpdateRequest(_StrictModel):
     title: str | None = Field(default=None, min_length=1, max_length=255)
+    template_id: uuid.UUID | None = None
     personal_info: CVPersonalInfo | None = None
     career_objective: str | None = Field(default=None, max_length=5000)
     educations: list[CVEducationItem] | None = Field(default=None, max_length=100)
@@ -169,6 +173,8 @@ class CVListItem(BaseModel):
     id: uuid.UUID
     title: str
     is_default: bool
+    template_id: uuid.UUID
+    template: CVTemplateSummary
     created_at: datetime
     updated_at: datetime
 

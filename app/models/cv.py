@@ -32,6 +32,12 @@ class CV(Base):
         nullable=False,
         index=True,
     )
+    template_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("cv_templates.id", ondelete="RESTRICT"),
+        nullable=False,
+        index=True,
+    )
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     is_default: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text("false"))
 
@@ -70,6 +76,7 @@ class CV(Base):
     )
 
     candidate: Mapped["User"] = relationship(back_populates="cvs")
+    template: Mapped["CVTemplate"] = relationship(back_populates="cvs")
 
     def __repr__(self) -> str:
         return f"<CV id={self.id} candidate_id={self.candidate_id} title={self.title!r}>"
