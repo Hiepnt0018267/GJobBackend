@@ -10,6 +10,7 @@ from app.routers.recruiters import router as recruiters_router
 from app.routers.cvs import router as cvs_router
 from app.routers.cv_templates import router as cv_templates_router
 from app.routers.applications import router as applications_router
+from app.routers.candidate_applications import router as candidate_applications_router
 from app.routers.admin import router as admin_router
 from app.routers.admin_cv_templates import router as admin_cv_templates_router
 from app.routers.admin_applications import router as admin_applications_router
@@ -28,6 +29,8 @@ app.add_middleware(
         "http://localhost:3000",
         "http://localhost:5173",
         "http://localhost:5174",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:5174",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -42,6 +45,7 @@ app.include_router(recruiters_router, prefix="/api/v1")
 app.include_router(cvs_router, prefix="/api/v1")
 app.include_router(cv_templates_router, prefix="/api/v1")
 app.include_router(applications_router, prefix="/api/v1")
+app.include_router(candidate_applications_router, prefix="/api/v1")
 app.include_router(admin_router, prefix="/api/v1")
 app.include_router(admin_cv_templates_router, prefix="/api/v1")
 app.include_router(admin_applications_router, prefix="/api/v1")

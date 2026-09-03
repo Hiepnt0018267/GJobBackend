@@ -10,7 +10,15 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.models.job import EmploymentType, ExperienceLevel
+from app.models.job import (
+    EmploymentType,
+    ExperienceLevel,
+    ExperienceRequirement,
+    Industry,
+    JobLevel,
+    SalaryType,
+    WorkMode,
+)
 from app.schemas.job import JobListResponse, JobResponse, JobSortOption
 from app.services.job_service import JobService
 
@@ -24,10 +32,16 @@ router = APIRouter(prefix="/jobs", tags=["Jobs"])
     summary="List / search / filter jobs (public)",
 )
 def list_jobs(
-    keyword: Optional[str] = Query(None, description="Search in title, description, company, skills"),
+    search: Optional[str] = Query(None, description="Search in title, description, company, skills"),
+    keyword: Optional[str] = Query(None, include_in_schema=False, description="Deprecated alias for search"),
     location: Optional[str] = Query(None, description="Partial match on location"),
     employment_type: Optional[EmploymentType] = Query(None),
     experience_level: Optional[ExperienceLevel] = Query(None),
+    industry: Optional[Industry] = Query(None),
+    experience_requirement: Optional[ExperienceRequirement] = Query(None),
+    level: Optional[JobLevel] = Query(None),
+    work_mode: Optional[WorkMode] = Query(None),
+    salary_type: Optional[SalaryType] = Query(None),
     salary_min: Optional[int] = Query(None, ge=0, description="Minimum salary filter"),
     salary_max: Optional[int] = Query(None, ge=0, description="Maximum salary filter"),
     page: int = Query(1, ge=1, description="Page number (1-indexed)"),
@@ -50,10 +64,15 @@ def list_jobs(
 
     service = JobService(db)
     return service.list_jobs(
-        keyword=keyword,
+        keyword=search if search and search.strip() else keyword,
         location=location,
         employment_type=employment_type,
         experience_level=experience_level,
+        industry=industry,
+        experience_requirement=experience_requirement,
+        level=level,
+        work_mode=work_mode,
+        salary_type=salary_type,
         salary_min=salary_min,
         salary_max=salary_max,
         page=page,

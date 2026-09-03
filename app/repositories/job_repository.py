@@ -6,10 +6,20 @@ import math
 import uuid
 from typing import Optional, Tuple, List
 
-from sqlalchemy import or_, func
+from sqlalchemy import and_, or_, func
 from sqlalchemy.orm import Session
 
-from app.models.job import Job, JobStatus, EmploymentType, ExperienceLevel
+from app.models.job import (
+    Job,
+    JobStatus,
+    EmploymentType,
+    ExperienceLevel,
+    ExperienceRequirement,
+    Industry,
+    JobLevel,
+    SalaryType,
+    WorkMode,
+)
 from app.schemas.job import JobSortOption, RecruiterJobSortOption
 
 
@@ -17,14 +27,14 @@ from app.schemas.job import JobSortOption, RecruiterJobSortOption
 
 def _apply_sort(query, sort: JobSortOption):
     if sort == JobSortOption.newest:
-        return query.order_by(Job.created_at.desc())
+        return query.order_by(Job.created_at.desc(), Job.id.desc())
     elif sort == JobSortOption.oldest:
-        return query.order_by(Job.created_at.asc())
+        return query.order_by(Job.created_at.asc(), Job.id.asc())
     elif sort == JobSortOption.salary_high:
-        return query.order_by(Job.salary_max.desc().nulls_last(), Job.created_at.desc())
+        return query.order_by(func.coalesce(Job.salary_max, Job.salary_fixed).desc().nulls_last(), Job.created_at.desc(), Job.id.desc())
     elif sort == JobSortOption.salary_low:
-        return query.order_by(Job.salary_min.asc().nulls_last(), Job.created_at.desc())
-    return query.order_by(Job.created_at.desc())
+        return query.order_by(func.coalesce(Job.salary_min, Job.salary_fixed).asc().nulls_last(), Job.created_at.desc(), Job.id.desc())
+    return query.order_by(Job.created_at.desc(), Job.id.desc())
 
 
 class JobRepository:
@@ -39,6 +49,11 @@ class JobRepository:
         location: Optional[str] = None,
         employment_type: Optional[EmploymentType] = None,
         experience_level: Optional[ExperienceLevel] = None,
+        industry: Optional[Industry] = None,
+        experience_requirement: Optional[ExperienceRequirement] = None,
+        level: Optional[JobLevel] = None,
+        work_mode: Optional[WorkMode] = None,
+        salary_type: Optional[SalaryType] = None,
         salary_min: Optional[int] = None,
         salary_max: Optional[int] = None,
         page: int = 1,
@@ -52,8 +67,9 @@ class JobRepository:
         q = self.db.query(Job).filter(Job.status == JobStatus.APPROVED)
 
         # Keyword: search in title, description, company_name, skills array
-        if keyword:
-            kw = f"%{keyword.strip()}%"
+        normalized_keyword = keyword.strip() if keyword else ""
+        if normalized_keyword:
+            kw = f"%{normalized_keyword}%"
             q = q.filter(
                 or_(
                     Job.title.ilike(kw),
@@ -64,8 +80,9 @@ class JobRepository:
                 )
             )
 
-        if location:
-            q = q.filter(Job.location.ilike(f"%{location.strip()}%"))
+        normalized_location = location.strip() if location else ""
+        if normalized_location:
+            q = q.filter(Job.location.ilike(f"%{normalized_location}%"))
 
         if employment_type:
             q = q.filter(Job.employment_type == employment_type)
@@ -73,16 +90,37 @@ class JobRepository:
         if experience_level:
             q = q.filter(Job.experience_level == experience_level)
 
+        if industry:
+            q = q.filter(Job.industry == industry)
+
+        if experience_requirement:
+            q = q.filter(Job.experience_requirement == experience_requirement)
+
+        if level:
+            q = q.filter(Job.level == level)
+
+        if work_mode:
+            q = q.filter(Job.work_mode == work_mode)
+
+        if salary_type:
+            q = q.filter(Job.salary_type == salary_type)
+
         if salary_min is not None:
-            # Job must pay at least salary_min
             q = q.filter(
-                (Job.salary_max >= salary_min) | (Job.salary_min >= salary_min)
+                or_(
+                    and_(Job.salary_type == SalaryType.RANGE, Job.salary_max >= salary_min),
+                    and_(Job.salary_type == SalaryType.FIXED, Job.salary_fixed >= salary_min),
+                    and_(Job.salary_type.is_(None), Job.salary_max >= salary_min),
+                )
             )
 
         if salary_max is not None:
-            # Job must be within budget
             q = q.filter(
-                (Job.salary_min <= salary_max) | (Job.salary_max <= salary_max)
+                or_(
+                    and_(Job.salary_type == SalaryType.RANGE, Job.salary_min <= salary_max),
+                    and_(Job.salary_type == SalaryType.FIXED, Job.salary_fixed <= salary_max),
+                    and_(Job.salary_type.is_(None), Job.salary_min <= salary_max),
+                )
             )
 
         total = q.count()

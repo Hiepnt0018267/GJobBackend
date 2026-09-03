@@ -9,7 +9,17 @@ from sqlalchemy.orm import Session
 
 from app.main import app
 from app.core.database import SessionLocal
-from app.models.job import Job, JobStatus, EmploymentType, ExperienceLevel
+from app.models.job import (
+    EmploymentType,
+    ExperienceLevel,
+    ExperienceRequirement,
+    Industry,
+    Job,
+    JobLevel,
+    JobStatus,
+    SalaryType,
+    WorkMode,
+)
 
 client = TestClient(app)
 
@@ -32,6 +42,12 @@ def _create_job(
     salary_max: int = 20_000_000,
     skills: list = None,
     status: JobStatus = JobStatus.APPROVED,
+    industry: Industry | None = None,
+    experience_requirement: ExperienceRequirement | None = None,
+    level: JobLevel | None = None,
+    work_mode: WorkMode | None = None,
+    salary_type: SalaryType | None = None,
+    salary_fixed: int | None = None,
 ) -> Job:
     """Insert a job directly into DB for testing."""
     db = _db()
@@ -44,6 +60,12 @@ def _create_job(
         experience_level=experience_level,
         salary_min=salary_min,
         salary_max=salary_max,
+        salary_type=salary_type,
+        salary_fixed=salary_fixed,
+        industry=industry,
+        experience_requirement=experience_requirement,
+        level=level,
+        work_mode=work_mode,
         skills=skills or ["Python", "FastAPI"],
         status=status,
     )
@@ -268,6 +290,51 @@ def test_combined_filters():
         assert resp.status_code == 200
         ids = [item["id"] for item in resp.json()["items"]]
         assert str(job.id) in ids
+    finally:
+        _delete_job(job.id)
+
+
+def test_candidate_discovery_filters_and_search_param():
+    job = _create_job(
+        title="Candidate Discovery Backend Unique",
+        company_name="Candidate Discovery Company",
+        location="Ha Noi",
+        industry=Industry.INFORMATION_TECHNOLOGY,
+        experience_requirement=ExperienceRequirement.ONE_TO_THREE_YEARS,
+        level=JobLevel.JUNIOR,
+        work_mode=WorkMode.HYBRID,
+        salary_min=20_000_000,
+        salary_max=30_000_000,
+        salary_type=SalaryType.RANGE,
+    )
+    try:
+        resp = client.get(BASE, params={
+            "search": "Candidate Discovery Backend Unique",
+            "location": "Ha Noi",
+            "industry": "INFORMATION_TECHNOLOGY",
+            "experience_requirement": "ONE_TO_THREE_YEARS",
+            "level": "JUNIOR",
+            "work_mode": "HYBRID",
+            "salary_min": 25_000_000,
+            "salary_max": 25_000_000,
+        })
+        assert resp.status_code == 200, resp.text
+        assert str(job.id) in [item["id"] for item in resp.json()["items"]]
+    finally:
+        _delete_job(job.id)
+
+
+def test_negotiable_salary_filter():
+    job = _create_job(
+        title="Negotiable Salary Unique",
+        salary_min=None,
+        salary_max=None,
+        salary_type=SalaryType.NEGOTIABLE,
+    )
+    try:
+        resp = client.get(BASE, params={"search": "Negotiable Salary Unique", "salary_type": "NEGOTIABLE"})
+        assert resp.status_code == 200, resp.text
+        assert str(job.id) in [item["id"] for item in resp.json()["items"]]
     finally:
         _delete_job(job.id)
 

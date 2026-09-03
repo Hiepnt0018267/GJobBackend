@@ -8,7 +8,7 @@ from typing import Optional
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.models.job import EmploymentType, ExperienceLevel
+from app.models.job import EmploymentType, ExperienceLevel, ExperienceRequirement, Industry, JobLevel, SalaryType, WorkMode
 from app.repositories.job_repository import JobRepository
 from app.schemas.job import JobListResponse, JobResponse, JobSortOption
 
@@ -23,6 +23,11 @@ class JobService:
         location: Optional[str] = None,
         employment_type: Optional[EmploymentType] = None,
         experience_level: Optional[ExperienceLevel] = None,
+        industry: Optional[Industry] = None,
+        experience_requirement: Optional[ExperienceRequirement] = None,
+        level: Optional[JobLevel] = None,
+        work_mode: Optional[WorkMode] = None,
+        salary_type: Optional[SalaryType] = None,
         salary_min: Optional[int] = None,
         salary_max: Optional[int] = None,
         page: int = 1,
@@ -35,6 +40,11 @@ class JobService:
             location=location,
             employment_type=employment_type,
             experience_level=experience_level,
+            industry=industry,
+            experience_requirement=experience_requirement,
+            level=level,
+            work_mode=work_mode,
+            salary_type=salary_type,
             salary_min=salary_min,
             salary_max=salary_max,
             page=page,
