@@ -12,8 +12,13 @@ class CVTemplateRepository:
     def list_active(self) -> list[CVTemplate]:
         return (
             self.db.query(CVTemplate)
-            .filter(CVTemplate.is_active.is_(True))
-            .order_by(CVTemplate.sort_order.asc(), CVTemplate.created_at.asc(), CVTemplate.id.asc())
+            .filter(CVTemplate.is_active.is_(True), CVTemplate.is_deleted.is_(False))
+            .order_by(
+                CVTemplate.is_featured.desc(),
+                CVTemplate.sort_order.asc(),
+                CVTemplate.created_at.asc(),
+                CVTemplate.id.asc(),
+            )
             .all()
         )
 
@@ -23,7 +28,6 @@ class CVTemplateRepository:
     def get_active_by_id(self, template_id: uuid.UUID) -> CVTemplate | None:
         return (
             self.db.query(CVTemplate)
-            .filter(CVTemplate.id == template_id, CVTemplate.is_active.is_(True))
+            .filter(CVTemplate.id == template_id, CVTemplate.is_active.is_(True), CVTemplate.is_deleted.is_(False))
             .first()
         )
-

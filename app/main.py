@@ -11,6 +11,9 @@ from app.routers.cvs import router as cvs_router
 from app.routers.cv_templates import router as cv_templates_router
 from app.routers.applications import router as applications_router
 from app.routers.admin import router as admin_router
+from app.routers.admin_cv_templates import router as admin_cv_templates_router
+from app.routers.admin_applications import router as admin_applications_router
+from app.routers.admin_cvs import router as admin_cvs_router
 
 app = FastAPI(
     title="GJob Backend API",
@@ -40,6 +43,9 @@ app.include_router(cvs_router, prefix="/api/v1")
 app.include_router(cv_templates_router, prefix="/api/v1")
 app.include_router(applications_router, prefix="/api/v1")
 app.include_router(admin_router, prefix="/api/v1")
+app.include_router(admin_cv_templates_router, prefix="/api/v1")
+app.include_router(admin_applications_router, prefix="/api/v1")
+app.include_router(admin_cvs_router, prefix="/api/v1")
 
 
 

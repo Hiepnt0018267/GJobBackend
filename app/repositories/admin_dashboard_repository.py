@@ -41,5 +41,5 @@ class AdminDashboardRepository:
             func.count(CVTemplate.id),
             func.count(CVTemplate.id).filter(CVTemplate.is_active.is_(True)),
             func.count(CVTemplate.id).filter(CVTemplate.is_active.is_(False)),
-        ).one()
+        ).filter(CVTemplate.is_deleted.is_(False)).one()
         return total, active, inactive

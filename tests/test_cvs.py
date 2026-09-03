@@ -196,9 +196,50 @@ def test_public_template_catalog_returns_seeded_active_templates_in_order():
     response = client.get(TEMPLATE_CATALOG)
     assert response.status_code == 200, response.text
     items = response.json()["items"]
-    assert [item["layout_key"] for item in items[:3]] == ["MODERN", "CLASSIC", "MINIMAL"]
-    assert [item["name"] for item in items[:3]] == ["Modern", "Classic", "Minimal"]
-    assert all("id" in item and "is_featured" in item for item in items)
+    assert {item["layout_key"] for item in items}.issuperset({"MODERN", "CLASSIC", "MINIMAL"})
+    assert {item["name"] for item in items}.issuperset({"Modern", "Classic", "Minimal"})
+    assert all("id" in item and "is_featured" in item and "sort_order" in item for item in items)
+
+
+def test_public_template_catalog_prioritizes_featured_templates_then_sort_order():
+    marker = uuid.uuid4().hex[:10]
+    featured_later_name = f"Featured later {marker}"
+    featured_first_name = f"Featured first {marker}"
+    regular_name = f"Regular {marker}"
+    db = SessionLocal()
+    try:
+        featured_later = CVTemplate(
+            id=uuid.uuid4(),
+            name=featured_later_name,
+            layout_key=CVTemplateLayoutKey.MODERN,
+            is_active=True,
+            is_featured=True,
+            sort_order=20,
+        )
+        featured_first = CVTemplate(
+            id=uuid.uuid4(),
+            name=featured_first_name,
+            layout_key=CVTemplateLayoutKey.CLASSIC,
+            is_active=True,
+            is_featured=True,
+            sort_order=10,
+        )
+        regular = CVTemplate(
+            id=uuid.uuid4(),
+            name=regular_name,
+            layout_key=CVTemplateLayoutKey.MINIMAL,
+            is_active=True,
+            is_featured=False,
+            sort_order=0,
+        )
+        db.add_all([featured_later, featured_first, regular])
+        db.commit()
+    finally:
+        db.close()
+
+    items = client.get(TEMPLATE_CATALOG).json()["items"]
+    marked_items = [item for item in items if marker in item["name"]]
+    assert [item["name"] for item in marked_items] == [featured_first_name, featured_later_name, regular_name]
 
 
 def test_candidate_can_change_to_an_active_template_without_changing_cv_content():
