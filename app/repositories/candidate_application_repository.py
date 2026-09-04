@@ -72,18 +72,18 @@ class CandidateApplicationRepository:
             .first()
         )
 
-    def withdraw_if_eligible(self, application_id: uuid.UUID, candidate_id: uuid.UUID) -> bool:
-        eligible_statuses = (
-            JobApplicationStatus.SUBMITTED,
-            JobApplicationStatus.REVIEWING,
-            JobApplicationStatus.SHORTLISTED,
-        )
+    def withdraw_if_eligible(
+        self,
+        application_id: uuid.UUID,
+        candidate_id: uuid.UUID,
+        expected_status: JobApplicationStatus,
+    ) -> bool:
         result = self.db.execute(
             update(JobApplication)
             .where(
                 JobApplication.id == application_id,
                 JobApplication.candidate_id == candidate_id,
-                JobApplication.status.in_(eligible_statuses),
+                JobApplication.status == expected_status,
             )
             .values(
                 status=JobApplicationStatus.WITHDRAWN,

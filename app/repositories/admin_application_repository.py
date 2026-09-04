@@ -53,7 +53,9 @@ class AdminApplicationRepository:
         total = query.count()
         items = (
             query.options(*self._audit_loads())
-            .order_by(JobApplication.created_at.desc(), JobApplication.id.desc())
+            # Admin audit should surface the most recently changed application first.
+            # New submissions are covered too because updated_at is initialized at creation.
+            .order_by(JobApplication.updated_at.desc(), JobApplication.created_at.desc(), JobApplication.id.desc())
             .offset((page - 1) * page_size)
             .limit(page_size)
             .all()
