@@ -5,12 +5,14 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.repositories.admin_cv_repository import AdminCVRepository
+from app.services.cv_storage_service import CVStorageService
 from app.schemas.admin_cv import AdminCVDetail, AdminCVListItem, AdminCVListResponse
 
 
 class AdminCVService:
     def __init__(self, db: Session) -> None:
         self.repository = AdminCVRepository(db)
+        self.storage = CVStorageService()
 
     def list_cvs(self, search: str | None, template_id: uuid.UUID | None, candidate_id: uuid.UUID | None, is_default: bool | None, page: int, page_size: int) -> AdminCVListResponse:
         normalized_search = search.strip() if search else None
@@ -22,3 +24,12 @@ class AdminCVService:
         if cv is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="CV not found.")
         return AdminCVDetail.model_validate(cv)
+
+    def get_cv_photo_path(self, cv_id: uuid.UUID):
+        cv = self.repository.get_by_id(cv_id)
+        if cv is None or not cv.photo_storage_key:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="CV photo not found.")
+        try:
+            return self.storage.get_file_path(cv.photo_storage_key)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="CV photo not found.") from exc

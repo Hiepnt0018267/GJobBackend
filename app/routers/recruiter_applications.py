@@ -1,6 +1,7 @@
 import uuid
 
 from fastapi import APIRouter, Depends, Query
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -54,6 +55,34 @@ def get_recruiter_application(
     db: Session = Depends(get_db),
 ):
     return RecruiterApplicationService(db).get_application(current_user, application_id)
+
+
+@router.get("/applications/{application_id}/cv-file", summary="Download an uploaded CV for a recruiter-owned application")
+def download_recruiter_application_cv_file(
+    application_id: uuid.UUID,
+    current_user: User = Depends(require_role(UserRole.RECRUITER)),
+    db: Session = Depends(get_db),
+):
+    cv, path = RecruiterApplicationService(db).get_uploaded_cv_file(current_user, application_id)
+    return FileResponse(
+        path,
+        media_type=cv.mime_type,
+        filename=cv.original_filename,
+        content_disposition_type="attachment",
+    )
+
+
+@router.get("/applications/{application_id}/cv-photo", summary="Read a Builder CV photo for a recruiter-owned application")
+def get_recruiter_application_cv_photo(
+    application_id: uuid.UUID,
+    current_user: User = Depends(require_role(UserRole.RECRUITER)),
+    db: Session = Depends(get_db),
+):
+    return FileResponse(
+        RecruiterApplicationService(db).get_cv_photo(current_user, application_id),
+        media_type="image/webp",
+        headers={"Cache-Control": "private, no-store"},
+    )
 
 
 def _transition(application_id: uuid.UUID, action: str, current_user: User, db: Session):

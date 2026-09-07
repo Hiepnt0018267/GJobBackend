@@ -4,6 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 from app.models.application import JobApplicationStatus
+from app.models.cv import CVSourceType
 from app.models.job import JobStatus
 from app.schemas.cv import CVResponse
 from app.schemas.cv_template import CVTemplateSummary
@@ -35,7 +36,12 @@ class RecruiterApplicationJobSummary(BaseModel):
 class RecruiterApplicationCVSummary(BaseModel):
     id: uuid.UUID
     title: str
-    template: CVTemplateSummary
+    source_type: CVSourceType
+    template: CVTemplateSummary | None
+    original_filename: str | None = None
+    mime_type: str | None = None
+    file_size: int | None = None
+    uploaded_at: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

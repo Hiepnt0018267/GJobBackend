@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, File, Query, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -57,6 +57,16 @@ def update_template_metadata(
     db: Session = Depends(get_db),
 ):
     return AdminCVTemplateService(db).update_template_metadata(template_id, payload)
+
+
+@router.post("/{template_id}/thumbnail", response_model=AdminCVTemplateResponse, summary="Upload or replace a CV template thumbnail")
+async def upload_template_thumbnail(template_id: uuid.UUID, file: UploadFile = File(...), current_user: User = Depends(require_role(UserRole.ADMIN)), db: Session = Depends(get_db)):
+    return await AdminCVTemplateService(db).upload_thumbnail(template_id, file)
+
+
+@router.delete("/{template_id}/thumbnail", response_model=AdminCVTemplateResponse, summary="Remove a managed CV template thumbnail")
+def delete_template_thumbnail(template_id: uuid.UUID, current_user: User = Depends(require_role(UserRole.ADMIN)), db: Session = Depends(get_db)):
+    return AdminCVTemplateService(db).delete_thumbnail(template_id)
 
 
 @router.delete("/{template_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete an unused CV template")

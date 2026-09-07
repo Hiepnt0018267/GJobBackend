@@ -6,6 +6,7 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, HttpUrl, field_validator, model_validator
 
 from app.schemas.cv_template import CVTemplateSummary
+from app.models.cv import CVSourceType
 
 
 class CVSkillLevel(str, Enum):
@@ -169,12 +170,27 @@ class CVUpdateRequest(_StrictModel):
     _trim_strings = field_validator("title", "career_objective", mode="before")(_trim_non_blank)
 
 
+class CVUploadedFileMetadata(BaseModel):
+    original_filename: str
+    mime_type: str
+    file_size: int
+    uploaded_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class CVListItem(BaseModel):
     id: uuid.UUID
     title: str
     is_default: bool
-    template_id: uuid.UUID
-    template: CVTemplateSummary
+    source_type: CVSourceType
+    template_id: uuid.UUID | None
+    template: CVTemplateSummary | None
+    original_filename: str | None = None
+    mime_type: str | None = None
+    file_size: int | None = None
+    uploaded_at: datetime | None = None
+    has_managed_photo: bool = False
     created_at: datetime
     updated_at: datetime
 

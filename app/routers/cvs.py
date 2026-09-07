@@ -1,6 +1,7 @@
 import uuid
 
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, File, Form, Response, UploadFile, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -30,6 +31,46 @@ def create_my_cv(
     return CVService(db).create_cv(current_user, payload)
 
 
+@router.post("/upload", response_model=CVResponse, status_code=status.HTTP_201_CREATED, summary="Upload a PDF or DOCX candidate CV")
+async def upload_my_cv(
+    title: str = Form(..., max_length=255),
+    file: UploadFile = File(...),
+    current_user: User = Depends(require_role(UserRole.CANDIDATE)),
+    db: Session = Depends(get_db),
+):
+    return await CVService(db).upload_cv(current_user, title, file)
+
+
+@router.post("/{cv_id}/photo", response_model=CVResponse, summary="Upload or replace a Builder CV photo")
+async def upload_my_cv_photo(
+    cv_id: uuid.UUID,
+    file: UploadFile = File(...),
+    current_user: User = Depends(require_role(UserRole.CANDIDATE)),
+    db: Session = Depends(get_db),
+):
+    return await CVService(db).upload_photo(current_user, cv_id, file)
+
+
+@router.get("/{cv_id}/photo", summary="Read a candidate-owned Builder CV photo")
+def get_my_cv_photo(
+    cv_id: uuid.UUID,
+    current_user: User = Depends(require_role(UserRole.CANDIDATE)),
+    db: Session = Depends(get_db),
+):
+    service = CVService(db)
+    cv = service.get_cv(current_user, cv_id)
+    return FileResponse(service.get_photo_path(cv), media_type="image/webp", headers={"Cache-Control": "private, no-store"})
+
+
+@router.delete("/{cv_id}/photo", response_model=CVResponse, summary="Remove a Builder CV photo")
+def delete_my_cv_photo(
+    cv_id: uuid.UUID,
+    current_user: User = Depends(require_role(UserRole.CANDIDATE)),
+    db: Session = Depends(get_db),
+):
+    return CVService(db).delete_photo(current_user, cv_id)
+
+
 @router.get("/{cv_id}", response_model=CVResponse, summary="Get a candidate-owned CV")
 def get_my_cv(
     cv_id: uuid.UUID,
@@ -37,6 +78,22 @@ def get_my_cv(
     db: Session = Depends(get_db),
 ):
     return CVService(db).get_cv(current_user, cv_id)
+
+
+@router.get("/{cv_id}/file", summary="Download a candidate-owned uploaded CV")
+def download_my_uploaded_cv(
+    cv_id: uuid.UUID,
+    current_user: User = Depends(require_role(UserRole.CANDIDATE)),
+    db: Session = Depends(get_db),
+):
+    service = CVService(db)
+    cv = service.get_cv(current_user, cv_id)
+    return FileResponse(
+        service.get_uploaded_file_path(cv),
+        media_type=cv.mime_type,
+        filename=cv.original_filename,
+        content_disposition_type="attachment",
+    )
 
 
 @router.patch("/{cv_id}", response_model=CVResponse, summary="Update a candidate-owned CV")

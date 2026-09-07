@@ -1,6 +1,7 @@
 import uuid
 
 from fastapi import APIRouter, Depends, Query
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -34,3 +35,16 @@ def get_cv_for_admin(
     db: Session = Depends(get_db),
 ):
     return AdminCVService(db).get_cv(cv_id)
+
+
+@router.get("/{cv_id}/photo", summary="Read a Builder CV photo for admin audit")
+def get_cv_photo_for_admin(
+    cv_id: uuid.UUID,
+    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    db: Session = Depends(get_db),
+):
+    return FileResponse(
+        AdminCVService(db).get_cv_photo_path(cv_id),
+        media_type="image/webp",
+        headers={"Cache-Control": "private, no-store"},
+    )

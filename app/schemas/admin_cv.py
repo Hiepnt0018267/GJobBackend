@@ -4,6 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 from app.models.cv_template import CVTemplateLayoutKey
+from app.models.cv import CVSourceType
 from app.schemas.cv import (
     CVCertificateItem,
     CVEducationItem,
@@ -40,9 +41,14 @@ class AdminCVListItem(BaseModel):
     title: str
     is_default: bool
     candidate_id: uuid.UUID
-    template_id: uuid.UUID
+    source_type: CVSourceType
+    template_id: uuid.UUID | None
     candidate: AdminCVCandidateSummary
-    template: AdminCVTemplateSummary
+    template: AdminCVTemplateSummary | None
+    original_filename: str | None = None
+    mime_type: str | None = None
+    file_size: int | None = None
+    uploaded_at: datetime | None = None
     created_at: datetime
     updated_at: datetime
 

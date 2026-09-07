@@ -5,6 +5,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models.application import JobApplicationStatus
+from app.models.cv import CVSourceType
 from app.models.user import User
 from app.repositories.recruiter_application_repository import RecruiterApplicationRepository
 from app.schemas.recruiter_application import (
@@ -12,6 +13,7 @@ from app.schemas.recruiter_application import (
     RecruiterApplicationListItem,
     RecruiterApplicationListResponse,
 )
+from app.services.cv_storage_service import CVStorageService
 
 
 class RecruiterApplicationService:
@@ -30,6 +32,7 @@ class RecruiterApplicationService:
 
     def __init__(self, db: Session) -> None:
         self.repository = RecruiterApplicationRepository(db)
+        self.storage = CVStorageService()
 
     @staticmethod
     def _application_or_404(application_id: uuid.UUID, recruiter_id: uuid.UUID, repository: RecruiterApplicationRepository):
@@ -94,6 +97,24 @@ class RecruiterApplicationService:
         return RecruiterApplicationDetail.model_validate(
             self._application_or_404(application_id, current_user.id, self.repository)
         )
+
+    def get_uploaded_cv_file(self, current_user: User, application_id: uuid.UUID):
+        application = self._application_or_404(application_id, current_user.id, self.repository)
+        if application.cv.source_type != CVSourceType.UPLOADED:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This application does not use an uploaded CV file.")
+        try:
+            return application.cv, self.storage.get_file_path(application.cv.storage_key)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Uploaded CV file not found.") from exc
+
+    def get_cv_photo(self, current_user: User, application_id: uuid.UUID):
+        application = self._application_or_404(application_id, current_user.id, self.repository)
+        if application.cv.source_type != CVSourceType.BUILDER or not application.cv.photo_storage_key:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="CV photo not found.")
+        try:
+            return self.storage.get_file_path(application.cv.photo_storage_key)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="CV photo not found.") from exc
 
     def transition_application(
         self, current_user: User, application_id: uuid.UUID, action: str

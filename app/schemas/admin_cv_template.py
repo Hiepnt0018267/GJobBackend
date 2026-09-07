@@ -88,7 +88,8 @@ class AdminCVTemplateResponse(BaseModel):
     description: str | None
     layout_key: CVTemplateLayoutKey
     theme_config: CVTemplateThemeConfig
-    thumbnail_url: HttpUrl | None
+    thumbnail_url: str | None
+    thumbnail_original_filename: str | None
     is_active: bool
     is_featured: bool
     sort_order: int

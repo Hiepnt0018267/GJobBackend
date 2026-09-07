@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.cv_template import (
     CVFontFamily,
@@ -35,7 +35,7 @@ class CVTemplateSummary(BaseModel):
 
 class CVTemplatePublic(CVTemplateSummary):
     description: str | None
-    thumbnail_url: HttpUrl | None
+    thumbnail_url: str | None
 
 
 class CVTemplateCatalogResponse(BaseModel):

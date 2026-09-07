@@ -1,7 +1,7 @@
 import math
 import uuid
 
-from fastapi import HTTPException, status
+from fastapi import HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app.models.cv_template import CVTemplate, CVTemplateLayoutKey, default_cv_template_theme_config
@@ -12,11 +12,13 @@ from app.schemas.admin_cv_template import (
     AdminCVTemplateResponse,
     AdminCVTemplateUpdate,
 )
+from app.services.cv_storage_service import CVFileValidationError, CVStorageService
 
 
 class AdminCVTemplateService:
     def __init__(self, db: Session) -> None:
         self.repository = AdminCVTemplateRepository(db)
+        self.storage = CVStorageService()
 
     def list_templates(
         self,
@@ -143,6 +145,35 @@ class AdminCVTemplateService:
             )
         self.repository.archive(template)
 
+    async def upload_thumbnail(self, template_id: uuid.UUID, upload: UploadFile) -> AdminCVTemplateResponse:
+        template, _ = self._get_template_or_404(template_id)
+        try:
+            new_key, original_filename = await self.storage.store_template_thumbnail(template.id, upload)
+        except CVFileValidationError as exc:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
+        old_key = template.thumbnail_storage_key
+        template.thumbnail_storage_key = new_key
+        template.thumbnail_original_filename = original_filename
+        self.repository.db.commit()
+        self.storage.delete_file(old_key)
+        return self.get_template(template_id)
+
+    def delete_thumbnail(self, template_id: uuid.UUID) -> AdminCVTemplateResponse:
+        template, _ = self._get_template_or_404(template_id)
+        old_key = template.thumbnail_storage_key
+        template.thumbnail_storage_key = None
+        template.thumbnail_original_filename = None
+        self.repository.db.commit()
+        self.storage.delete_file(old_key)
+        return self.get_template(template_id)
+
+    def get_thumbnail_path(self, template_id: uuid.UUID):
+        template, _ = self._get_template_or_404(template_id)
+        try:
+            return self.storage.get_file_path(template.thumbnail_storage_key)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="CV template thumbnail not found.") from exc
+
     def _get_template_or_404(self, template_id: uuid.UUID) -> tuple[CVTemplate, int]:
         result = self.repository.get_template_with_usage(template_id)
         if result is None:
@@ -157,7 +188,8 @@ class AdminCVTemplateService:
             description=template.description,
             layout_key=template.layout_key,
             theme_config=template.theme_config,
-            thumbnail_url=template.thumbnail_url,
+            thumbnail_url=(f"/api/v1/cv-templates/{template.id}/thumbnail?v={int(template.updated_at.timestamp())}" if template.thumbnail_storage_key else template.thumbnail_url),
+            thumbnail_original_filename=template.thumbnail_original_filename,
             is_active=template.is_active,
             is_featured=template.is_featured,
             sort_order=template.sort_order,

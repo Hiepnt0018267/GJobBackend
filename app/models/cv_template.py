@@ -98,6 +98,8 @@ class CVTemplate(Base):
         default=_theme_config_default,
     )
     thumbnail_url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
+    thumbnail_storage_key: Mapped[str | None] = mapped_column(String(1024), nullable=True, unique=True)
+    thumbnail_original_filename: Mapped[str | None] = mapped_column(String(255), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, server_default=text("true"))
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text("false"))
     is_featured: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text("false"))
