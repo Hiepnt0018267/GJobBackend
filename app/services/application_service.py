@@ -40,8 +40,13 @@ class ApplicationService:
         )
         self.application_repository.add(application)
         try:
+            self.application_repository.flush()
+            self.application_repository.add_status_history(application, user.id)
             self.application_repository.commit()
         except IntegrityError as exc:
             self.application_repository.rollback()
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="You have already applied for this job.") from exc
+        except Exception:
+            self.application_repository.rollback()
+            raise
         return self.application_repository.refresh(application)

@@ -20,6 +20,8 @@ from app.models.job import (
     SalaryType,
     WorkMode,
 )
+from app.models.recruiter_profile import RecruiterProfile
+from app.models.user import User, UserRole
 
 client = TestClient(app)
 
@@ -48,10 +50,12 @@ def _create_job(
     work_mode: WorkMode | None = None,
     salary_type: SalaryType | None = None,
     salary_fixed: int | None = None,
+    recruiter_id: uuid.UUID | None = None,
 ) -> Job:
     """Insert a job directly into DB for testing."""
     db = _db()
     job = Job(
+        recruiter_id=recruiter_id,
         title=title,
         description=f"Description for {title}",
         company_name=company_name,
@@ -352,6 +356,81 @@ def test_get_job_detail_200():
         assert "password" not in data
         assert "password_hash" not in data
         assert "recruiter_id" not in data  # Not in public response schema
+    finally:
+        _delete_job(job.id)
+
+
+def test_get_job_detail_returns_public_company_summary_from_owner_profile():
+    db = _db()
+    recruiter = User(
+        email=f"public-company-{uuid.uuid4().hex}@example.com",
+        password_hash="private-password-hash",
+        full_name="Private Recruiter Name",
+        phone="0901234567",
+        role=UserRole.RECRUITER,
+    )
+    db.add(recruiter)
+    db.flush()
+    profile = RecruiterProfile(
+        user_id=recruiter.id,
+        company_name="GJob Technology",
+        company_logo_url="https://cdn.example.com/gjob.png",
+        company_description="Nền tảng tuyển dụng công nghệ.",
+        company_website="https://gjob.example",
+        industry="Công nghệ thông tin",
+        company_address="Hà Nội",
+        company_size=120,
+    )
+    db.add(profile)
+    db.commit()
+    recruiter_id = recruiter.id
+    db.close()
+
+    job = _create_job(
+        title="Public Company Summary Job",
+        company_name="Legacy Posting Name",
+        recruiter_id=recruiter_id,
+    )
+    try:
+        response = client.get(f"{BASE}/{job.id}")
+        assert response.status_code == 200, response.text
+        data = response.json()
+        assert data["title"] == "Public Company Summary Job"
+        assert data["company"] == {
+            "name": "GJob Technology",
+            "logo_url": "https://cdn.example.com/gjob.png",
+            "description": "Nền tảng tuyển dụng công nghệ.",
+            "website": "https://gjob.example",
+            "industry": "Công nghệ thông tin",
+            "address": "Hà Nội",
+            "size": 120,
+        }
+        serialized = response.text
+        assert "public-company-" not in serialized
+        assert "0901234567" not in serialized
+        assert "private-password-hash" not in serialized
+
+        list_response = client.get(BASE, params={"search": "Public Company Summary Job"})
+        assert list_response.status_code == 200
+        assert "company" not in list_response.json()["items"][0]
+    finally:
+        _delete_job(job.id)
+        cleanup_db = _db()
+        cleanup_db.query(RecruiterProfile).filter(
+            RecruiterProfile.user_id == recruiter_id
+        ).delete()
+        cleanup_db.query(User).filter(User.id == recruiter_id).delete()
+        cleanup_db.commit()
+        cleanup_db.close()
+
+
+def test_get_job_detail_handles_missing_recruiter_profile():
+    job = _create_job(title="Job Without Recruiter Profile")
+    try:
+        response = client.get(f"{BASE}/{job.id}")
+        assert response.status_code == 200, response.text
+        assert response.json()["company"] is None
+        assert response.json()["company_name"] == "Test Corp"
     finally:
         _delete_job(job.id)
 

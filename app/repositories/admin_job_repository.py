@@ -46,5 +46,10 @@ class AdminJobRepository:
         )
         if affected_rows == 0:
             return None
-        self.db.commit()
         return self.get_by_id(job_id)
+
+    def commit(self) -> None:
+        self.db.commit()
+
+    def rollback(self) -> None:
+        self.db.rollback()

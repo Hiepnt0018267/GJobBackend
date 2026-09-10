@@ -20,6 +20,8 @@ from app.models.job import (
     SalaryType,
     WorkMode,
 )
+from app.models.skill import JobSkill, Skill, normalize_skill_name
+from app.models.recruiter_profile import RecruiterProfile
 from app.schemas.job import JobSortOption, RecruiterJobSortOption
 
 
@@ -56,6 +58,7 @@ class JobRepository:
         salary_type: Optional[SalaryType] = None,
         salary_min: Optional[int] = None,
         salary_max: Optional[int] = None,
+        skill: Optional[str] = None,
         page: int = 1,
         page_size: int = 10,
         sort: JobSortOption = JobSortOption.newest,
@@ -123,6 +126,14 @@ class JobRepository:
                 )
             )
 
+        normalized_skill = normalize_skill_name(skill) if skill else ""
+        if normalized_skill:
+            q = (
+                q.join(JobSkill, JobSkill.job_id == Job.id)
+                .join(Skill, Skill.id == JobSkill.skill_id)
+                .filter(Skill.normalized_name == normalized_skill)
+            )
+
         total = q.count()
         q = _apply_sort(q, sort)
         offset = (page - 1) * page_size
@@ -131,13 +142,19 @@ class JobRepository:
 
     # ── Public detail ─────────────────────────────────────────────────────────
 
-    def get_by_id_public(self, job_id: uuid.UUID) -> Optional[Job]:
+    def get_by_id_public(
+        self, job_id: uuid.UUID
+    ) -> Optional[tuple[Job, Optional[RecruiterProfile]]]:
         """
         Return job by ID only if publicly viewable (APPROVED or CLOSED).
         PENDING and REJECTED are never returned.
         """
         return (
-            self.db.query(Job)
+            self.db.query(Job, RecruiterProfile)
+            .outerjoin(
+                RecruiterProfile,
+                RecruiterProfile.user_id == Job.recruiter_id,
+            )
             .filter(
                 Job.id == job_id,
                 Job.status.in_([JobStatus.APPROVED, JobStatus.CLOSED]),

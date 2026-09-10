@@ -46,7 +46,7 @@ def create_template(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminCVTemplateService(db).create_template(payload)
+    return AdminCVTemplateService(db).create_template(payload, current_user)
 
 
 @router.patch("/{template_id}", response_model=AdminCVTemplateResponse, summary="Update CV template metadata")
@@ -56,17 +56,17 @@ def update_template_metadata(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminCVTemplateService(db).update_template_metadata(template_id, payload)
+    return AdminCVTemplateService(db).update_template_metadata(template_id, payload, current_user)
 
 
 @router.post("/{template_id}/thumbnail", response_model=AdminCVTemplateResponse, summary="Upload or replace a CV template thumbnail")
 async def upload_template_thumbnail(template_id: uuid.UUID, file: UploadFile = File(...), current_user: User = Depends(require_role(UserRole.ADMIN)), db: Session = Depends(get_db)):
-    return await AdminCVTemplateService(db).upload_thumbnail(template_id, file)
+    return await AdminCVTemplateService(db).upload_thumbnail(template_id, file, current_user)
 
 
 @router.delete("/{template_id}/thumbnail", response_model=AdminCVTemplateResponse, summary="Remove a managed CV template thumbnail")
 def delete_template_thumbnail(template_id: uuid.UUID, current_user: User = Depends(require_role(UserRole.ADMIN)), db: Session = Depends(get_db)):
-    return AdminCVTemplateService(db).delete_thumbnail(template_id)
+    return AdminCVTemplateService(db).delete_thumbnail(template_id, current_user)
 
 
 @router.delete("/{template_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete an unused CV template")
@@ -75,7 +75,7 @@ def delete_template(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    AdminCVTemplateService(db).delete_template(template_id)
+    AdminCVTemplateService(db).delete_template(template_id, current_user)
 
 
 @router.patch("/{template_id}/activate", response_model=AdminCVTemplateResponse, summary="Activate a CV template")
@@ -84,7 +84,7 @@ def activate_template(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminCVTemplateService(db).activate_template(template_id)
+    return AdminCVTemplateService(db).activate_template(template_id, current_user)
 
 
 @router.patch("/{template_id}/deactivate", response_model=AdminCVTemplateResponse, summary="Deactivate a CV template")
@@ -93,7 +93,7 @@ def deactivate_template(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminCVTemplateService(db).deactivate_template(template_id)
+    return AdminCVTemplateService(db).deactivate_template(template_id, current_user)
 
 
 @router.patch("/{template_id}/feature", response_model=AdminCVTemplateResponse, summary="Feature a CV template")
@@ -102,7 +102,7 @@ def feature_template(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminCVTemplateService(db).feature_template(template_id)
+    return AdminCVTemplateService(db).feature_template(template_id, current_user)
 
 
 @router.patch("/{template_id}/unfeature", response_model=AdminCVTemplateResponse, summary="Remove featured status from a CV template")
@@ -111,4 +111,4 @@ def unfeature_template(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminCVTemplateService(db).unfeature_template(template_id)
+    return AdminCVTemplateService(db).unfeature_template(template_id, current_user)

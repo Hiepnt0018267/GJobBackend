@@ -54,7 +54,7 @@ def activate_user_for_admin(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminUserService(db).activate_user(user_id)
+    return AdminUserService(db).activate_user(user_id, current_user)
 
 
 @router.patch("/users/{user_id}/deactivate", response_model=AdminUserDetailResponse, summary="Deactivate a user account")
@@ -93,7 +93,7 @@ def approve_pending_job(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminJobService(db).approve_job(job_id)
+    return AdminJobService(db).approve_job(job_id, current_user)
 
 
 @router.patch("/jobs/{job_id}/reject", response_model=AdminJobResponse, summary="Reject a pending job")
@@ -102,4 +102,4 @@ def reject_pending_job(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminJobService(db).reject_job(job_id)
+    return AdminJobService(db).reject_job(job_id, current_user)

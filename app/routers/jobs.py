@@ -19,7 +19,7 @@ from app.models.job import (
     SalaryType,
     WorkMode,
 )
-from app.schemas.job import JobListResponse, JobResponse, JobSortOption
+from app.schemas.job import JobDetailResponse, JobListResponse, JobSortOption
 from app.services.job_service import JobService
 
 router = APIRouter(prefix="/jobs", tags=["Jobs"])
@@ -44,6 +44,7 @@ def list_jobs(
     salary_type: Optional[SalaryType] = Query(None),
     salary_min: Optional[int] = Query(None, ge=0, description="Minimum salary filter"),
     salary_max: Optional[int] = Query(None, ge=0, description="Maximum salary filter"),
+    skill: Optional[str] = Query(None, max_length=255, description="Exact normalized skill filter"),
     page: int = Query(1, ge=1, description="Page number (1-indexed)"),
     page_size: int = Query(10, ge=1, le=100, description="Items per page (max 100)"),
     sort: JobSortOption = Query(JobSortOption.newest, description="Sort order"),
@@ -75,6 +76,7 @@ def list_jobs(
         salary_type=salary_type,
         salary_min=salary_min,
         salary_max=salary_max,
+        skill=skill,
         page=page,
         page_size=page_size,
         sort=sort,
@@ -83,7 +85,7 @@ def list_jobs(
 
 @router.get(
     "/{job_id}",
-    response_model=JobResponse,
+    response_model=JobDetailResponse,
     status_code=status.HTTP_200_OK,
     summary="Get job detail (public)",
 )

@@ -3,6 +3,7 @@ import uuid
 from sqlalchemy.orm import Session
 
 from app.models.application import JobApplication
+from app.models.application_status_history import ApplicationStatusHistory
 
 
 class ApplicationRepository:
@@ -17,6 +18,23 @@ class ApplicationRepository:
 
     def add(self, application: JobApplication) -> None:
         self.db.add(application)
+
+    def flush(self) -> None:
+        self.db.flush()
+
+    def add_status_history(
+        self,
+        application: JobApplication,
+        changed_by_user_id: uuid.UUID,
+    ) -> None:
+        self.db.add(
+            ApplicationStatusHistory(
+                application_id=application.id,
+                from_status=None,
+                to_status=application.status,
+                changed_by_user_id=changed_by_user_id,
+            )
+        )
 
     def commit(self) -> None:
         self.db.commit()

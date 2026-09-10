@@ -5,13 +5,16 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models.job import Job, JobStatus
+from app.models.user import User
 from app.repositories.admin_job_repository import AdminJobRepository
+from app.repositories.admin_audit_log_repository import AdminAuditLogRepository
 from app.schemas.admin_job import AdminJobListResponse, AdminJobResponse
 
 
 class AdminJobService:
     def __init__(self, db: Session) -> None:
         self.repository = AdminJobRepository(db)
+        self.audit_repository = AdminAuditLogRepository(db)
 
     def list_jobs(
         self,
@@ -33,14 +36,24 @@ class AdminJobService:
     def get_job(self, job_id: uuid.UUID) -> AdminJobResponse:
         return AdminJobResponse.model_validate(self._get_job_or_404(job_id))
 
-    def approve_job(self, job_id: uuid.UUID) -> AdminJobResponse:
+    def approve_job(self, job_id: uuid.UUID, current_user: User) -> AdminJobResponse:
         return AdminJobResponse.model_validate(
-            self._transition_pending_job(job_id, JobStatus.APPROVED, "Only pending jobs can be approved.")
+            self._transition_pending_job(
+                job_id,
+                JobStatus.APPROVED,
+                "Only pending jobs can be approved.",
+                current_user,
+            )
         )
 
-    def reject_job(self, job_id: uuid.UUID) -> AdminJobResponse:
+    def reject_job(self, job_id: uuid.UUID, current_user: User) -> AdminJobResponse:
         return AdminJobResponse.model_validate(
-            self._transition_pending_job(job_id, JobStatus.REJECTED, "Only pending jobs can be rejected.")
+            self._transition_pending_job(
+                job_id,
+                JobStatus.REJECTED,
+                "Only pending jobs can be rejected.",
+                current_user,
+            )
         )
 
     def _get_job_or_404(self, job_id: uuid.UUID) -> Job:
@@ -49,10 +62,28 @@ class AdminJobService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found.")
         return job
 
-    def _transition_pending_job(self, job_id: uuid.UUID, target_status: JobStatus, conflict_detail: str) -> Job:
-        job = self.repository.transition_pending_job(job_id, target_status)
-        if job is not None:
-            return job
+    def _transition_pending_job(
+        self,
+        job_id: uuid.UUID,
+        target_status: JobStatus,
+        conflict_detail: str,
+        current_user: User,
+    ) -> Job:
+        try:
+            job = self.repository.transition_pending_job(job_id, target_status)
+            if job is not None:
+                self.audit_repository.add(
+                    admin_user_id=current_user.id,
+                    action=f"JOB_{target_status.value}",
+                    entity_type="JOB",
+                    entity_id=job.id,
+                    metadata={"from_status": JobStatus.PENDING.value, "to_status": target_status.value},
+                )
+                self.repository.commit()
+                return job
+        except Exception:
+            self.repository.rollback()
+            raise
 
         self._get_job_or_404(job_id)
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=conflict_detail)

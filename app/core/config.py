@@ -1,4 +1,5 @@
 # pyrefly: ignore [missing-import]
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,6 +12,12 @@ class Settings(BaseSettings):
     CV_UPLOAD_MAX_BYTES: int = 10 * 1024 * 1024
     CV_PHOTO_MAX_BYTES: int = 5 * 1024 * 1024
     CV_PHOTO_MAX_DIMENSION: int = 4096
+    # Trong Settings (dù kế thừa BaseSettings hay class thường):
+    ai_provider: str = "gemini"
+    gemini_api_key: str | None = None
+    gemini_model: str = "gemini-3.8-flash"
+    ai_timeout_seconds: float = Field(default=30.0, gt=0, le=120)
+    ai_max_retries: int = Field(default=2, ge=0, le=5)
 
     model_config = SettingsConfigDict(
         env_file=".env",

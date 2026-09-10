@@ -72,7 +72,7 @@ class CandidateApplicationService:
 
         try:
             withdrawn = self.repository.withdraw_if_eligible(
-                application_id, current_user.id, application.status
+                application_id, current_user.id, application.status, current_user.id
             )
         except Exception:
             self.repository.rollback()

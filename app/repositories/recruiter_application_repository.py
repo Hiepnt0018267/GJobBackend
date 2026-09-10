@@ -5,6 +5,7 @@ from sqlalchemy import or_, select, update
 from sqlalchemy.orm import Session, joinedload
 
 from app.models.application import JobApplication, JobApplicationStatus
+from app.models.application_status_history import ApplicationStatusHistory
 from app.models.cv import CV
 from app.models.job import Job
 from app.models.user import User
@@ -91,6 +92,7 @@ class RecruiterApplicationRepository:
         recruiter_id: uuid.UUID,
         expected_status: JobApplicationStatus,
         next_status: JobApplicationStatus,
+        changed_by_user_id: uuid.UUID | None = None,
     ) -> bool:
         owned_job_ids = select(Job.id).where(Job.recruiter_id == recruiter_id)
         result = self.db.execute(
@@ -102,6 +104,15 @@ class RecruiterApplicationRepository:
             )
             .values(status=next_status, updated_at=datetime.now(timezone.utc))
         )
+        if result.rowcount == 1:
+            self.db.add(
+                ApplicationStatusHistory(
+                    application_id=application_id,
+                    from_status=expected_status,
+                    to_status=next_status,
+                    changed_by_user_id=changed_by_user_id,
+                )
+            )
         self.db.commit()
         self.db.expire_all()
         return result.rowcount == 1

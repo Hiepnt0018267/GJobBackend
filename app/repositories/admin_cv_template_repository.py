@@ -68,14 +68,14 @@ class AdminCVTemplateRepository:
 
     def create(self, template: CVTemplate) -> CVTemplate:
         self.db.add(template)
-        self.db.commit()
+        self.db.flush()
         self.db.refresh(template)
         return template
 
     def update_metadata(self, template: CVTemplate, fields: dict[str, object]) -> CVTemplate:
         for field, value in fields.items():
             setattr(template, field, value)
-        self.db.commit()
+        self.db.flush()
         self.db.refresh(template)
         return template
 
@@ -83,7 +83,7 @@ class AdminCVTemplateRepository:
         template.is_deleted = True
         template.is_active = False
         template.is_featured = False
-        self.db.commit()
+        self.db.flush()
 
     def transition_active_status(
         self,
@@ -106,7 +106,6 @@ class AdminCVTemplateRepository:
         )
         if affected_rows == 0:
             return False
-        self.db.commit()
         return True
 
     def transition_featured_status(
@@ -131,5 +130,10 @@ class AdminCVTemplateRepository:
         )
         if affected_rows == 0:
             return False
-        self.db.commit()
         return True
+
+    def commit(self) -> None:
+        self.db.commit()
+
+    def rollback(self) -> None:
+        self.db.rollback()

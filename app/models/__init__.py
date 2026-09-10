@@ -14,9 +14,15 @@ from app.models.cv_template import (
     CVTemplateLayoutKey,
 )
 from app.models.application import JobApplication, JobApplicationStatus
+from app.models.application_status_history import ApplicationStatusHistory
+from app.models.admin_audit_log import AdminAuditLog
+from app.models.skill import JobSkill, Skill
+from app.models.saved_job import SavedJob
 
 __all__ = [
     "User", "UserRole", "RecruiterProfile", "Job", "JobStatus", "EmploymentType",
     "ExperienceLevel", "JobLevel", "ExperienceRequirement", "WorkMode", "SalaryType", "Industry", "CV",
     "CVTemplate", "CVTemplateLayoutKey", "CVFontFamily", "CVFontScale", "CVSectionSpacing", "CVHeadingStyle", "JobApplication", "JobApplicationStatus",
+    "ApplicationStatusHistory", "AdminAuditLog",
+    "Skill", "JobSkill", "SavedJob",
 ]

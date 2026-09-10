@@ -3,9 +3,9 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional, List
 
-from sqlalchemy import DateTime, Enum, String, Text, Integer
+from sqlalchemy import DateTime, Enum, ForeignKey, String, Text, Integer
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
 
@@ -83,7 +83,10 @@ class Job(Base):
     )
     # Recruiter who posted the job (FK to users.id, nullable so seeds/tests are easy)
     recruiter_id: Mapped[Optional[uuid.UUID]] = mapped_column(
-        UUID(as_uuid=True), nullable=True, index=True
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
     )
 
     title: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
@@ -145,6 +148,10 @@ class Job(Base):
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
         onupdate=lambda: datetime.now(timezone.utc),
+    )
+
+    skill_links: Mapped[List["JobSkill"]] = relationship(
+        back_populates="job", passive_deletes=True
     )
 
     def __repr__(self) -> str:

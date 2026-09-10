@@ -141,6 +141,7 @@ class RecruiterApplicationService:
                 current_user.id,
                 application.status,
                 next_status,
+                current_user.id,
             )
         except Exception:
             self.repository.rollback()

@@ -10,7 +10,13 @@ from sqlalchemy.orm import Session
 
 from app.models.job import EmploymentType, ExperienceLevel, ExperienceRequirement, Industry, JobLevel, SalaryType, WorkMode
 from app.repositories.job_repository import JobRepository
-from app.schemas.job import JobListResponse, JobResponse, JobSortOption
+from app.schemas.job import (
+    JobDetailResponse,
+    JobListResponse,
+    JobResponse,
+    JobSortOption,
+    PublicCompanySummary,
+)
 
 
 class JobService:
@@ -30,6 +36,7 @@ class JobService:
         salary_type: Optional[SalaryType] = None,
         salary_min: Optional[int] = None,
         salary_max: Optional[int] = None,
+        skill: Optional[str] = None,
         page: int = 1,
         page_size: int = 10,
         sort: JobSortOption = JobSortOption.newest,
@@ -47,6 +54,7 @@ class JobService:
             salary_type=salary_type,
             salary_min=salary_min,
             salary_max=salary_max,
+            skill=skill,
             page=page,
             page_size=page_size,
             sort=sort,
@@ -60,12 +68,27 @@ class JobService:
             total_pages=total_pages,
         )
 
-    def get_job_detail(self, job_id: uuid.UUID) -> JobResponse:
+    def get_job_detail(self, job_id: uuid.UUID) -> JobDetailResponse:
         """Return job detail — 404 if not found or not publicly viewable."""
-        job = self.repo.get_by_id_public(job_id)
-        if job is None:
+        result = self.repo.get_by_id_public(job_id)
+        if result is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Job not found.",
             )
-        return JobResponse.model_validate(job)
+        job, profile = result
+        company = None
+        if profile is not None:
+            company = PublicCompanySummary(
+                name=profile.company_name or job.company_name,
+                logo_url=profile.company_logo_url,
+                description=profile.company_description,
+                website=profile.company_website,
+                industry=profile.industry,
+                address=profile.company_address,
+                size=profile.company_size,
+            )
+        return JobDetailResponse(
+            **JobResponse.model_validate(job).model_dump(),
+            company=company,
+        )

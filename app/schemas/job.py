@@ -46,6 +46,21 @@ class JobResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class PublicCompanySummary(BaseModel):
+    """Company information that is safe to expose on a public job detail."""
+    name: str
+    logo_url: Optional[str] = None
+    description: Optional[str] = None
+    website: Optional[str] = None
+    industry: Optional[str] = None
+    address: Optional[str] = None
+    size: Optional[int] = None
+
+
+class JobDetailResponse(JobResponse):
+    company: Optional[PublicCompanySummary] = None
+
+
 class JobListResponse(BaseModel):
     """Paginated list of jobs."""
     items: List[JobResponse]

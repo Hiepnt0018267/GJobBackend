@@ -38,3 +38,8 @@ class JobApplication(Base):
     job: Mapped["Job"] = relationship()
     candidate: Mapped["User"] = relationship()
     cv: Mapped["CV"] = relationship()
+    status_history: Mapped[list["ApplicationStatusHistory"]] = relationship(
+        back_populates="application",
+        cascade="all, delete-orphan",
+        order_by="ApplicationStatusHistory.created_at",
+    )
