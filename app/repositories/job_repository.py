@@ -7,7 +7,7 @@ import uuid
 from typing import Optional, Tuple, List
 
 from sqlalchemy import and_, or_, func
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload, selectinload
 
 from app.models.job import (
     Job,
@@ -167,6 +167,15 @@ class JobRepository:
     def get_by_id(self, job_id: uuid.UUID) -> Optional[Job]:
         """Get job by ID regardless of status (internal use)."""
         return self.db.query(Job).filter(Job.id == job_id).first()
+
+    def get_by_id_for_matching(self, job_id: uuid.UUID) -> Optional[Job]:
+        """Fetch a job and its complete taxonomy projection in two bounded queries."""
+        return (
+            self.db.query(Job)
+            .options(selectinload(Job.skill_links).joinedload(JobSkill.skill))
+            .filter(Job.id == job_id)
+            .first()
+        )
 
     def create(self, job: Job) -> Job:
         self.db.add(job)

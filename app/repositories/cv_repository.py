@@ -24,6 +24,20 @@ class CVRepository:
             .first()
         )
 
+    def get_by_id_for_matching(self, cv_id: uuid.UUID) -> CV | None:
+        """Fetch one CV for an internal matching workflow without extra relationships."""
+        return self.db.query(CV).filter(CV.id == cv_id).first()
+
+    def get_for_candidate_for_update(
+        self, cv_id: uuid.UUID, candidate_id: uuid.UUID
+    ) -> CV | None:
+        return (
+            self.db.query(CV)
+            .filter(CV.id == cv_id, CV.candidate_id == candidate_id)
+            .with_for_update()
+            .first()
+        )
+
     def has_for_candidate(self, candidate_id: uuid.UUID) -> bool:
         return self.db.query(CV.id).filter(CV.candidate_id == candidate_id).first() is not None
 

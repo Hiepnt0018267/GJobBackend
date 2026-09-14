@@ -8,6 +8,12 @@ from app.core.database import get_db
 from app.core.dependencies import require_role
 from app.models.user import User, UserRole
 from app.schemas.cv import CVCreateRequest, CVListResponse, CVResponse, CVUpdateRequest
+from app.schemas.cv_extraction import StructuredCVExtractionResult
+from app.schemas.cv_extraction_api import (
+    CVExtractionConfirmationResponse,
+    CVExtractionResponse,
+)
+from app.services.cv_extraction_service import CandidateCVExtractionService
 from app.services.cv_service import CVService
 
 
@@ -39,6 +45,66 @@ async def upload_my_cv(
     db: Session = Depends(get_db),
 ):
     return await CVService(db).upload_cv(current_user, title, file)
+
+
+@router.post(
+    "/{cv_id}/extractions",
+    response_model=CVExtractionResponse,
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        status.HTTP_200_OK: {
+            "model": CVExtractionResponse,
+            "description": "An existing active extraction was reused.",
+        }
+    },
+    summary="Extract structured data from a candidate-owned uploaded CV",
+)
+async def trigger_my_cv_extraction(
+    cv_id: uuid.UUID,
+    response: Response,
+    current_user: User = Depends(require_role(UserRole.CANDIDATE)),
+    db: Session = Depends(get_db),
+):
+    extraction, created = await CandidateCVExtractionService(db).trigger(
+        current_user, cv_id
+    )
+    response.status_code = (
+        status.HTTP_201_CREATED if created else status.HTTP_200_OK
+    )
+    return extraction
+
+
+@router.get(
+    "/{cv_id}/extractions/latest",
+    response_model=CVExtractionResponse,
+    summary="Get the latest structured extraction for a candidate-owned CV",
+)
+def get_my_latest_cv_extraction(
+    cv_id: uuid.UUID,
+    current_user: User = Depends(require_role(UserRole.CANDIDATE)),
+    db: Session = Depends(get_db),
+):
+    return CandidateCVExtractionService(db).get_latest(current_user, cv_id)
+
+
+@router.post(
+    "/{cv_id}/extractions/{extraction_id}/confirm",
+    response_model=CVExtractionConfirmationResponse,
+    summary="Confirm reviewed structured data from a CV extraction",
+)
+def confirm_my_cv_extraction(
+    cv_id: uuid.UUID,
+    extraction_id: uuid.UUID,
+    payload: StructuredCVExtractionResult,
+    current_user: User = Depends(require_role(UserRole.CANDIDATE)),
+    db: Session = Depends(get_db),
+):
+    return CandidateCVExtractionService(db).confirm(
+        current_user,
+        cv_id,
+        extraction_id,
+        payload,
+    )
 
 
 @router.post("/{cv_id}/photo", response_model=CVResponse, summary="Upload or replace a Builder CV photo")

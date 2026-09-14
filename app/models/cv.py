@@ -105,6 +105,11 @@ class CV(Base):
 
     candidate: Mapped["User"] = relationship(back_populates="cvs")
     template: Mapped["CVTemplate | None"] = relationship(back_populates="cvs")
+    extractions: Mapped[list["CVExtraction"]] = relationship(
+        back_populates="cv",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
     def __repr__(self) -> str:
         return f"<CV id={self.id} candidate_id={self.candidate_id} title={self.title!r}>"

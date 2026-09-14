@@ -4,6 +4,7 @@ from app.ai.exceptions import (
     AIConfigurationError,
     AIAuthenticationError,
     AIRateLimitError,
+    AIResponseValidationError,
     AITimeoutError,
 )
 from app.ai.factory import create_ai_provider
@@ -14,6 +15,7 @@ __all__ = [
     "AIConfigurationError",
     "AIAuthenticationError",
     "AIRateLimitError",
+    "AIResponseValidationError",
     "AITimeoutError",
     "create_ai_provider",
 ]

@@ -14,6 +14,7 @@ import app.models.user  # noqa: F401 -- registers User table with Base.metadata
 import app.models.job   # noqa: F401 -- registers Job table with Base.metadata
 import app.models.recruiter_profile  # noqa: F401 -- registers RecruiterProfile table
 import app.models.cv  # noqa: F401 -- registers CV table
+import app.models.cv_extraction  # noqa: F401 -- registers CV extraction attempts
 import app.models.cv_template  # noqa: F401 -- registers CVTemplate table
 import app.models.application  # noqa: F401 -- registers JobApplication table
 import app.models.application_status_history  # noqa: F401 -- registers application history
