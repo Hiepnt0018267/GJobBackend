@@ -4,6 +4,8 @@ from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
 from app.models.job import Job, JobStatus
+from app.models.recruiter_profile import RecruiterProfile
+from app.models.user import User
 
 
 class AdminJobRepository:
@@ -34,6 +36,20 @@ class AdminJobRepository:
 
     def get_by_id(self, job_id: uuid.UUID) -> Job | None:
         return self.db.query(Job).filter(Job.id == job_id).first()
+
+    def get_recruiter_contexts(
+        self,
+        recruiter_ids: set[uuid.UUID],
+    ) -> dict[uuid.UUID, tuple[User, RecruiterProfile | None]]:
+        if not recruiter_ids:
+            return {}
+        rows = (
+            self.db.query(User, RecruiterProfile)
+            .outerjoin(RecruiterProfile, RecruiterProfile.user_id == User.id)
+            .filter(User.id.in_(recruiter_ids))
+            .all()
+        )
+        return {user.id: (user, profile) for user, profile in rows}
 
     def transition_pending_job(self, job_id: uuid.UUID, target_status: JobStatus) -> Job | None:
         affected_rows = (

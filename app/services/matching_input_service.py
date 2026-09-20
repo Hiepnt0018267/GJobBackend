@@ -5,11 +5,13 @@ import uuid
 from sqlalchemy.orm import Session
 
 from app.models.cv import CVSourceType
+from app.models.cv_extraction import CVExtractionStatus
 from app.models.job import JobStatus
 from app.repositories.cv_extraction_repository import CVExtractionRepository
 from app.repositories.cv_repository import CVRepository
 from app.repositories.job_repository import JobRepository
 from app.schemas.matching import CanonicalCVMatchingInput, CanonicalJobMatchingInput
+from app.schemas.cv_extraction import StructuredCVExtractionResult
 from app.services.matching_input_mapper import (
     build_cv_matching_input,
     build_job_matching_input,
@@ -21,7 +23,7 @@ class MatchingInputNotFoundError(LookupError):
 
 
 class CVNotReadyForMatchingError(RuntimeError):
-    """Raised when an uploaded CV has no candidate-confirmed structured data."""
+    """Raised when an uploaded CV has no usable structured representation."""
 
 
 class JobNotReadyForMatchingError(RuntimeError):
@@ -38,14 +40,29 @@ class MatchingInputService:
         cv = self.cv_repository.get_by_id_for_matching(cv_id)
         if cv is None:
             raise MatchingInputNotFoundError("CV not found.")
-        if (
-            cv.source_type == CVSourceType.UPLOADED
-            and not self.extraction_repository.has_confirmed_for_cv(cv.id)
-        ):
-            raise CVNotReadyForMatchingError(
-                "Uploaded CV structured data has not been confirmed by the candidate."
+        if cv.source_type != CVSourceType.UPLOADED:
+            return build_cv_matching_input(cv)
+
+        # Confirmation copies one complete candidate-reviewed representation onto CV.
+        # It remains authoritative even if a later automatic/retry attempt succeeds.
+        if self.extraction_repository.has_confirmed_for_cv(cv.id):
+            return build_cv_matching_input(cv)
+
+        successful = self.extraction_repository.get_latest_successful_for_cv(cv.id)
+        if successful is not None and successful.structured_result is not None:
+            structured = StructuredCVExtractionResult.model_validate(
+                successful.structured_result
             )
-        return build_cv_matching_input(cv)
+            return build_cv_matching_input(cv, structured)
+
+        latest = self.extraction_repository.get_latest_for_cv(cv.id)
+        if latest is not None and latest.status == CVExtractionStatus.PROCESSING:
+            raise CVNotReadyForMatchingError(
+                "Uploaded CV extraction is still processing."
+            )
+        raise CVNotReadyForMatchingError(
+            "Uploaded CV has no usable successful extraction."
+        )
 
     def build_job_input(
         self, job_id: uuid.UUID, *, require_approved: bool = True

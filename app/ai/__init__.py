@@ -1,6 +1,7 @@
 from app.ai.base import AIProvider
 from app.ai.exceptions import (
     AIProviderError,
+    AIProviderRequestError,
     AIConfigurationError,
     AIAuthenticationError,
     AIRateLimitError,
@@ -12,6 +13,7 @@ from app.ai.factory import create_ai_provider
 __all__ = [
     "AIProvider",
     "AIProviderError",
+    "AIProviderRequestError",
     "AIConfigurationError",
     "AIAuthenticationError",
     "AIRateLimitError",

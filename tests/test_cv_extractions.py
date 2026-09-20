@@ -16,6 +16,8 @@ from app.models.user import User, UserRole
 from app.schemas.cv_extraction import StructuredCVExtractionResult
 from app.services.cv_extraction_service import CandidateCVExtractionService
 from app.services.cv_structured_extraction_service import (
+    CVAIRateLimitError,
+    CVAIProviderRequestError,
     CVAIProviderUnavailableError,
     CVExtractionValidationError,
 )
@@ -177,6 +179,13 @@ def test_trigger_success_persists_typed_draft_metadata_without_mutating_cv(
     assert "storage_key" not in body
     assert extractor.call_count == 1
 
+    listed = client.get(BASE, headers=_headers(token))
+    assert listed.status_code == 200
+    listed_cv = next(item for item in listed.json()["items"] if item["id"] == str(cv.id))
+    assert listed_cv["extraction_status"] == "SUCCEEDED"
+    assert listed_cv["is_matchable"] is True
+    assert listed_cv["is_verified"] is False
+
     db = SessionLocal()
     try:
         stored = db.query(CVExtraction).filter(CVExtraction.cv_id == cv.id).one()
@@ -236,6 +245,16 @@ def test_builder_foreign_cv_and_non_candidate_roles_are_blocked_without_ai(
             "AI_PROVIDER_UNAVAILABLE",
         ),
         (
+            CVAIProviderRequestError("private invalid request detail"),
+            500,
+            "AI_PROVIDER_REQUEST_INVALID",
+        ),
+        (
+            CVAIRateLimitError("private quota detail"),
+            503,
+            "AI_RATE_LIMITED",
+        ),
+        (
             CVExtractionValidationError("raw invalid response"),
             502,
             "AI_RESPONSE_INVALID",
@@ -270,6 +289,13 @@ def test_trigger_failure_persists_safe_failed_resource(
     assert latest.json()["status"] == "FAILED"
     assert latest.json()["result"] is None
     assert latest.json()["error_code"] == error_code
+    listed_cv = next(
+        item
+        for item in client.get(BASE, headers=_headers(token)).json()["items"]
+        if item["id"] == str(cv.id)
+    )
+    assert listed_cv["extraction_status"] == "FAILED"
+    assert listed_cv["is_matchable"] is False
 
 
 def test_active_trigger_is_idempotently_reused_without_calling_ai(monkeypatch) -> None:
@@ -300,6 +326,13 @@ def test_active_trigger_is_idempotently_reused_without_calling_ai(monkeypatch) -
     assert response.json()["id"] == str(active_id)
     assert response.json()["status"] == "PROCESSING"
     assert extractor.call_count == 0
+    listed_cv = next(
+        item
+        for item in client.get(BASE, headers=_headers(token)).json()["items"]
+        if item["id"] == str(cv.id)
+    )
+    assert listed_cv["extraction_status"] == "PROCESSING"
+    assert listed_cv["is_matchable"] is False
 
 
 def test_partial_unique_index_prevents_two_processing_attempts() -> None:
@@ -438,3 +471,83 @@ def test_cv_delete_cascades_extraction_rows() -> None:
         assert db.query(CVExtraction).filter(CVExtraction.cv_id == cv.id).count() == 0
     finally:
         db.close()
+
+
+def test_rate_limit_failure_preserves_cv_and_retry_can_succeed(monkeypatch) -> None:
+    candidate, token = _create_user()
+    cv = _create_cv(candidate.id, CVSourceType.UPLOADED)
+    original_storage_key = cv.storage_key
+    _install_extractor(
+        monkeypatch,
+        StubStructuredExtractor(CVAIRateLimitError("private quota detail")),
+    )
+
+    limited = client.post(f"{BASE}/{cv.id}/extractions", headers=_headers(token))
+
+    assert limited.status_code == 503
+    assert limited.json()["detail"]["code"] == "AI_RATE_LIMITED"
+    assert "private" not in limited.text
+    db = SessionLocal()
+    try:
+        preserved = db.get(CV, cv.id)
+        assert preserved is not None
+        assert preserved.storage_key == original_storage_key
+        assert preserved.original_filename == "synthetic-cv.pdf"
+    finally:
+        db.close()
+
+    successful_extractor = StubStructuredExtractor()
+    _install_extractor(monkeypatch, successful_extractor)
+    retried = client.post(f"{BASE}/{cv.id}/extractions", headers=_headers(token))
+
+    assert retried.status_code == 201
+    assert retried.json()["status"] == "SUCCEEDED"
+    listed_cv = next(
+        item
+        for item in client.get(BASE, headers=_headers(token)).json()["items"]
+        if item["id"] == str(cv.id)
+    )
+    assert listed_cv["is_matchable"] is True
+    assert listed_cv["extraction_error_code"] is None
+
+
+def test_rate_limited_reprocess_keeps_previous_success_matchable(monkeypatch) -> None:
+    candidate, token = _create_user()
+    cv = _create_cv(candidate.id, CVSourceType.UPLOADED)
+    old_time = datetime.now(timezone.utc) - timedelta(minutes=1)
+    db = SessionLocal()
+    try:
+        db.add(
+            CVExtraction(
+                cv_id=cv.id,
+                status=CVExtractionStatus.SUCCEEDED,
+                provider="gemini",
+                model="old-model",
+                structured_result=StructuredCVExtractionResult.model_validate(
+                    EXTRACTED_PAYLOAD
+                ).model_dump(mode="json"),
+                started_at=old_time,
+                completed_at=old_time,
+                created_at=old_time,
+                updated_at=old_time,
+            )
+        )
+        db.commit()
+    finally:
+        db.close()
+    _install_extractor(
+        monkeypatch,
+        StubStructuredExtractor(CVAIRateLimitError("private quota detail")),
+    )
+
+    limited = client.post(f"{BASE}/{cv.id}/extractions", headers=_headers(token))
+    listed_cv = next(
+        item
+        for item in client.get(BASE, headers=_headers(token)).json()["items"]
+        if item["id"] == str(cv.id)
+    )
+
+    assert limited.status_code == 503
+    assert listed_cv["extraction_status"] == "FAILED"
+    assert listed_cv["extraction_error_code"] == "AI_RATE_LIMITED"
+    assert listed_cv["is_matchable"] is True

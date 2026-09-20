@@ -19,6 +19,8 @@ from app.schemas.cv_extraction_api import (
     CVExtractionResponse,
 )
 from app.services.cv_structured_extraction_service import (
+    CVAIRateLimitError,
+    CVAIProviderRequestError,
     CVAIProviderUnavailableError,
     CVExtractionValidationError,
     CVStructuredExtractionError,
@@ -31,6 +33,8 @@ from app.services.document_text_extractor import DocumentExtractionError
 class CVExtractionFailureCode:
     DOCUMENT_EXTRACTION_FAILED = "DOCUMENT_EXTRACTION_FAILED"
     AI_PROVIDER_UNAVAILABLE = "AI_PROVIDER_UNAVAILABLE"
+    AI_PROVIDER_REQUEST_INVALID = "AI_PROVIDER_REQUEST_INVALID"
+    AI_RATE_LIMITED = "AI_RATE_LIMITED"
     AI_RESPONSE_INVALID = "AI_RESPONSE_INVALID"
     UNKNOWN_EXTRACTION_FAILURE = "UNKNOWN_EXTRACTION_FAILURE"
 
@@ -148,6 +152,29 @@ class CandidateCVExtractionService:
             raise HTTPException(
                 status_code=status.HTTP_502_BAD_GATEWAY,
                 detail="The AI provider returned an invalid extraction result.",
+            ) from exc
+        except CVAIProviderRequestError as exc:
+            self._persist_failure(
+                extraction_id,
+                CVExtractionFailureCode.AI_PROVIDER_REQUEST_INVALID,
+                "Hệ thống AI chưa thể xử lý CV do cấu hình yêu cầu không tương thích.",
+            )
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="The AI integration could not process the extraction request.",
+            ) from exc
+        except CVAIRateLimitError as exc:
+            self._persist_failure(
+                extraction_id,
+                CVExtractionFailureCode.AI_RATE_LIMITED,
+                "Hệ thống AI đang tạm thời giới hạn lượt xử lý. Vui lòng thử lại sau.",
+            )
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail={
+                    "code": CVExtractionFailureCode.AI_RATE_LIMITED,
+                    "message": "CV extraction is temporarily rate limited.",
+                },
             ) from exc
         except (CVAIProviderUnavailableError, AIProviderError) as exc:
             self._persist_failure(

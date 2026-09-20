@@ -1,5 +1,5 @@
 # pyrefly: ignore [missing-import]
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -20,6 +20,22 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-3.8-flash"
     ai_timeout_seconds: float = Field(default=30.0, gt=0, le=120)
     ai_max_retries: int = Field(default=2, ge=0, le=5)
+    embedding_provider: str = "ollama"
+    embedding_model: str = "bge-m3"
+    ollama_base_url: str = "http://localhost:11434"
+    embedding_timeout_seconds: float = Field(default=30.0, gt=0, le=120)
+
+    @field_validator(
+        "embedding_provider",
+        "embedding_model",
+        "ollama_base_url",
+        mode="before",
+    )
+    @classmethod
+    def validate_non_blank_embedding_setting(cls, value: object) -> str:
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError("Embedding settings cannot be blank.")
+        return value.strip()
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -5,10 +5,12 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models.job import Job, JobStatus
+from app.models.recruiter_profile import RecruiterProfile
 from app.models.user import User
 from app.repositories.admin_job_repository import AdminJobRepository
 from app.repositories.admin_audit_log_repository import AdminAuditLogRepository
 from app.schemas.admin_job import AdminJobListResponse, AdminJobResponse
+from app.schemas.job import JobResponse
 
 
 class AdminJobService:
@@ -26,7 +28,7 @@ class AdminJobService:
         normalized_search = search.strip() if search else None
         items, total = self.repository.list_jobs(job_status, normalized_search, page, page_size)
         return AdminJobListResponse(
-            items=[AdminJobResponse.model_validate(job) for job in items],
+            items=self._to_responses(items),
             page=page,
             page_size=page_size,
             total=total,
@@ -34,10 +36,10 @@ class AdminJobService:
         )
 
     def get_job(self, job_id: uuid.UUID) -> AdminJobResponse:
-        return AdminJobResponse.model_validate(self._get_job_or_404(job_id))
+        return self._to_response(self._get_job_or_404(job_id))
 
     def approve_job(self, job_id: uuid.UUID, current_user: User) -> AdminJobResponse:
-        return AdminJobResponse.model_validate(
+        return self._to_response(
             self._transition_pending_job(
                 job_id,
                 JobStatus.APPROVED,
@@ -47,7 +49,7 @@ class AdminJobService:
         )
 
     def reject_job(self, job_id: uuid.UUID, current_user: User) -> AdminJobResponse:
-        return AdminJobResponse.model_validate(
+        return self._to_response(
             self._transition_pending_job(
                 job_id,
                 JobStatus.REJECTED,
@@ -61,6 +63,27 @@ class AdminJobService:
         if job is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found.")
         return job
+
+    def _to_responses(self, jobs: list[Job]) -> list[AdminJobResponse]:
+        recruiter_ids = {job.recruiter_id for job in jobs if job.recruiter_id is not None}
+        contexts = self.repository.get_recruiter_contexts(recruiter_ids)
+        return [self._to_response(job, contexts.get(job.recruiter_id)) for job in jobs]
+
+    def _to_response(
+        self,
+        job: Job,
+        context: tuple[User, RecruiterProfile | None] | None = None,
+    ) -> AdminJobResponse:
+        if context is None and job.recruiter_id is not None:
+            context = self.repository.get_recruiter_contexts({job.recruiter_id}).get(job.recruiter_id)
+        recruiter, company_profile = context if context is not None else (None, None)
+        payload = JobResponse.model_validate(job).model_dump()
+        return AdminJobResponse(
+            **payload,
+            recruiter_id=job.recruiter_id,
+            recruiter_account=recruiter,
+            company_profile=company_profile,
+        )
 
     def _transition_pending_job(
         self,

@@ -1,0 +1,1 @@
+"""Offline embedding provider tests."""

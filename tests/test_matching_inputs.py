@@ -170,18 +170,81 @@ def test_builder_and_confirmed_uploaded_have_equivalent_feature_content() -> Non
     "latest_status",
     [None, CVExtractionStatus.PROCESSING, CVExtractionStatus.FAILED],
 )
-def test_unconfirmed_uploaded_cv_is_rejected(latest_status: CVExtractionStatus | None) -> None:
+def test_uploaded_cv_without_usable_success_is_rejected(
+    latest_status: CVExtractionStatus | None,
+) -> None:
     service = MatchingInputService.__new__(MatchingInputService)
     service.cv_repository = SimpleNamespace(
         get_by_id_for_matching=lambda _cv_id: _structured_cv(CVSourceType.UPLOADED)
     )
     service.extraction_repository = SimpleNamespace(
         has_confirmed_for_cv=lambda _cv_id: False,
-        latest_status=latest_status,
+        get_latest_successful_for_cv=lambda _cv_id: None,
+        get_latest_for_cv=lambda _cv_id: (
+            SimpleNamespace(status=latest_status) if latest_status else None
+        ),
     )
 
     with pytest.raises(CVNotReadyForMatchingError):
         service.build_cv_input(CV_ID)
+
+
+def test_unconfirmed_successful_uploaded_cv_uses_extracted_result() -> None:
+    extracted = {
+        "personal_info": {"address": "Đà Nẵng"},
+        "career_objective": "Build reliable distributed systems",
+        "educations": [],
+        "experiences": [],
+        "skills": [{"name": "Rust"}],
+        "projects": [],
+        "certificates": [],
+        "languages": [],
+    }
+    service = MatchingInputService.__new__(MatchingInputService)
+    service.cv_repository = SimpleNamespace(
+        get_by_id_for_matching=lambda _cv_id: _structured_cv(CVSourceType.UPLOADED)
+    )
+    service.extraction_repository = SimpleNamespace(
+        has_confirmed_for_cv=lambda _cv_id: False,
+        get_latest_successful_for_cv=lambda _cv_id: SimpleNamespace(
+            structured_result=extracted
+        ),
+        get_latest_for_cv=lambda _cv_id: None,
+    )
+
+    canonical = service.build_cv_input(CV_ID)
+
+    assert [skill.normalized_name for skill in canonical.skills] == ["rust"]
+    assert canonical.location is not None
+    assert canonical.location.normalized_value == "đà nẵng"
+
+
+def test_failed_retry_does_not_hide_an_older_successful_extraction() -> None:
+    successful = SimpleNamespace(
+        structured_result={
+            "personal_info": {},
+            "career_objective": None,
+            "educations": [],
+            "experiences": [],
+            "skills": [{"name": "FastAPI"}],
+            "projects": [],
+            "certificates": [],
+            "languages": [],
+        }
+    )
+    service = MatchingInputService.__new__(MatchingInputService)
+    service.cv_repository = SimpleNamespace(
+        get_by_id_for_matching=lambda _cv_id: _structured_cv(CVSourceType.UPLOADED)
+    )
+    service.extraction_repository = SimpleNamespace(
+        has_confirmed_for_cv=lambda _cv_id: False,
+        get_latest_successful_for_cv=lambda _cv_id: successful,
+        get_latest_for_cv=lambda _cv_id: SimpleNamespace(
+            status=CVExtractionStatus.FAILED
+        ),
+    )
+
+    assert service.build_cv_input(CV_ID).skills[0].normalized_name == "fastapi"
 
 
 def test_confirmed_uploaded_cv_maps_without_ai_call() -> None:
@@ -194,6 +257,23 @@ def test_confirmed_uploaded_cv_maps_without_ai_call() -> None:
     )
 
     assert service.build_cv_input(CV_ID).skills[0].normalized_name == "python"
+
+
+def test_confirmed_candidate_data_precedes_a_later_successful_extraction() -> None:
+    service = MatchingInputService.__new__(MatchingInputService)
+    service.cv_repository = SimpleNamespace(
+        get_by_id_for_matching=lambda _cv_id: _structured_cv(CVSourceType.UPLOADED)
+    )
+    service.extraction_repository = SimpleNamespace(
+        has_confirmed_for_cv=lambda _cv_id: True,
+        get_latest_successful_for_cv=lambda _cv_id: pytest.fail(
+            "confirmed data must short-circuit newer AI results"
+        ),
+    )
+
+    canonical = service.build_cv_input(CV_ID)
+
+    assert canonical.skills[0].normalized_name == "python"
 
 
 def test_job_mapper_prefers_taxonomy_and_has_stable_serializable_output() -> None:

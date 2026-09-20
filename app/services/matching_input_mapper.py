@@ -15,6 +15,7 @@ from app.schemas.cv import (
     CVSkillItem,
     CVSkillLevel,
 )
+from app.schemas.cv_extraction import StructuredCVExtractionResult
 from app.schemas.matching import (
     CanonicalCertificate,
     CanonicalCVMatchingInput,
@@ -103,14 +104,19 @@ def _semantic_text(sections: Iterable[str | None]) -> str:
     return "\n\n".join(section for section in sections if section)
 
 
-def build_cv_matching_input(cv: CV) -> CanonicalCVMatchingInput:
-    personal_info = CVPersonalInfo.model_validate(cv.personal_info or {})
-    experiences = [CVExperienceItem.model_validate(item) for item in (cv.experiences or [])]
-    educations = [CVEducationItem.model_validate(item) for item in (cv.educations or [])]
-    skills = [CVSkillItem.model_validate(item) for item in (cv.skills or [])]
-    projects = [CVProjectItem.model_validate(item) for item in (cv.projects or [])]
-    certificates = [CVCertificateItem.model_validate(item) for item in (cv.certificates or [])]
-    languages = [CVLanguageItem.model_validate(item) for item in (cv.languages or [])]
+def build_cv_matching_input(
+    cv: CV,
+    structured_result: StructuredCVExtractionResult | None = None,
+) -> CanonicalCVMatchingInput:
+    """Build one canonical input from a whole, explicitly selected representation."""
+    source = structured_result or cv
+    personal_info = CVPersonalInfo.model_validate(source.personal_info or {})
+    experiences = [CVExperienceItem.model_validate(item) for item in (source.experiences or [])]
+    educations = [CVEducationItem.model_validate(item) for item in (source.educations or [])]
+    skills = [CVSkillItem.model_validate(item) for item in (source.skills or [])]
+    projects = [CVProjectItem.model_validate(item) for item in (source.projects or [])]
+    certificates = [CVCertificateItem.model_validate(item) for item in (source.certificates or [])]
+    languages = [CVLanguageItem.model_validate(item) for item in (source.languages or [])]
 
     canonical_skills = _canonical_skills((item.name, item.level) for item in skills)
     canonical_experiences = [
@@ -164,7 +170,7 @@ def build_cv_matching_input(cv: CV) -> CanonicalCVMatchingInput:
         )
         for item in languages
     ]
-    objective = normalize_multiline_text(cv.career_objective)
+    objective = normalize_multiline_text(source.career_objective)
     semantic_text = _semantic_text(
         (
             _section("CAREER OBJECTIVE", [objective]),

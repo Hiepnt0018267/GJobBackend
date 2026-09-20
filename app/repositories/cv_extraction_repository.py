@@ -1,4 +1,5 @@
 import uuid
+from dataclasses import dataclass
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -13,6 +14,14 @@ if TYPE_CHECKING:
 
 class CVExtractionStateError(RuntimeError):
     """Raised when a terminal update loses its expected PROCESSING state."""
+
+
+@dataclass(frozen=True)
+class CVExtractionReadiness:
+    latest_status: CVExtractionStatus | None = None
+    latest_error_code: str | None = None
+    has_successful: bool = False
+    has_confirmed: bool = False
 
 
 class CVExtractionRepository:
@@ -36,6 +45,54 @@ class CVExtractionRepository:
             .order_by(CVExtraction.created_at.desc(), CVExtraction.id.desc())
             .first()
         )
+
+    def get_latest_successful_for_cv(
+        self, cv_id: uuid.UUID
+    ) -> CVExtraction | None:
+        """Return the newest usable AI result, ignoring later failed attempts."""
+        return (
+            self.db.query(CVExtraction)
+            .filter(
+                CVExtraction.cv_id == cv_id,
+                CVExtraction.status == CVExtractionStatus.SUCCEEDED,
+            )
+            .order_by(CVExtraction.created_at.desc(), CVExtraction.id.desc())
+            .first()
+        )
+
+    def get_readiness_for_cvs(
+        self, cv_ids: list[uuid.UUID]
+    ) -> dict[uuid.UUID, CVExtractionReadiness]:
+        if not cv_ids:
+            return {}
+        rows = (
+            self.db.query(CVExtraction)
+            .filter(CVExtraction.cv_id.in_(cv_ids))
+            .order_by(
+                CVExtraction.cv_id,
+                CVExtraction.created_at.desc(),
+                CVExtraction.id.desc(),
+            )
+            .all()
+        )
+        states: dict[uuid.UUID, CVExtractionReadiness] = {}
+        for row in rows:
+            is_latest = row.cv_id not in states
+            current = states.get(row.cv_id, CVExtractionReadiness())
+            states[row.cv_id] = CVExtractionReadiness(
+                latest_status=current.latest_status or row.status,
+                latest_error_code=(
+                    row.error_code if is_latest else current.latest_error_code
+                ),
+                has_successful=(
+                    current.has_successful
+                    or row.status == CVExtractionStatus.SUCCEEDED
+                ),
+                has_confirmed=(
+                    current.has_confirmed or row.confirmed_at is not None
+                ),
+            )
+        return states
 
     def has_confirmed_for_cv(self, cv_id: uuid.UUID) -> bool:
         """Check authoritative uploaded-CV readiness without loading extraction history."""

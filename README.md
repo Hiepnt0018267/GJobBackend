@@ -48,3 +48,44 @@ normalized `skills`/`job_skills` taxonomy with a legacy array fallback. Semantic
 text excludes names, contact details, photos, locations, salary, company identity,
 and recruiter data. No score, embedding, external AI call, or persistence is part
 of this foundation.
+
+`baseline-v1` builds on those canonical inputs with one defensible component:
+explicit normalized Job-skill coverage against CV skills and project technologies.
+It returns deterministic matched/missing evidence and factual explanations. Missing
+signals are never converted into an arbitrary score. The result is feature
+compatibility—not hiring probability, candidate quality, or a hiring recommendation.
+The engine performs no database, LLM, embedding, or network operation.
+
+## Semantic CV/JD matching
+
+`semantic-v1` compares the existing privacy-filtered canonical CV and job text
+with one ordered embedding batch. The default adapter calls a local Ollama
+instance at `POST /api/embed` using `bge-m3`, disables truncation, validates both
+vectors strictly, and returns raw cosine similarity in `[-1, 1]`. It does not
+persist vectors, expose a raw embedding route, combine scores, or make hiring
+decisions.
+
+Optional environment settings:
+
+```env
+EMBEDDING_PROVIDER=ollama
+EMBEDDING_MODEL=bge-m3
+OLLAMA_BASE_URL=http://localhost:11434
+EMBEDDING_TIMEOUT_SECONDS=30
+```
+
+For a local smoke check, install Ollama, run `ollama pull bge-m3`, and start the
+Ollama service. Automated tests mock the HTTP transport and never require Ollama
+or network access.
+
+## Persisted CV/job matches
+
+Candidate and recruiter detail workflows can request an on-demand CV/job match.
+The backend stores one current derived result per CV/job pair and reuses it only
+while deterministic matching fingerprints, engine versions, provider, and model
+remain current. Baseline evidence and raw semantic similarity stay separate.
+
+Only the validated baseline result and semantic scalar/metadata are persisted.
+Canonical text and raw embedding vectors are never stored, and this feature does
+not require pgvector. Candidate access is limited to an owned CV and approved Job;
+Recruiter access is limited to the CV referenced by an application for an owned Job.

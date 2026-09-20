@@ -20,6 +20,7 @@ import app.models.application  # noqa: F401 -- registers JobApplication table
 import app.models.application_status_history  # noqa: F401 -- registers application history
 import app.models.admin_audit_log  # noqa: F401 -- registers admin audit logs
 import app.models.skill  # noqa: F401 -- registers skill taxonomy and job links
+import app.models.cv_job_match  # noqa: F401 -- registers derived CV/Job matches
 
 # â”€â”€ Alembic Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 config = context.config

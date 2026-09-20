@@ -1,6 +1,7 @@
 from pydantic import ValidationError
 
 from app.ai import AIProvider, AIProviderError, AIResponseValidationError, create_ai_provider
+from app.ai.exceptions import AIRateLimitError, AIProviderRequestError
 from app.ai.cv_extraction_prompt import (
     CV_EXTRACTION_SYSTEM_INSTRUCTION,
     build_cv_extraction_prompt,
@@ -27,6 +28,18 @@ class CVExtractionValidationError(CVStructuredExtractionError):
 
 
 class CVAIProviderUnavailableError(CVStructuredExtractionError):
+    pass
+
+
+class CVAIRateLimitError(CVStructuredExtractionError):
+    """Gemini remained rate limited after the bounded retry policy."""
+
+    pass
+
+
+class CVAIProviderRequestError(CVStructuredExtractionError):
+    """The provider rejected GJob's deterministic request configuration."""
+
     pass
 
 
@@ -62,6 +75,14 @@ class CVStructuredExtractionService:
         except AIResponseValidationError as exc:
             raise CVExtractionValidationError(
                 "AI returned invalid structured CV data."
+            ) from exc
+        except AIProviderRequestError as exc:
+            raise CVAIProviderRequestError(
+                "The AI provider rejected the structured extraction request."
+            ) from exc
+        except AIRateLimitError as exc:
+            raise CVAIRateLimitError(
+                "Structured CV extraction is temporarily rate limited."
             ) from exc
         except AIProviderError as exc:
             raise CVAIProviderUnavailableError(

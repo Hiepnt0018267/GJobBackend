@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field, HttpUrl, field_vali
 
 from app.schemas.cv_template import CVTemplateSummary
 from app.models.cv import CVSourceType
+from app.models.cv_extraction import CVExtractionStatus
 
 
 class CVSkillLevel(str, Enum):
@@ -193,6 +194,10 @@ class CVListItem(BaseModel):
     has_managed_photo: bool = False
     created_at: datetime
     updated_at: datetime
+    extraction_status: CVExtractionStatus | None = None
+    extraction_error_code: str | None = None
+    is_matchable: bool | None = None
+    is_verified: bool | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

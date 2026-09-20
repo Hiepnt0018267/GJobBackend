@@ -8,14 +8,22 @@ from sqlalchemy.orm import Session
 from app.models.cv import CV, CVSourceType
 from app.models.user import User
 from app.repositories.cv_repository import CVRepository
+from app.repositories.cv_extraction_repository import CVExtractionRepository
 from app.services.cv_template_service import CVTemplateService
-from app.schemas.cv import CVCreateRequest, CVListResponse, CVResponse, CVUpdateRequest
+from app.schemas.cv import (
+    CVCreateRequest,
+    CVListItem,
+    CVListResponse,
+    CVResponse,
+    CVUpdateRequest,
+)
 from app.services.cv_storage_service import CVFileValidationError, CVStorageService
 
 
 class CVService:
     def __init__(self, db: Session) -> None:
         self.repository = CVRepository(db)
+        self.extraction_repository = CVExtractionRepository(db)
         self.template_service = CVTemplateService(db)
         self.storage = CVStorageService()
 
@@ -26,7 +34,34 @@ class CVService:
         return cv
 
     def list_cvs(self, user: User) -> CVListResponse:
-        items = self.repository.list_for_candidate(user.id)
+        cvs = self.repository.list_for_candidate(user.id)
+        uploaded_ids = [cv.id for cv in cvs if cv.source_type == CVSourceType.UPLOADED]
+        readiness = self.extraction_repository.get_readiness_for_cvs(uploaded_ids)
+        items: list[CVListItem] = []
+        for cv in cvs:
+            item = CVListItem.model_validate(cv)
+            if cv.source_type == CVSourceType.BUILDER:
+                items.append(
+                    item.model_copy(
+                        update={"is_matchable": True, "is_verified": False}
+                    )
+                )
+                continue
+            state = readiness.get(cv.id)
+            items.append(
+                item.model_copy(
+                    update={
+                        "extraction_status": state.latest_status if state else None,
+                        "extraction_error_code": (
+                            state.latest_error_code if state else None
+                        ),
+                        "is_matchable": bool(
+                            state and (state.has_confirmed or state.has_successful)
+                        ),
+                        "is_verified": bool(state and state.has_confirmed),
+                    }
+                )
+            )
         return CVListResponse(items=items, total=len(items))
 
     def get_cv(self, user: User, cv_id: uuid.UUID) -> CV:

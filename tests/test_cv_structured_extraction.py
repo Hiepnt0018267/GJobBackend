@@ -8,10 +8,17 @@ from app.ai.cv_extraction_prompt import (
     CV_EXTRACTION_SYSTEM_INSTRUCTION,
     build_cv_extraction_prompt,
 )
-from app.ai.exceptions import AIProviderError, AIResponseValidationError
+from app.ai.exceptions import (
+    AIProviderError,
+    AIProviderRequestError,
+    AIResponseValidationError,
+    AIRateLimitError,
+)
 from app.models.cv import CVSourceType
 from app.schemas.cv_extraction import StructuredCVExtractionResult
 from app.services.cv_structured_extraction_service import (
+    CVAIRateLimitError,
+    CVAIProviderRequestError,
     CVAIProviderUnavailableError,
     CVExtractionValidationError,
     CVStructuredExtractionInputError,
@@ -182,6 +189,28 @@ def test_service_maps_provider_failure_without_leaking_details() -> None:
     with pytest.raises(CVAIProviderUnavailableError) as error:
         asyncio.run(service.extract_from_text("Backend Developer"))
     assert "secret upstream detail" not in str(error.value)
+
+
+def test_service_maps_deterministic_provider_request_error_distinctly() -> None:
+    service = CVStructuredExtractionService(
+        provider=RaisingProvider(
+            AIProviderRequestError("raw incompatible schema detail")
+        )
+    )
+
+    with pytest.raises(CVAIProviderRequestError) as error:
+        asyncio.run(service.extract_from_text("Backend Developer"))
+    assert "raw incompatible schema detail" not in str(error.value)
+
+
+def test_service_maps_exhausted_rate_limit_distinctly() -> None:
+    service = CVStructuredExtractionService(
+        provider=RaisingProvider(AIRateLimitError("private quota detail"))
+    )
+
+    with pytest.raises(CVAIRateLimitError) as error:
+        asyncio.run(service.extract_from_text("Backend Developer"))
+    assert "private quota detail" not in str(error.value)
 
 
 @pytest.mark.parametrize("value", ["", "  \n\t  "])

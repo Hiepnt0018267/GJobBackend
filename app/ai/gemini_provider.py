@@ -1,28 +1,35 @@
 import json
 import logging
+from typing import cast
 
 import httpx
 from google import genai
 from google.genai import types
 from google.genai.errors import APIError
 from pydantic import BaseModel
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from tenacity import RetryCallState, retry, retry_if_exception_type, stop_after_attempt
+from tenacity.wait import wait_base
 
 from app.ai.base import AIProvider
 from app.ai.exceptions import (
     AIAuthenticationError,
     AIProviderError,
+    AIProviderRequestError,
     AIRateLimitError,
     AIResponseValidationError,
     AITimeoutError,
 )
+from app.ai.gemini_schema import JSONValue, sanitize_schema_for_gemini
+from app.ai.gemini_retry import (
+    GeminiRetryWait,
+    TransientAIError,
+    TransientProviderError,
+    TransientRateLimitError,
+    TransientTimeoutError,
+    retry_after_seconds,
+)
 
 logger = logging.getLogger("gjob.ai.gemini")
-
-# Custom transient exception để quản lý retry nội bộ
-class _TransientAIError(Exception):
-    pass
-
 
 class GeminiProvider(AIProvider):
     def __init__(
@@ -31,11 +38,13 @@ class GeminiProvider(AIProvider):
         model: str,
         timeout: float = 30.0,
         max_retries: int = 2,
+        retry_wait: wait_base | None = None,
     ):
         # Tuyệt đối không log self.api_key
         self.model = model
         self.timeout = timeout
         self.max_retries = max_retries
+        self.retry_wait = retry_wait if retry_wait is not None else GeminiRetryWait()
         self.client = genai.Client(
             api_key=api_key,
             http_options=types.HttpOptions(timeout=int(timeout * 1000)),
@@ -48,8 +57,9 @@ class GeminiProvider(AIProvider):
     ) -> types.GenerateContentResponse:
         @retry(
             stop=stop_after_attempt(self.max_retries + 1),
-            wait=wait_exponential(multiplier=1, min=1, max=4),
-            retry=retry_if_exception_type(_TransientAIError),
+            wait=self.retry_wait,
+            retry=retry_if_exception_type(TransientAIError),
+            before_sleep=self._log_before_sleep,
             reraise=True,
         )
         async def _execute() -> types.GenerateContentResponse:
@@ -67,31 +77,67 @@ class GeminiProvider(AIProvider):
                         "Invalid or unauthorized Gemini API key"
                     ) from exc
                 if status_code == 429:
-                    logger.warning("Gemini rate limit encountered. Attempting retry...")
-                    raise _TransientAIError("Gemini rate limited") from exc
-                if status_code and status_code >= 500:
-                    logger.warning(
-                        "Gemini server error (status=%s). Attempting retry...",
+                    raise TransientRateLimitError(retry_after_seconds(exc)) from exc
+                if status_code and 400 <= status_code < 500:
+                    logger.error(
+                        "Gemini request rejected (status=%s, error_type=%s)",
                         status_code,
+                        type(exc).__name__,
                     )
-                    raise _TransientAIError("Gemini internal server error") from exc
-                logger.error("Gemini API error (status=%s)", status_code)
+                    raise AIProviderRequestError(
+                        "Gemini rejected the request configuration"
+                    ) from exc
+                if status_code and status_code >= 500:
+                    raise TransientProviderError(
+                        "Gemini internal server error"
+                    ) from exc
+                logger.error(
+                    "Gemini API error (status=%s, error_type=%s)",
+                    status_code,
+                    type(exc).__name__,
+                )
                 raise AIProviderError(f"Gemini API returned error: {status_code}") from exc
             except (TimeoutError, httpx.TimeoutException) as exc:
-                logger.warning("Gemini timeout encountered. Attempting retry...")
-                raise _TransientAIError("Gemini call timed out") from exc
+                raise TransientTimeoutError("Gemini call timed out") from exc
+            except httpx.NetworkError as exc:
+                raise TransientProviderError("Gemini network failure") from exc
             except Exception as exc:
                 logger.error("Unexpected error contacting Gemini: %s", type(exc).__name__)
                 raise AIProviderError("Unexpected Gemini provider failure") from exc
 
         try:
             return await _execute()
-        except _TransientAIError as exc:
-            if "timed out" in str(exc):
+        except TransientAIError as exc:
+            logger.warning(
+                "Gemini retries exhausted (attempts=%s, reason=%s)",
+                self.max_retries + 1,
+                exc.kind,
+            )
+            if isinstance(exc, TransientTimeoutError):
                 raise AITimeoutError("Gemini request timed out after retries") from exc
-            if "rate limited" in str(exc):
+            if isinstance(exc, TransientRateLimitError):
                 raise AIRateLimitError("Gemini quota / rate limit exceeded") from exc
             raise AIProviderError("Gemini request failed after maximum retries") from exc
+
+    def _log_before_sleep(self, retry_state: RetryCallState) -> None:
+        error = (
+            retry_state.outcome.exception()
+            if retry_state.outcome is not None
+            else None
+        )
+        wait_seconds = (
+            retry_state.next_action.sleep
+            if retry_state.next_action is not None
+            else 0.0
+        )
+        logger.warning(
+            "Gemini transient failure; retry scheduled "
+            "(next_attempt=%s/%s, wait_seconds=%.2f, reason=%s)",
+            retry_state.attempt_number + 1,
+            self.max_retries + 1,
+            wait_seconds,
+            error.kind if isinstance(error, TransientAIError) else "provider",
+        )
 
     @staticmethod
     def _response_text(raw_response: types.GenerateContentResponse) -> str:
@@ -126,11 +172,13 @@ class GeminiProvider(AIProvider):
         system_instruction: str | None = None,
         temperature: float = 0.0,
     ) -> object:
+        domain_schema = cast(JSONValue, response_schema.model_json_schema())
+        provider_schema = sanitize_schema_for_gemini(domain_schema)
         config = types.GenerateContentConfig(
             temperature=temperature,
             system_instruction=system_instruction if system_instruction else None,
             response_mime_type="application/json",
-            response_schema=response_schema,
+            response_schema=provider_schema,
         )
         raw_response = await self._generate_content(prompt, config)
         parsed = getattr(raw_response, "parsed", None)

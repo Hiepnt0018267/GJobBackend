@@ -22,6 +22,12 @@ class AIAuthenticationError(AIProviderError):
     pass
 
 
+class AIProviderRequestError(AIProviderError):
+    """The provider rejected a deterministic request or configuration."""
+
+    pass
+
+
 class AIRateLimitError(AIProviderError):
     """Hết quota hoặc vượt ngưỡng RPM/TPM (429)."""
 

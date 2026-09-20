@@ -11,6 +11,7 @@ from app.main import app
 from app.models.application import JobApplication
 from app.models.cv import CV
 from app.models.job import Job, JobStatus
+from app.models.recruiter_profile import RecruiterProfile
 from app.models.user import User, UserRole
 
 
@@ -216,6 +217,64 @@ def test_admin_can_view_job_detail_in_every_status_and_gets_404_for_missing_job(
         assert response.json()["status"] == job_status.value
         assert response.json()["id"] == job_id
     assert client.get(f"{ADMIN_JOBS_BASE}/{uuid.uuid4()}", headers=_headers(admin_token)).status_code == 404
+
+
+def test_admin_job_detail_includes_recruiter_account_and_company_profile():
+    admin_token = _admin_token()
+    recruiter_email = f"task10a_recruiter_{uuid.uuid4().hex[:12]}@example.com"
+    db = SessionLocal()
+    try:
+        recruiter = User(
+            email=recruiter_email,
+            password_hash=hash_password("password123"),
+            full_name="Nguyễn Minh Anh",
+            phone="0901234567",
+            role=UserRole.RECRUITER,
+        )
+        db.add(recruiter)
+        db.flush()
+        db.add(
+            RecruiterProfile(
+                user_id=recruiter.id,
+                company_name="Công ty GJob Labs",
+                company_website="https://example.com",
+                company_address="Hà Nội",
+                industry="Công nghệ thông tin",
+                company_size=120,
+            )
+        )
+        job = Job(
+            recruiter_id=recruiter.id,
+            title=f"__task10a__ Owned job {uuid.uuid4().hex}",
+            description="Admin recruiter context test",
+            company_name="GJob Labs",
+            status=JobStatus.PENDING,
+        )
+        db.add(job)
+        db.commit()
+        job_id = str(job.id)
+        recruiter_id = str(recruiter.id)
+    finally:
+        db.close()
+
+    response = client.get(f"{ADMIN_JOBS_BASE}/{job_id}", headers=_headers(admin_token))
+
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    assert payload["recruiter_id"] == recruiter_id
+    assert payload["recruiter_account"] == {
+        "id": recruiter_id,
+        "email": recruiter_email,
+        "full_name": "Nguyễn Minh Anh",
+        "phone": "0901234567",
+        "is_active": True,
+        "created_at": payload["recruiter_account"]["created_at"],
+    }
+    assert payload["company_profile"]["company_name"] == "Công ty GJob Labs"
+    assert payload["company_profile"]["company_website"] == "https://example.com"
+    assert payload["company_profile"]["company_address"] == "Hà Nội"
+    assert payload["company_profile"]["industry"] == "Công nghệ thông tin"
+    assert payload["company_profile"]["company_size"] == 120
 
 
 def test_admin_approves_pending_job_persists_status_updates_dashboard_and_makes_job_public():
