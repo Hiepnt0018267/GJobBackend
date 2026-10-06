@@ -1,0 +1,6 @@
+{
+  "intent": "single final evaluation, no threshold optimization",
+  "test_sha256": "e26b5715d0a1a4589616cc23d930ceef89d91e3af79beaf346c7ceaf02743e11",
+  "threshold_sha256": "5d552274da24d355c1c9eb631377ace6d31fe059b2a3477434d9ae8644e746f8",
+  "timestamp": "2026-10-05T12:37:46.723400+00:00"
+}

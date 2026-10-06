@@ -1,0 +1,98 @@
+{
+  "algorithms": {
+    "baseline-v1": {
+      "algorithm_identifier": "baseline-v1-offline-lexical",
+      "calibration_only": true,
+      "score_field": "baseline_score",
+      "selection_metric": "f1",
+      "selection_result": {
+        "FN": 5,
+        "FP": 20,
+        "TN": 42,
+        "TP": 65,
+        "accuracy": 0.8106060606060606,
+        "balanced_accuracy": 0.8029953917050692,
+        "f1": 0.8387096774193549,
+        "false_positive_rate": 0.3225806451612903,
+        "mcc": 0.6316150822354546,
+        "precision": 0.7647058823529411,
+        "recall": 0.9285714285714286,
+        "specificity": 0.6774193548387096,
+        "threshold": 0.24733698756646583
+      },
+      "threshold": 0.24733698756646583
+    },
+    "semantic-v1": {
+      "algorithm_identifier": "semantic-v1",
+      "calibration_only": true,
+      "score_field": "semantic_score",
+      "selection_metric": "f1",
+      "selection_result": {
+        "FN": 8,
+        "FP": 29,
+        "TN": 33,
+        "TP": 62,
+        "accuracy": 0.7196969696969697,
+        "balanced_accuracy": 0.7089861751152073,
+        "f1": 0.7701863354037267,
+        "false_positive_rate": 0.46774193548387094,
+        "mcc": 0.4507957297422995,
+        "precision": 0.6813186813186813,
+        "recall": 0.8857142857142857,
+        "specificity": 0.532258064516129,
+        "threshold": 0.5867267674262028
+      },
+      "threshold": 0.5867267674262028
+    }
+  },
+  "calibration_file_sha256": "8f1957b958a8b7fc686053b8fd4dbc4fa330a47ce1cbfc3afb872cb7ef05776d",
+  "policy": {
+    "bootstrap_resamples": 1000,
+    "calibration_fraction": 0.6,
+    "calibration_range": [
+      0.55,
+      0.65
+    ],
+    "comparison": "score >= threshold",
+    "grouping": "connected components of typed bipartite CV/JD graph",
+    "limitations": [
+      "Retrospective partition: all 220 labels previously analyzed.",
+      "Frozen baseline IDF used the full corpus: transductive covariate exposure.",
+      "Not a new blind external or fully inductive test."
+    ],
+    "seed": 42,
+    "selection": "max calibration F1, higher precision, lower FP, higher threshold",
+    "threshold_candidates": "observed calibration scores, adjacent midpoints, range endpoints, nextafter(max,+inf)",
+    "version": "grouped-retrospective-holdout-v1"
+  },
+  "protected_hashes": {
+    "C:\\DATN\\Datasets\\archivecv\\Resume\\Resume.csv": "816a7cd985a9a41e3ce8d1e83cb7e1beb1e854a89c1cf1fd0d75494faaa0559d",
+    "C:\\DATN\\Datasets\\archivejd\\job_postings.csv": "d782e95f35cbd5f658ad7124021c938f5c8c1656f1c059b6dc9d402d1eaa195f",
+    "C:\\DATN\\GJobBackend\\evaluation\\HELDOUT_PROTOCOL.md": "b8e1d8ee202cac8e1e2553af0f55d24e0650511e835f964e32ca06c178d02a9a",
+    "C:\\DATN\\GJobBackend\\evaluation\\baseline_lexical.py": "4aa3f4d459a7ca57fa8403b1a2403ee4d1745ec2d709241bf61fe1854279083d",
+    "C:\\DATN\\GJobBackend\\evaluation\\benchmark_metrics.py": "bdfe3bfe9c249180a0d210548c2d869213791859ca2eed2728e7423f46e668d9",
+    "C:\\DATN\\GJobBackend\\evaluation\\heldout_protocol.py": "93680e30ba12728c89f27bfba3b9e112404d9ad36c1b6664bc727e8f50573d7a",
+    "C:\\DATN\\GJobBackend\\evaluation\\run_heldout_evaluation.py": "8b6e16b757d7c735702c0ddc606c4b6eb0675d84c419815292858a302e25347a",
+    "app\\services\\semantic_matching_service.py": "0c347e9dd24ab68b10e2c95a3eea7d634e40a9c094c07e206aed0e62d1319fdf",
+    "evaluation/data/derived/evaluation_pairs_labeled.csv": "28f371400b637045155ca12543869052998be29b3f8a3b575b7e46313851fad8",
+    "evaluation\\results\\baseline-v1\\false_negatives.csv": "bd512b3f57370ba995a7049c14a8a8171574ab7f1159c27b27945ac2c8b0afe1",
+    "evaluation\\results\\baseline-v1\\false_positives.csv": "4798ea31299672d3f707b023d0c20b7a5cfb87fe550fcc4675b1dffd27f6c3f0",
+    "evaluation\\results\\baseline-v1\\hard_negative_errors.csv": "a707651e4ad59142c66f1df13cebfc10689699d4ec23bec67bc67de1b2c91652",
+    "evaluation\\results\\baseline-v1\\metrics.json": "fcb40f23ac72d0a21f660479b93e1506aa8424390fee7ce3f44e0c4df529508e",
+    "evaluation\\results\\baseline-v1\\predictions.csv": "ac358d98a719838de49fad4209d95b7b3a5523a40d6f077b23a2b6d049fc99e1",
+    "evaluation\\results\\baseline-v1\\report.md": "a269ec6b168dcce00e0a84f971979e063cb2749920c5937190fd8f5afba919fa",
+    "evaluation\\results\\baseline-v1\\threshold_analysis.csv": "3b7a5ad2458a26deff66788dc39f9798506458a1d14e7b6f572a1a381f9d8ba3",
+    "evaluation\\results\\semantic-v1\\false_negatives.csv": "e805cea8e2ea8c0fbc253721c1d49f8ab682b4a9d39182fc41b20692a75c9c29",
+    "evaluation\\results\\semantic-v1\\false_positives.csv": "88fee6a36c8f524da42d33459984e3df4d4b0772b7cf268a6f54d89c300c370f",
+    "evaluation\\results\\semantic-v1\\hard_negative_errors.csv": "23f0ec7996a4ada000dc966db5bf18c3fc16f7a414911da977bde678a38b9fec",
+    "evaluation\\results\\semantic-v1\\metrics.json": "8d9e608c1639e0f16fc2f474f1385b586dd59273baa97fd38fd6be52c49721f3",
+    "evaluation\\results\\semantic-v1\\predictions.csv": "588a6d0fbfddc4ef6f7088fb354166bdf3662b15ace5774e7d572aadc9eaae46",
+    "evaluation\\results\\semantic-v1\\report.md": "65f9bb3099a477fb898992775bec98d52ee6b55b5b24728ff300e1491928640c",
+    "evaluation\\results\\semantic-v1\\threshold_analysis.csv": "6f87a1fabcb3c41260e49c204380f1965830e0a252bc6f3478964fb05ae6e012"
+  },
+  "seed": 42,
+  "source_benchmark_sha256": "28f371400b637045155ca12543869052998be29b3f8a3b575b7e46313851fad8",
+  "split_manifest_sha256": "8e2119a04aaa434b5d4a0feee19fb860feb06ab33a97b01b8d6422fa56da3bcf",
+  "test_file_sha256": "e26b5715d0a1a4589616cc23d930ceef89d91e3af79beaf346c7ceaf02743e11",
+  "timestamp": "2026-10-05T12:36:38.194084+00:00"
+}

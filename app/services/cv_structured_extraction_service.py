@@ -1,7 +1,11 @@
 from pydantic import ValidationError
 
 from app.ai import AIProvider, AIProviderError, AIResponseValidationError, create_ai_provider
-from app.ai.exceptions import AIRateLimitError, AIProviderRequestError
+from app.ai.exceptions import (
+    AIContextLimitError,
+    AIRateLimitError,
+    AIProviderRequestError,
+)
 from app.ai.cv_extraction_prompt import (
     CV_EXTRACTION_SYSTEM_INSTRUCTION,
     build_cv_extraction_prompt,
@@ -33,6 +37,12 @@ class CVAIProviderUnavailableError(CVStructuredExtractionError):
 
 class CVAIRateLimitError(CVStructuredExtractionError):
     """Gemini remained rate limited after the bounded retry policy."""
+
+    pass
+
+
+class CVAIContextLimitError(CVStructuredExtractionError):
+    """The selected provider exhausted the configured context window."""
 
     pass
 
@@ -83,6 +93,10 @@ class CVStructuredExtractionService:
         except AIRateLimitError as exc:
             raise CVAIRateLimitError(
                 "Structured CV extraction is temporarily rate limited."
+            ) from exc
+        except AIContextLimitError as exc:
+            raise CVAIContextLimitError(
+                "CV content exceeds the safe AI context limit."
             ) from exc
         except AIProviderError as exc:
             raise CVAIProviderUnavailableError(

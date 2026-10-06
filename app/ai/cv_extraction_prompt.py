@@ -10,6 +10,13 @@ Extraction rules:
 - Never infer, guess, improve, translate, score, rank, or recommend.
 - Never infer sensitive attributes, personality, intelligence, or job suitability.
 - Use null for absent singular optional fields and [] for absent collections.
+- Do not omit an explicitly stated education, experience, skill, project,
+  certificate, or language merely because one of its optional fields is absent;
+  keep the factual item and set only the absent optional field to null.
+- Completeness is required for explicitly labeled CV sections: map education to
+  educations, work history to experiences, and each explicitly listed skill to
+  its own skills item. When a date is only a month or year and cannot be encoded
+  as a complete ISO date, retain the item and set that date field to null.
 - Preserve the source language and wording; only normalize insignificant whitespace.
 - Do not infer skills from a job title or prose that does not explicitly name them.
 - Do not turn work experience into a project unless the document identifies a project.

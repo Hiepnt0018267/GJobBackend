@@ -67,6 +67,26 @@ class CVService:
     def get_cv(self, user: User, cv_id: uuid.UUID) -> CV:
         return self._owned_or_404(user, cv_id)
 
+    def get_cv_response(self, user: User, cv_id: uuid.UUID) -> CVResponse:
+        cv = self._owned_or_404(user, cv_id)
+        response = CVResponse.model_validate(cv)
+        if cv.source_type == CVSourceType.BUILDER:
+            return response.model_copy(
+                update={"is_matchable": True, "is_verified": False}
+            )
+
+        state = self.extraction_repository.get_readiness_for_cvs([cv.id]).get(cv.id)
+        return response.model_copy(
+            update={
+                "extraction_status": state.latest_status if state else None,
+                "extraction_error_code": state.latest_error_code if state else None,
+                "is_matchable": bool(
+                    state and (state.has_confirmed or state.has_successful)
+                ),
+                "is_verified": bool(state and state.has_confirmed),
+            }
+        )
+
     def create_cv(self, user: User, payload: CVCreateRequest) -> CV:
         self.template_service.require_active_template(payload.template_id)
         values = payload.model_dump(mode="json")

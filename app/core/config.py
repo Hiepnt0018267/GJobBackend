@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-3.8-flash"
     ai_timeout_seconds: float = Field(default=30.0, gt=0, le=120)
     ai_max_retries: int = Field(default=2, ge=0, le=5)
+    ollama_llm_model: str = "qwen3:8b"
+    ollama_llm_timeout_seconds: float = Field(default=90.0, gt=0, le=120)
+    ollama_llm_num_ctx: int = Field(default=8192, ge=1024, le=131_072)
     embedding_provider: str = "ollama"
     embedding_model: str = "bge-m3"
     ollama_base_url: str = "http://localhost:11434"
@@ -29,6 +32,7 @@ class Settings(BaseSettings):
         "embedding_provider",
         "embedding_model",
         "ollama_base_url",
+        "ollama_llm_model",
         mode="before",
     )
     @classmethod

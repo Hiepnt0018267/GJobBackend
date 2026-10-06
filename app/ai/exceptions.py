@@ -39,6 +39,12 @@ class AITimeoutError(AIProviderError):
     pass
 
 
+class AIContextLimitError(AIProviderError):
+    """The provider consumed too much of its configured input context."""
+
+    pass
+
+
 class AIResponseValidationError(AIProviderError):
     """The provider returned an empty, malformed, or schema-invalid response."""
 

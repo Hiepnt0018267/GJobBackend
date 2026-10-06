@@ -165,6 +165,49 @@ class GeminiProvider(AIProvider):
         raw_response = await self._generate_content(prompt, config)
         return self._response_text(raw_response)
 
+    @staticmethod
+    def _extract_json_block(text: str) -> str:
+        """Strip optional markdown code fences (```json ... ```) from a response."""
+        stripped = text.strip()
+        # Remove opening fence: ```json or ```
+        if stripped.startswith("```"):
+            first_newline = stripped.find("\n")
+            if first_newline != -1:
+                stripped = stripped[first_newline + 1:]
+        # Remove closing fence
+        if stripped.endswith("```"):
+            stripped = stripped[: stripped.rfind("```")]
+        return stripped.strip()
+
+    async def _generate_structured_text_fallback(
+        self,
+        prompt: str,
+        system_instruction: str | None,
+        temperature: float,
+    ) -> object:
+        """Fallback: ask model to output JSON as plain text, then parse manually."""
+        json_instruction = (
+            "\n\nIMPORTANT: Respond with ONLY a valid JSON object. "
+            "Do not include any explanation, markdown, or code fences."
+        )
+        text_config = types.GenerateContentConfig(
+            temperature=temperature,
+            system_instruction=system_instruction if system_instruction else None,
+        )
+        logger.warning(
+            "Gemini structured output unavailable; retrying with text-mode fallback"
+        )
+        raw_response = await self._generate_content(prompt + json_instruction, text_config)
+        response_text = self._response_text(raw_response)
+        clean_text = self._extract_json_block(response_text)
+        try:
+            return json.loads(clean_text)
+        except (json.JSONDecodeError, TypeError) as exc:
+            logger.error("Gemini text-mode fallback returned malformed JSON")
+            raise AIResponseValidationError(
+                "Gemini text-mode fallback returned malformed JSON"
+            ) from exc
+
     async def generate_structured(
         self,
         prompt: str,
@@ -180,7 +223,18 @@ class GeminiProvider(AIProvider):
             response_mime_type="application/json",
             response_schema=provider_schema,
         )
-        raw_response = await self._generate_content(prompt, config)
+        try:
+            raw_response = await self._generate_content(prompt, config)
+        except (AIProviderError, AIRateLimitError, AITimeoutError) as exc:
+            # Structured endpoint overloaded — attempt text-mode fallback
+            logger.warning(
+                "Gemini structured output failed (%s); attempting text-mode fallback",
+                type(exc).__name__,
+            )
+            return await self._generate_structured_text_fallback(
+                prompt, system_instruction, temperature
+            )
+
         parsed = getattr(raw_response, "parsed", None)
         if parsed is not None:
             return parsed

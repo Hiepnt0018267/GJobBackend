@@ -22,9 +22,26 @@ or persisted. Image-only/scanned PDFs require OCR, which is not supported yet.
 
 `CVStructuredExtractionService` converts normalized uploaded-CV text into the
 existing Builder-compatible CV shape using the configured AI provider. Gemini
-uses native JSON structured output and the final payload is always validated by
+uses native JSON structured output; local Ollama uses `/api/chat` with the same
+Pydantic JSON Schema and `qwen3:8b`. The final payload is always validated by
 Pydantic. This low-level operation does not score candidates, persist prompts or
 raw provider responses, expose a generic AI endpoint, or process Builder CVs.
+
+Choose one generation provider explicitly; there is no silent cross-provider
+fallback:
+
+```env
+AI_PROVIDER=ollama
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_LLM_MODEL=qwen3:8b
+OLLAMA_LLM_TIMEOUT_SECONDS=90
+OLLAMA_LLM_NUM_CTX=8192
+```
+
+For the initial 8 GB GPU deployment, run Ollama with `OLLAMA_NUM_PARALLEL=1`.
+The API sends `think=false`, `temperature=0`, and rejects a result when Ollama's
+reported prompt token count reaches 95% of the configured context. Raw CV text,
+prompts, provider bodies, and thinking traces are not logged or persisted.
 
 ## Persistent CV extraction drafts
 

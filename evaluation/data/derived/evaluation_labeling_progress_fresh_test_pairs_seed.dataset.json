@@ -1,0 +1,10 @@
+{
+  "input_sha256": "9c2d506c45c9fc7386d53627de09b5c12a51404d51f5852a40405af0a4eedca3",
+  "old_benchmark_sha256": "28f371400b637045155ca12543869052998be29b3f8a3b575b7e46313851fad8",
+  "exclusion_file_hashes": {
+    "C:\\DATN\\GJobBackend\\evaluation\\data\\derived\\evaluation_pairs_labeled.csv": "28f371400b637045155ca12543869052998be29b3f8a3b575b7e46313851fad8",
+    "C:\\DATN\\GJobBackend\\evaluation\\data\\derived\\evaluation_pairs_pilot_reviewed.csv": "663ac7fa1007703bed56c71ef24d6da565bda79082a059bdab0a0da555e2bc3e",
+    "C:\\DATN\\GJobBackend\\evaluation\\data\\derived\\evaluation_pairs_draft.csv": "0c11b9771a9797473ba243e89924309469bda19b488b7312be90d5f044d648b3"
+  },
+  "mode": "fresh-blind-human-review"
+}

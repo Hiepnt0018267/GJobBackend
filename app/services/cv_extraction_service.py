@@ -5,7 +5,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.ai import AIProviderError
+from app.ai import AIProviderError, configured_ai_model
 from app.core.config import settings
 from app.models.cv import CV, CVSourceType
 from app.models.cv_extraction import CVExtraction, CVExtractionStatus
@@ -20,6 +20,7 @@ from app.schemas.cv_extraction_api import (
 )
 from app.services.cv_structured_extraction_service import (
     CVAIRateLimitError,
+    CVAIContextLimitError,
     CVAIProviderRequestError,
     CVAIProviderUnavailableError,
     CVExtractionValidationError,
@@ -36,6 +37,7 @@ class CVExtractionFailureCode:
     AI_PROVIDER_REQUEST_INVALID = "AI_PROVIDER_REQUEST_INVALID"
     AI_RATE_LIMITED = "AI_RATE_LIMITED"
     AI_RESPONSE_INVALID = "AI_RESPONSE_INVALID"
+    AI_CONTEXT_LIMIT_EXCEEDED = "AI_CONTEXT_LIMIT_EXCEEDED"
     UNKNOWN_EXTRACTION_FAILURE = "UNKNOWN_EXTRACTION_FAILURE"
 
 
@@ -111,7 +113,7 @@ class CandidateCVExtractionService:
             id=uuid.uuid4(),
             cv_id=cv.id,
             provider=settings.ai_provider.strip().lower(),
-            model=settings.gemini_model,
+            model=configured_ai_model(),
             started_at=now,
             created_at=now,
             updated_at=now,
@@ -174,6 +176,19 @@ class CandidateCVExtractionService:
                 detail={
                     "code": CVExtractionFailureCode.AI_RATE_LIMITED,
                     "message": "CV extraction is temporarily rate limited.",
+                },
+            ) from exc
+        except CVAIContextLimitError as exc:
+            self._persist_failure(
+                extraction_id,
+                CVExtractionFailureCode.AI_CONTEXT_LIMIT_EXCEEDED,
+                "Nội dung CV vượt quá ngữ cảnh xử lý an toàn của mô hình AI.",
+            )
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail={
+                    "code": CVExtractionFailureCode.AI_CONTEXT_LIMIT_EXCEEDED,
+                    "message": "CV content exceeds the safe AI context limit.",
                 },
             ) from exc
         except (CVAIProviderUnavailableError, AIProviderError) as exc:

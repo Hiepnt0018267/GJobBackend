@@ -1,14 +1,17 @@
 """Task 08A: secure candidate job-application integration tests."""
 import uuid
+from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.exc import IntegrityError
 
 from app.core.database import SessionLocal
-from app.core.security import hash_password
+from app.core.security import decode_access_token, hash_password
 from app.main import app
 from app.models.application import JobApplication
+from app.models.cv import CV, CVSourceType
+from app.models.cv_extraction import CVExtraction, CVExtractionStatus
 from app.models.job import Job, JobStatus
 from app.models.user import User, UserRole
 
@@ -62,6 +65,56 @@ def _create_cv(token: str) -> dict:
     return response.json()
 
 
+def _create_uploaded_cv_with_extraction(
+    token: str, extraction_status: CVExtractionStatus | None
+) -> CV:
+    payload = decode_access_token(token)
+    assert payload and payload.get("sub")
+    now = datetime.now(timezone.utc)
+    db = SessionLocal()
+    try:
+        cv = CV(
+            candidate_id=uuid.UUID(payload["sub"]),
+            source_type=CVSourceType.UPLOADED,
+            title="Uploaded application CV",
+            storage_key=f"tests/{uuid.uuid4()}.pdf",
+            original_filename="candidate.pdf",
+            mime_type="application/pdf",
+            file_size=128,
+            uploaded_at=now,
+        )
+        db.add(cv)
+        db.flush()
+        if extraction_status == CVExtractionStatus.PROCESSING:
+            db.add(
+                CVExtraction(
+                    cv_id=cv.id,
+                    status=extraction_status,
+                    provider="fake",
+                    model="fake",
+                    started_at=now,
+                )
+            )
+        elif extraction_status == CVExtractionStatus.FAILED:
+            db.add(
+                CVExtraction(
+                    cv_id=cv.id,
+                    status=extraction_status,
+                    provider="fake",
+                    model="fake",
+                    error_code="AI_PROVIDER_UNAVAILABLE",
+                    failure_reason="Test failure",
+                    started_at=now,
+                    completed_at=now,
+                )
+            )
+        db.commit()
+        db.refresh(cv)
+        return cv
+    finally:
+        db.close()
+
+
 def _apply(token: str, job_id: str, cv_id: str):
     return client.post(f"{JOBS_BASE}/{job_id}/applications", json={"cv_id": cv_id}, headers=_headers(token))
 
@@ -85,6 +138,22 @@ def test_candidate_submits_approved_job_with_own_cv_and_server_managed_fields():
     assert payload["status"] == "SUBMITTED"
     assert payload["candidate_id"]
     assert client.post(f"{JOBS_BASE}/{job_id}/applications", json={"cv_id": cv["id"], "status": "HIRED"}, headers=_headers(token)).status_code == 422
+
+
+@pytest.mark.parametrize(
+    "extraction_status",
+    [None, CVExtractionStatus.PROCESSING, CVExtractionStatus.FAILED],
+)
+def test_candidate_can_apply_with_uploaded_cv_regardless_of_extraction_status(
+    extraction_status: CVExtractionStatus | None,
+):
+    token = _token()
+    cv = _create_uploaded_cv_with_extraction(token, extraction_status)
+
+    response = _apply(token, _create_job(), str(cv.id))
+
+    assert response.status_code == 201, response.text
+    assert response.json()["cv_id"] == str(cv.id)
 
 
 @pytest.mark.parametrize("job_status", [JobStatus.PENDING, JobStatus.REJECTED, JobStatus.CLOSED])

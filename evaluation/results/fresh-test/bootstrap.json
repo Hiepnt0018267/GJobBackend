@@ -1,0 +1,67 @@
+{
+  "intervals": {
+    "baseline-v1": {
+      "average_precision": {
+        "high": 0.9333114171985679,
+        "low": 0.7402734292081158,
+        "valid_resamples": 1000
+      },
+      "f1": {
+        "high": 0.8571428571428571,
+        "low": 0.65625,
+        "valid_resamples": 1000
+      },
+      "precision": {
+        "high": 0.853745644599303,
+        "low": 0.5799736842105263,
+        "valid_resamples": 1000
+      },
+      "recall": {
+        "high": 0.9428571428571428,
+        "low": 0.6764705882352942,
+        "valid_resamples": 1000
+      },
+      "roc_auc": {
+        "high": 0.9099333984952152,
+        "low": 0.7141492346938775,
+        "valid_resamples": 1000
+      }
+    },
+    "semantic-v1": {
+      "average_precision": {
+        "high": 0.9473681795570374,
+        "low": 0.6963740702324214,
+        "valid_resamples": 1000
+      },
+      "f1": {
+        "high": 0.8775634644101543,
+        "low": 0.6823529411764706,
+        "valid_resamples": 1000
+      },
+      "precision": {
+        "high": 0.8409090909090909,
+        "low": 0.5869167550371156,
+        "valid_resamples": 1000
+      },
+      "recall": {
+        "high": 0.9729907539118066,
+        "low": 0.75,
+        "valid_resamples": 1000
+      },
+      "roc_auc": {
+        "high": 0.9328459465556239,
+        "low": 0.7360949017199018,
+        "valid_resamples": 1000
+      }
+    }
+  },
+  "limitation": "Rows sharing entities inside test are dependent; row intervals may understate uncertainty.",
+  "method": "paired row percentile bootstrap after grouping; thresholds fixed",
+  "paired_f1_delta_baseline_minus_semantic": {
+    "high": 0.09519091070163009,
+    "low": -0.14080238595708364,
+    "valid_resamples": 1000
+  },
+  "resamples": 1000,
+  "seed": 42
+}

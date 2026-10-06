@@ -19,6 +19,9 @@ def test_embedding_settings_defaults() -> None:
     assert configured.embedding_model == "bge-m3"
     assert configured.ollama_base_url == "http://localhost:11434"
     assert configured.embedding_timeout_seconds == 30.0
+    assert configured.ollama_llm_model == "qwen3:8b"
+    assert configured.ollama_llm_timeout_seconds == 90.0
+    assert configured.ollama_llm_num_ctx == 8192
 
 
 @pytest.mark.parametrize(
@@ -30,6 +33,11 @@ def test_embedding_settings_defaults() -> None:
         ("embedding_timeout_seconds", 0),
         ("embedding_timeout_seconds", -1),
         ("embedding_timeout_seconds", 121),
+        ("ollama_llm_model", ""),
+        ("ollama_llm_timeout_seconds", 0),
+        ("ollama_llm_timeout_seconds", 121),
+        ("ollama_llm_num_ctx", 1023),
+        ("ollama_llm_num_ctx", 131_073),
     ],
 )
 def test_invalid_embedding_settings_are_rejected(field: str, value: object) -> None:

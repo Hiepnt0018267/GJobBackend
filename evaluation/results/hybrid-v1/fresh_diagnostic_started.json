@@ -1,0 +1,18 @@
+{
+  "config_sha256": "ad05275ae64f96fee03378cea50f5ee12f894d9774a7ce2d53a217ece4f7b976",
+  "fresh_artifact_hashes": {
+    "evaluation\\results\\fresh-test\\baseline_false_negatives.csv": "029f1a56585149880d91ac4ca33327cf83071b3dd74dc820f2a5383bf0659102",
+    "evaluation\\results\\fresh-test\\baseline_false_positives.csv": "dbdba752b0f0332c7d0773228648c27f6bd3e5b2a655eefe0cd226309a38aadd",
+    "evaluation\\results\\fresh-test\\bootstrap.json": "40bb2038ce67333431b4e6f7fa486f4bc3cc3c13140c95453dfc7c739239782d",
+    "evaluation\\results\\fresh-test\\error_overlap.csv": "b8ad0c7ede3c73771865d978c51db5006565813ad9d297ff8b6ef2b1a4eca0b3",
+    "evaluation\\results\\fresh-test\\evaluation_started.json": "17344e907564ff1ac888b8dc421fbf74c8d1e1b682506529280c3aca01c6269e",
+    "evaluation\\results\\fresh-test\\fresh_ground_truth_frozen.json": "cf297913f16c384bad2a92c458a5986429b3b288968f6e1cbdaf9ae43f7f184a",
+    "evaluation\\results\\fresh-test\\metrics.json": "a1cda606f07577e6c0e62ffed7f4fb19d8abec6180b8f47cbe33505648d40159",
+    "evaluation\\results\\fresh-test\\predictions.csv": "358cc30221602dd6e5e3343ea5e5af8cc123c3a951dab9eb499f5aba64bfaafb",
+    "evaluation\\results\\fresh-test\\report.md": "debaf8e4aa7b7ee0e0333bce1129099008b337fbb34efab2d4e5525be0c33843",
+    "evaluation\\results\\fresh-test\\semantic_false_negatives.csv": "e4d25faebb5b3b6294f2e5b584a87b0550c28fa3655c3b9a40cd87ba5625e4c3",
+    "evaluation\\results\\fresh-test\\semantic_false_positives.csv": "27dae8227d1c4ca0a73a3e519a09e22b15eebbe1141d9f3cdf179c4b7b772271"
+  },
+  "status": "POST-HOC CONSUMED FRESH-SET DIAGNOSTIC, NOT INDEPENDENT HYBRID VALIDATION",
+  "timestamp": "2026-10-05T23:06:28.340942+00:00"
+}

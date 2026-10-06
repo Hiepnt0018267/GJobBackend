@@ -17,6 +17,7 @@ from app.schemas.cv_extraction import StructuredCVExtractionResult
 from app.services.cv_extraction_service import CandidateCVExtractionService
 from app.services.cv_structured_extraction_service import (
     CVAIRateLimitError,
+    CVAIContextLimitError,
     CVAIProviderRequestError,
     CVAIProviderUnavailableError,
     CVExtractionValidationError,
@@ -166,14 +167,18 @@ def test_trigger_success_persists_typed_draft_metadata_without_mutating_cv(
         }
     finally:
         db.close()
-
     response = client.post(f"{BASE}/{cv.id}/extractions", headers=_headers(token))
 
     assert response.status_code == 201, response.text
     body = response.json()
     assert body["status"] == "SUCCEEDED"
     assert body["provider"] == settings.ai_provider.strip().lower()
-    assert body["model"] == settings.gemini_model
+    expected_model = (
+        settings.gemini_model
+        if settings.ai_provider.strip().lower() == "gemini"
+        else settings.ollama_llm_model
+    )
+    assert body["model"] == expected_model
     assert body["result"]["personal_info"]["full_name"] == "Nguyễn Văn A"
     assert "structured_result" not in body
     assert "storage_key" not in body
@@ -199,6 +204,24 @@ def test_trigger_success_persists_typed_draft_metadata_without_mutating_cv(
             assert getattr(reloaded_cv, field) == value
     finally:
         db.close()
+
+
+def test_trigger_persists_selected_ollama_provider_and_model(monkeypatch) -> None:
+    candidate, token = _create_user()
+    cv = _create_cv(candidate.id, CVSourceType.UPLOADED)
+    _install_extractor(monkeypatch, StubStructuredExtractor())
+    monkeypatch.setattr(settings, "ai_provider", "ollama")
+    monkeypatch.setattr(settings, "ollama_llm_model", "qwen3:audit-test")
+
+    response = client.post(f"{BASE}/{cv.id}/extractions", headers=_headers(token))
+
+    assert response.status_code == 201, response.text
+    assert response.json()["provider"] == "ollama"
+    assert response.json()["model"] == "qwen3:audit-test"
+    stored = _latest_row(cv.id)
+    assert stored is not None
+    assert stored.provider == "ollama"
+    assert stored.model == "qwen3:audit-test"
 
 
 def test_builder_foreign_cv_and_non_candidate_roles_are_blocked_without_ai(
@@ -258,6 +281,11 @@ def test_builder_foreign_cv_and_non_candidate_roles_are_blocked_without_ai(
             CVExtractionValidationError("raw invalid response"),
             502,
             "AI_RESPONSE_INVALID",
+        ),
+        (
+            CVAIContextLimitError("private context detail"),
+            422,
+            "AI_CONTEXT_LIMIT_EXCEEDED",
         ),
     ],
 )
@@ -551,3 +579,8 @@ def test_rate_limited_reprocess_keeps_previous_success_matchable(monkeypatch) ->
     assert listed_cv["extraction_status"] == "FAILED"
     assert listed_cv["extraction_error_code"] == "AI_RATE_LIMITED"
     assert listed_cv["is_matchable"] is True
+
+    detailed_cv = client.get(f"{BASE}/{cv.id}", headers=_headers(token))
+    assert detailed_cv.status_code == 200
+    assert detailed_cv.json()["extraction_status"] == "FAILED"
+    assert detailed_cv.json()["is_matchable"] is True

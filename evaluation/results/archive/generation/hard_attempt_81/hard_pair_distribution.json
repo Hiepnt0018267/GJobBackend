@@ -1,0 +1,415 @@
+{
+  "seed": 42,
+  "target": 220,
+  "total_pairs": 81,
+  "quota_shortfall": {
+    "POSITIVE_CANDIDATE": 60,
+    "HARD_NEGATIVE_CANDIDATE": 79,
+    "EASY_NEGATIVE_CANDIDATE": 0
+  },
+  "candidate_type_counts": {
+    "POSITIVE_CANDIDATE": 30,
+    "HARD_NEGATIVE_CANDIDATE": 21,
+    "EASY_NEGATIVE_CANDIDATE": 30
+  },
+  "old_total": 400,
+  "old_reviewed": 78,
+  "old_selected": 10,
+  "new_generated": 71,
+  "final_reviewed": 10,
+  "selection_status_counts": {
+    "PILOT_ONLY": 68,
+    "INCLUDED_MAIN_BENCHMARK": 10,
+    "ARCHIVE_REDUNDANT": 240,
+    "ARCHIVE_TRIVIAL": 80,
+    "ARCHIVE_NEAR_DUPLICATE": 2
+  },
+  "unique_cvs": 51,
+  "unique_jobs": 74,
+  "max_pairs_per_cv": 4,
+  "max_pairs_per_jd": 3,
+  "category_distribution": {
+    "HEALTHCARE": 1,
+    "CONSULTANT": 6,
+    "FITNESS": 2,
+    "APPAREL": 1,
+    "ACCOUNTANT": 10,
+    "AUTOMOBILE": 5,
+    "BANKING": 2,
+    "BUSINESS-DEVELOPMENT": 1,
+    "AVIATION": 4,
+    "ADVOCATE": 6,
+    "ENGINEERING": 1,
+    "CONSTRUCTION": 4,
+    "CHEF": 3,
+    "DIGITAL-MEDIA": 1,
+    "FINANCE": 4,
+    "PUBLIC-RELATIONS": 2,
+    "INFORMATION-TECHNOLOGY": 4,
+    "SALES": 3,
+    "AGRICULTURE": 1,
+    "BPO": 6,
+    "TEACHER": 1,
+    "ARTS": 3,
+    "HR": 5,
+    "DESIGNER": 5
+  },
+  "domain_distribution": {
+    "education": 8,
+    "accounting": 19,
+    "hospitality": 3,
+    "finance": 5,
+    "engineering": 1,
+    "software": 14,
+    "marketing": 2,
+    "operations": 3,
+    "sales": 2,
+    "healthcare": 5,
+    "legal": 5,
+    "unknown": 5,
+    "science": 1,
+    "hr": 5,
+    "support": 1,
+    "design": 2
+  },
+  "title_family_coverage": {
+    "teaching": 4,
+    "mobile": 2,
+    "sales": 2,
+    "credit": 2,
+    "unknown": 36,
+    "accounting": 13,
+    "data": 3,
+    "infrastructure": 6,
+    "marketing": 2,
+    "laboratory": 3,
+    "frontend": 3,
+    "investment": 2,
+    "backend": 1,
+    "clinical": 2
+  },
+  "industry_coverage": {
+    "67": 4,
+    "68": 7,
+    "69": 4,
+    "27": 4,
+    "34": 2,
+    "6": 10,
+    "31": 2,
+    "44": 5,
+    "7": 1,
+    "96": 9,
+    "41": 2,
+    "54": 1,
+    "80": 2,
+    "48": 5,
+    "51": 2,
+    "12": 2,
+    "76": 1,
+    "9": 3,
+    "1": 2,
+    "70": 1,
+    "121": 2,
+    "43": 2,
+    "46": 1,
+    "92": 3,
+    "47": 3,
+    "104": 5,
+    "37": 1,
+    "14": 2,
+    "75": 2,
+    "52": 1,
+    "3": 1,
+    "91": 1,
+    "50": 1,
+    "139": 1,
+    "126": 1,
+    "127": 1,
+    "98": 1,
+    "10": 1,
+    "32": 1,
+    "118": 1,
+    "4": 1
+  },
+  "duplicate_pairs": 0,
+  "near_duplicate_jds_excluded": 159,
+  "hardness": {
+    "POSITIVE_CANDIDATE": {
+      "count": 30,
+      "median_lexical_overlap": 0.17490050000000001,
+      "median_title_overlap": 1.0,
+      "same_domain_rate": 1.0
+    },
+    "HARD_NEGATIVE_CANDIDATE": {
+      "count": 21,
+      "median_lexical_overlap": 0.129522,
+      "median_title_overlap": 0.477515,
+      "same_domain_rate": 1.0
+    },
+    "EASY_NEGATIVE_CANDIDATE": {
+      "count": 30,
+      "median_lexical_overlap": 0.057855500000000004,
+      "median_title_overlap": 0.0,
+      "same_domain_rate": 0.0
+    }
+  },
+  "old_hardness": {
+    "POSITIVE_CANDIDATE": {
+      "count": 160,
+      "median_lexical_overlap": 0.0467205,
+      "median_title_overlap": 0.08808099999999999,
+      "same_domain_rate": 0.13125
+    },
+    "HARD_NEGATIVE_CANDIDATE": {
+      "count": 160,
+      "median_lexical_overlap": 0.036552,
+      "median_title_overlap": 0.0,
+      "same_domain_rate": 0.0625
+    },
+    "EASY_NEGATIVE_CANDIDATE": {
+      "count": 80,
+      "median_lexical_overlap": 0.017274499999999998,
+      "median_title_overlap": 0.0,
+      "same_domain_rate": 0.025
+    }
+  },
+  "limitations": [
+    "Candidate types are not ground truth.",
+    "Role/specialization vocabularies are lexical cues, not formal taxonomies.",
+    "Seniority from CV introduction can be missing or ambiguous.",
+    "No skill_abr semantics are invented."
+  ],
+  "examples": {
+    "POSITIVE_CANDIDATE": [
+      {
+        "pair_id": "pair_51e3839bec5bfeb8ca44",
+        "cv_id": "18725071",
+        "job_id": "3693043732",
+        "job_title": "Special Education Teacher",
+        "cv_family": "education",
+        "job_family": "education",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.174543,
+        "title_overlap": 1.0
+      },
+      {
+        "pair_id": "pair_e770c7cee4e7189bbab2",
+        "cv_id": "18725071",
+        "job_id": "3693048951",
+        "job_title": "Special Education Teacher → $2500 Sign-on Bonus!",
+        "cv_family": "education",
+        "job_family": "education",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.181582,
+        "title_overlap": 0.536649
+      },
+      {
+        "pair_id": "pair_c2f7473e6d1d3415eea3",
+        "cv_id": "16924102",
+        "job_id": "3693598847",
+        "job_title": "Director of Event Operations",
+        "cv_family": "hospitality",
+        "job_family": "hospitality",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.185424,
+        "title_overlap": 0.339297
+      },
+      {
+        "pair_id": "pair_ca99d7905a25edf1b105",
+        "cv_id": "35172961",
+        "job_id": "3701321964",
+        "job_title": "Cleanroom Process Technician",
+        "cv_family": "engineering",
+        "job_family": "engineering",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.174542,
+        "title_overlap": 0.728223
+      },
+      {
+        "pair_id": "pair_125166e1bdde7bdbe337",
+        "cv_id": "28969385",
+        "job_id": "3694100639",
+        "job_title": "Accounts Payable Specialist",
+        "cv_family": "accounting",
+        "job_family": "accounting",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.180829,
+        "title_overlap": 1.0
+      }
+    ],
+    "HARD_NEGATIVE_CANDIDATE": [
+      {
+        "pair_id": "pair_dd6d7043382495743b6f",
+        "cv_id": "28969385",
+        "job_id": "3693071651",
+        "job_title": "Accountant (Bilingual Chinese)",
+        "cv_family": "accounting",
+        "job_family": "accounting",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.142495,
+        "title_overlap": 0.287853
+      },
+      {
+        "pair_id": "pair_483baeae546774857dcb",
+        "cv_id": "20356750",
+        "job_id": "3693048957",
+        "job_title": "Acquisitions/Investment Associate – Industrial and Outdoor Storage (IOS)",
+        "cv_family": "finance",
+        "job_family": "finance",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.141942,
+        "title_overlap": 0.354835
+      },
+      {
+        "pair_id": "pair_59b96175de8214e26780",
+        "cv_id": "29051656",
+        "job_id": "3697381432",
+        "job_title": "Oracle Database Administrator (7121)",
+        "cv_family": "software",
+        "job_family": "software",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.266005,
+        "title_overlap": 1.0
+      },
+      {
+        "pair_id": "pair_04be82e7b02372bc30f5",
+        "cv_id": "39441617",
+        "job_id": "3697395824",
+        "job_title": "Network Engineer III",
+        "cv_family": "software",
+        "job_family": "software",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.153231,
+        "title_overlap": 0.352574
+      },
+      {
+        "pair_id": "pair_693e79bed9650a5b1cd5",
+        "cv_id": "39441617",
+        "job_id": "3701323844",
+        "job_title": "IT Infrastructure Engineer",
+        "cv_family": "software",
+        "job_family": "software",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.129522,
+        "title_overlap": 1.0
+      },
+      {
+        "pair_id": "pair_afec9eb2c2bcc694565d",
+        "cv_id": "12413512",
+        "job_id": "3697386941",
+        "job_title": "Instructor (Math & Science)",
+        "cv_family": "education",
+        "job_family": "education",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.123878,
+        "title_overlap": 0.0
+      },
+      {
+        "pair_id": "pair_ea0cf048bb7b45b38e34",
+        "cv_id": "18368613",
+        "job_id": "3694105162",
+        "job_title": "Vice President of Sales",
+        "cv_family": "sales",
+        "job_family": "sales",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.128822,
+        "title_overlap": 0.173738
+      },
+      {
+        "pair_id": "pair_20f06024c471f830a3bb",
+        "cv_id": "29051656",
+        "job_id": "3693046734",
+        "job_title": "Database Developer",
+        "cv_family": "software",
+        "job_family": "software",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.134082,
+        "title_overlap": 0.468655
+      },
+      {
+        "pair_id": "pair_714cc1d12184ccbba34c",
+        "cv_id": "41152404",
+        "job_id": "3693046079",
+        "job_title": "AEM Developer",
+        "cv_family": "software",
+        "job_family": "software",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.125142,
+        "title_overlap": 0.0
+      },
+      {
+        "pair_id": "pair_105013f0ef2540392fb0",
+        "cv_id": "70892619",
+        "job_id": "3697386941",
+        "job_title": "Instructor (Math & Science)",
+        "cv_family": "education",
+        "job_family": "education",
+        "mismatch_cues": "specialization_difference",
+        "lexical_overlap": 0.123293,
+        "title_overlap": 0.0
+      }
+    ],
+    "EASY_NEGATIVE_CANDIDATE": [
+      {
+        "pair_id": "pair_88c0bc11a9a74c64975c",
+        "cv_id": "23933031",
+        "job_id": "3693586403",
+        "job_title": "IT Auditor",
+        "cv_family": "support",
+        "job_family": "accounting",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.063702,
+        "title_overlap": 0.0
+      },
+      {
+        "pair_id": "pair_f59c48fae17c1052d9ea",
+        "cv_id": "34317538",
+        "job_id": "3699415350",
+        "job_title": "Proposal Manager - Infrastructure Business Development",
+        "cv_family": "design",
+        "job_family": "operations",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.06953,
+        "title_overlap": 0.0
+      },
+      {
+        "pair_id": "pair_f60a819dc689adf7d8d0",
+        "cv_id": "24285142",
+        "job_id": "3693587388",
+        "job_title": "Boutique Manager",
+        "cv_family": "design",
+        "job_family": "sales",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.035599,
+        "title_overlap": 0.0
+      },
+      {
+        "pair_id": "pair_89056f119c62e5cca711",
+        "cv_id": "29221006",
+        "job_id": "3697397763",
+        "job_title": "Assistant Store Manager (ASM)",
+        "cv_family": "hr",
+        "job_family": "healthcare",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.083196,
+        "title_overlap": 0.0
+      },
+      {
+        "pair_id": "pair_16f026adcb074c59b3c2",
+        "cv_id": "27496514",
+        "job_id": "3701158169",
+        "job_title": "Manager, Project Financials",
+        "cv_family": "legal",
+        "job_family": "unknown",
+        "mismatch_cues": "",
+        "lexical_overlap": 0.063621,
+        "title_overlap": 0.0
+      }
+    ]
+  },
+  "archive_files": [
+    "evaluation\\data\\archive\\evaluation_pairs_draft_old_400.csv",
+    "evaluation\\data\\archive\\evaluation_labeling_progress_old.csv"
+  ],
+  "sha256": "adb98b634e050f957fbaaa3c4a03df86ece8b8eaed94b0784bf4cb56ac5432f8"
+}

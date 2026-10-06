@@ -1,0 +1,132 @@
+{
+  "all_labels_blank": true,
+  "candidate_counts": {
+    "EASY_NEGATIVE_CANDIDATE": 10,
+    "HARD_NEGATIVE_CANDIDATE": 32,
+    "POSITIVE_CANDIDATE": 28
+  },
+  "category_distribution": {
+    "ACCOUNTANT": 3,
+    "ADVOCATE": 4,
+    "AGRICULTURE": 4,
+    "APPAREL": 2,
+    "ARTS": 3,
+    "AUTOMOBILE": 2,
+    "AVIATION": 4,
+    "BANKING": 3,
+    "BPO": 2,
+    "BUSINESS-DEVELOPMENT": 3,
+    "CHEF": 4,
+    "CONSTRUCTION": 4,
+    "CONSULTANT": 2,
+    "DESIGNER": 2,
+    "DIGITAL-MEDIA": 2,
+    "ENGINEERING": 2,
+    "FINANCE": 3,
+    "FITNESS": 2,
+    "HEALTHCARE": 4,
+    "HR": 3,
+    "INFORMATION-TECHNOLOGY": 4,
+    "PUBLIC-RELATIONS": 2,
+    "SALES": 2,
+    "TEACHER": 4
+  },
+  "exclusion_file_hashes": {
+    "evaluation\\data\\derived\\evaluation_pairs_draft.csv": "0c11b9771a9797473ba243e89924309469bda19b488b7312be90d5f044d648b3",
+    "evaluation\\data\\derived\\evaluation_pairs_labeled.csv": "28f371400b637045155ca12543869052998be29b3f8a3b575b7e46313851fad8",
+    "evaluation\\data\\derived\\evaluation_pairs_pilot_reviewed.csv": "663ac7fa1007703bed56c71ef24d6da565bda79082a059bdab0a0da555e2bc3e"
+  },
+  "generator_sha256": "cf6d132c6ddc2103a991ce5adecee6ca44a8be8636646ec465f78d04528711a2",
+  "job_domain_distribution": {
+    "accounting": 8,
+    "aviation": 1,
+    "construction": 5,
+    "design": 1,
+    "education": 7,
+    "engineering": 5,
+    "finance": 4,
+    "fitness": 2,
+    "healthcare": 3,
+    "hospitality": 3,
+    "hr": 3,
+    "marketing": 5,
+    "operations": 5,
+    "sales": 4,
+    "science": 1,
+    "software": 7,
+    "support": 2,
+    "unknown": 4
+  },
+  "model_scores_computed": false,
+  "old_benchmark_sha256": "28f371400b637045155ca12543869052998be29b3f8a3b575b7e46313851fad8",
+  "old_cv_overlap": 0,
+  "old_jd_overlap": 0,
+  "old_pair_overlap": 0,
+  "pool_audit": {
+    "additional_historical_cv_ids": 42,
+    "additional_historical_jd_ids": 123,
+    "cv_extra_content_excluded": 0,
+    "cv_loader": {
+      "duplicate_skipped": 2,
+      "eligible_unique": 2481,
+      "ineligible": 1,
+      "selected": 2481
+    },
+    "cv_raw": {
+      "blank": 1,
+      "total": 2484
+    },
+    "eligible_cv_after_quality": 2481,
+    "eligible_jd_after_quality": 13780,
+    "fresh_cvs": 2237,
+    "fresh_jobs": 13318,
+    "jd_extra_duplicate_content_excluded": 159,
+    "jd_loader": {
+      "duplicate_skipped": 2053,
+      "eligible_unique": 13780,
+      "ineligible": 53,
+      "selected": 13780
+    },
+    "jd_raw": {
+      "blank": 1,
+      "short": 52,
+      "total": 15886
+    },
+    "old_cv_eligible_excluded": 244,
+    "old_cv_ids": 244,
+    "old_jd_eligible_excluded": 303,
+    "old_jd_ids": 303,
+    "primary_220_cv_ids": 202,
+    "primary_220_jd_ids": 180,
+    "sampled_cvs": 400
+  },
+  "raw_previews_omitted": true,
+  "rows": 70,
+  "sampling": "Existing professional-family/mismatch/title/lexical evidence gates; seeded selection, no evaluation/model scoring.",
+  "sampling_code_sha256": "e4b704d3224f163b1caa7204e9795bd0cb577cc73b9c6f3b03ecbab22b7df9b1",
+  "sampling_metadata_not_ground_truth": true,
+  "seed": 42,
+  "seed_sha256": "9c2d506c45c9fc7386d53627de09b5c12a51404d51f5852a40405af0a4eedca3",
+  "source_hashes": {
+    "Resume.csv": "816a7cd985a9a41e3ce8d1e83cb7e1beb1e854a89c1cf1fd0d75494faaa0559d",
+    "benefits.csv": "654cd4b3609902ef9623e595623c28abff02dd986f55d88a04b4ebe40ed72259",
+    "companies.csv": "6b28eff58886cdc8687c56fe574c5723480acbc8ed07d0dccfb2754f0e509cc4",
+    "company_industries.csv": "47dba96dffc476dffa2b4e2f642503fa72f51d99f47b4be153e5bf26ebae2b3d",
+    "company_specialities.csv": "408365d0ac69410a30cece48cb1a7997550d4279ee8c4c05f3b70dc219d39ef5",
+    "employee_counts.csv": "b4911e3ba00eeeadd2d6fcaf65ef43dabbbd1b2d8e66f47c68af93893088a0dd",
+    "job_industries.csv": "f04162a407f0b5135642a1b8d48f71d1b94ad0660c8bf68cafc9e5da9e2dcfff",
+    "job_postings.csv": "d782e95f35cbd5f658ad7124021c938f5c8c1656f1c059b6dc9d402d1eaa195f",
+    "job_skills.csv": "bedd1dbb061fd5ed4a8d3473cb01f9c67308b638c18bb8ad66d08629048060b2"
+  },
+  "target": 70,
+  "unique_cvs": 70,
+  "unique_jobs": 70,
+  "validation": {
+    "old_cv_overlap": 0,
+    "old_jd_overlap": 0,
+    "old_pair_overlap": 0,
+    "rows": 70,
+    "unique_cvs": 70,
+    "unique_jobs": 70
+  }
+}

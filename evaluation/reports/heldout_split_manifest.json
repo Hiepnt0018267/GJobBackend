@@ -1,0 +1,1036 @@
+{
+  "assignment": {
+    "pair_00b86c026205d5d0c274": {
+      "component_id": "component_adc2d08ab127974e",
+      "split": "test"
+    },
+    "pair_03d8f6f1c5762408e997": {
+      "component_id": "component_b87ce403b5dc0c8c",
+      "split": "calibration"
+    },
+    "pair_04265b56be13601792a5": {
+      "component_id": "component_90bc8069eba20dad",
+      "split": "test"
+    },
+    "pair_04be82e7b02372bc30f5": {
+      "component_id": "component_b87ce403b5dc0c8c",
+      "split": "calibration"
+    },
+    "pair_0679e3f11adf0eb92d83": {
+      "component_id": "component_42f17658dd68c3a7",
+      "split": "test"
+    },
+    "pair_06e6916b7738ae51ab37": {
+      "component_id": "component_de9c1e2dfea93b5d",
+      "split": "calibration"
+    },
+    "pair_07064fae21cb21e66e8c": {
+      "component_id": "component_6bda1b02e96719cd",
+      "split": "test"
+    },
+    "pair_07cbddd5debb210cad77": {
+      "component_id": "component_9eeb0e77928cd54d",
+      "split": "calibration"
+    },
+    "pair_0877a0fcf4e04de504c0": {
+      "component_id": "component_1bfb3ded36adbfe3",
+      "split": "calibration"
+    },
+    "pair_08e59d39b40e7d9a60bb": {
+      "component_id": "component_7528ca2e970e0f22",
+      "split": "test"
+    },
+    "pair_0b2bd1fa586de0f6645d": {
+      "component_id": "component_4b70c6c77538df48",
+      "split": "test"
+    },
+    "pair_0b43ce019c2e6293ca29": {
+      "component_id": "component_c8dab3b9cdf3c99b",
+      "split": "test"
+    },
+    "pair_0bfa12bc9ebfbbeb5338": {
+      "component_id": "component_8be22dcece42574d",
+      "split": "test"
+    },
+    "pair_0c41606525a9d75667e8": {
+      "component_id": "component_03fdb92b6f9450c9",
+      "split": "calibration"
+    },
+    "pair_0dfbc4b1369a17640692": {
+      "component_id": "component_13d10f67d7db0ebe",
+      "split": "calibration"
+    },
+    "pair_0e6e0e16595cb0d7a2e7": {
+      "component_id": "component_59b962b4ecb16e79",
+      "split": "test"
+    },
+    "pair_0f1ea871fb169fccf78c": {
+      "component_id": "component_ae0d9851a8661f65",
+      "split": "calibration"
+    },
+    "pair_0fd70655baf9687a43cb": {
+      "component_id": "component_b10a1d9d7d3ba1b4",
+      "split": "test"
+    },
+    "pair_14c88a1d7de2f53fac2f": {
+      "component_id": "component_22104a8aadb99c75",
+      "split": "test"
+    },
+    "pair_154f1bddf2a05d77fb7f": {
+      "component_id": "component_33c0a26f0b1e665e",
+      "split": "test"
+    },
+    "pair_16628dc76c06a34b9a40": {
+      "component_id": "component_538bbec63e493ce2",
+      "split": "test"
+    },
+    "pair_16cc0b1c02c9faddd190": {
+      "component_id": "component_8ebaec1b608ec6d8",
+      "split": "test"
+    },
+    "pair_16dbf013653c14cda733": {
+      "component_id": "component_10033284f2996cc8",
+      "split": "test"
+    },
+    "pair_1824937f8aae29662faa": {
+      "component_id": "component_aa1b4cb00c887890",
+      "split": "calibration"
+    },
+    "pair_1d614d0e4e32d64ea985": {
+      "component_id": "component_d97092206ceddea8",
+      "split": "calibration"
+    },
+    "pair_200d361f0db70d6ad975": {
+      "component_id": "component_789c3b8434b97895",
+      "split": "calibration"
+    },
+    "pair_21f70823099311bba662": {
+      "component_id": "component_2e701b2aa3bcf135",
+      "split": "calibration"
+    },
+    "pair_225e8427efc8a5fe81d2": {
+      "component_id": "component_12c37224d4a5eaab",
+      "split": "calibration"
+    },
+    "pair_23971734f0f615f9b0ea": {
+      "component_id": "component_5af2b5629875864a",
+      "split": "test"
+    },
+    "pair_25fa05e9d4a7274081f6": {
+      "component_id": "component_99e6bef2fa03c0e9",
+      "split": "calibration"
+    },
+    "pair_26b8e19fcae65f378b0b": {
+      "component_id": "component_ea1c09e3a3f7a74a",
+      "split": "test"
+    },
+    "pair_2dfe249ee6239ec9143f": {
+      "component_id": "component_3f3ca1d830d4be35",
+      "split": "calibration"
+    },
+    "pair_2e3acb1d38a970d5c484": {
+      "component_id": "component_99e6bef2fa03c0e9",
+      "split": "calibration"
+    },
+    "pair_2fcea8a0d775bfa07f64": {
+      "component_id": "component_d52397c9e2534a21",
+      "split": "calibration"
+    },
+    "pair_31f85640f2dae936386b": {
+      "component_id": "component_372e6b87a128a5f8",
+      "split": "calibration"
+    },
+    "pair_32090bd5cbef3ca90519": {
+      "component_id": "component_84268914e412a55c",
+      "split": "calibration"
+    },
+    "pair_33ec2c4bd4e8fb4c629c": {
+      "component_id": "component_2062753ddfd10763",
+      "split": "test"
+    },
+    "pair_345d8a46eb741472230c": {
+      "component_id": "component_18ba871ecdb02550",
+      "split": "calibration"
+    },
+    "pair_375d4b8ee6746e43e9b4": {
+      "component_id": "component_16a58d4675a93288",
+      "split": "calibration"
+    },
+    "pair_375d5ac14b353848a646": {
+      "component_id": "component_5060e91bc7b667a4",
+      "split": "test"
+    },
+    "pair_37a55da99116a894f1a7": {
+      "component_id": "component_0d0ccaf6173e7ebd",
+      "split": "calibration"
+    },
+    "pair_380cd77c4c4e262ed5b6": {
+      "component_id": "component_0f7ae46dcc5fef92",
+      "split": "test"
+    },
+    "pair_384c3f15132ff869a960": {
+      "component_id": "component_12654f25050bb658",
+      "split": "test"
+    },
+    "pair_3b1ba1e4e70617e70aa2": {
+      "component_id": "component_18ba871ecdb02550",
+      "split": "calibration"
+    },
+    "pair_3bd7a9190441b60457e0": {
+      "component_id": "component_16a58d4675a93288",
+      "split": "calibration"
+    },
+    "pair_3cb884e239b6495db4ec": {
+      "component_id": "component_7e5130da096bd192",
+      "split": "calibration"
+    },
+    "pair_420e1a29b5a003da0766": {
+      "component_id": "component_d52397c9e2534a21",
+      "split": "calibration"
+    },
+    "pair_424434b0077e9df4675d": {
+      "component_id": "component_1cfa04985b562e54",
+      "split": "calibration"
+    },
+    "pair_426c595290f062c2f2e4": {
+      "component_id": "component_59194f0fef34ad35",
+      "split": "test"
+    },
+    "pair_4472f35e94c0115cd583": {
+      "component_id": "component_ae0d9851a8661f65",
+      "split": "calibration"
+    },
+    "pair_45e603c7c431a338deb7": {
+      "component_id": "component_18a297596b78a47c",
+      "split": "calibration"
+    },
+    "pair_47390f706386a24597b7": {
+      "component_id": "component_53a5dc3a36d73dc7",
+      "split": "test"
+    },
+    "pair_47da54ac10c8d4ebb64b": {
+      "component_id": "component_ccf344c5ba157e7a",
+      "split": "calibration"
+    },
+    "pair_47f9dcf1003206e5c199": {
+      "component_id": "component_67692a3f8d0caf7b",
+      "split": "test"
+    },
+    "pair_483baeae546774857dcb": {
+      "component_id": "component_4b909c6b40a3a98e",
+      "split": "calibration"
+    },
+    "pair_49c153d75e079b14850c": {
+      "component_id": "component_0d0ccaf6173e7ebd",
+      "split": "calibration"
+    },
+    "pair_4ae1c367d59eaed829c1": {
+      "component_id": "component_c7011a54a076e69c",
+      "split": "calibration"
+    },
+    "pair_4b413e4320c1a7855a5a": {
+      "component_id": "component_c4811651adda5f4f",
+      "split": "test"
+    },
+    "pair_4c52d28bb620dc3ad851": {
+      "component_id": "component_4f54949afb99ccb3",
+      "split": "test"
+    },
+    "pair_4f8dd7116750ced9e6a0": {
+      "component_id": "component_548de2fb1b71d2ab",
+      "split": "calibration"
+    },
+    "pair_4ff2375bb667fc60eab4": {
+      "component_id": "component_29299776b9bc2da6",
+      "split": "calibration"
+    },
+    "pair_503221737da1343e7923": {
+      "component_id": "component_e3506d6a514b9d65",
+      "split": "calibration"
+    },
+    "pair_5095128bc5ac58f534e4": {
+      "component_id": "component_da6d3b3c1995f1fe",
+      "split": "calibration"
+    },
+    "pair_50b125b992d2b8bf3a4b": {
+      "component_id": "component_3afab4726d9fc468",
+      "split": "test"
+    },
+    "pair_51b6190cbe018e1fab22": {
+      "component_id": "component_16a58d4675a93288",
+      "split": "calibration"
+    },
+    "pair_5242b21dcd9fda648b86": {
+      "component_id": "component_f40d69741fc27787",
+      "split": "test"
+    },
+    "pair_5396d6c351ff3848b1ae": {
+      "component_id": "component_548de2fb1b71d2ab",
+      "split": "calibration"
+    },
+    "pair_54e16bac68b18424bc4f": {
+      "component_id": "component_d925f6d17656889b",
+      "split": "test"
+    },
+    "pair_5585548f8a55b4c11dc4": {
+      "component_id": "component_fc1521e2005e5a87",
+      "split": "test"
+    },
+    "pair_56bf40f0f113231426e6": {
+      "component_id": "component_3de3dc40a95ede01",
+      "split": "calibration"
+    },
+    "pair_5730cfe56c5f33c9fe12": {
+      "component_id": "component_04134a965b0504a7",
+      "split": "test"
+    },
+    "pair_5b6af58e7a3e385f75a3": {
+      "component_id": "component_197c294accaff002",
+      "split": "test"
+    },
+    "pair_5bc4b15ac0d7b2c302aa": {
+      "component_id": "component_211ba8de6fa4d9e6",
+      "split": "calibration"
+    },
+    "pair_5c870892a3b7c4327c32": {
+      "component_id": "component_76c04c776be546c1",
+      "split": "test"
+    },
+    "pair_5cf46717e4c3ae2c5251": {
+      "component_id": "component_2ee0acd99dbeedc1",
+      "split": "calibration"
+    },
+    "pair_5d46b01ee548fd36979c": {
+      "component_id": "component_17e6a292ca32d9cd",
+      "split": "test"
+    },
+    "pair_5dbcb036b9362d7b20a5": {
+      "component_id": "component_3d0341d92fb02c54",
+      "split": "test"
+    },
+    "pair_5f3ddfa3326b5314a84f": {
+      "component_id": "component_7f5ea668e2695d38",
+      "split": "test"
+    },
+    "pair_616c5aa493a54bad28f8": {
+      "component_id": "component_ca8805dced0bb3e0",
+      "split": "test"
+    },
+    "pair_6205b0f1a9e5bfe00cf9": {
+      "component_id": "component_3aa949f94f54930d",
+      "split": "calibration"
+    },
+    "pair_6261b0fa4192c67024df": {
+      "component_id": "component_5b4b78902c94a3ec",
+      "split": "calibration"
+    },
+    "pair_629676f8b94c5bb1f944": {
+      "component_id": "component_08f1fdf8933a9042",
+      "split": "test"
+    },
+    "pair_632743b189f992b99ad6": {
+      "component_id": "component_4b30f48c41766cb0",
+      "split": "test"
+    },
+    "pair_64c4914f7e73f30122fe": {
+      "component_id": "component_1cceb2799d4172e6",
+      "split": "test"
+    },
+    "pair_6633028fa43b72b6f205": {
+      "component_id": "component_0924cb25ee027016",
+      "split": "calibration"
+    },
+    "pair_69dc6724429d43ad16d2": {
+      "component_id": "component_49233e756d7c5175",
+      "split": "calibration"
+    },
+    "pair_6b6d32e3cf63f31d3c5a": {
+      "component_id": "component_d48f2090e7bb7ca0",
+      "split": "test"
+    },
+    "pair_6c579e7cd6075434db26": {
+      "component_id": "component_bcf836228153aa13",
+      "split": "calibration"
+    },
+    "pair_6e2f455c59e905e21d09": {
+      "component_id": "component_c5e52bdecb3a219e",
+      "split": "calibration"
+    },
+    "pair_708c80f23b4de7e4c008": {
+      "component_id": "component_bcf836228153aa13",
+      "split": "calibration"
+    },
+    "pair_71ba4be999a46cdf8120": {
+      "component_id": "component_bab14d8f1f63b5b2",
+      "split": "test"
+    },
+    "pair_71d9654107799b2674d9": {
+      "component_id": "component_8785ea81731eed89",
+      "split": "calibration"
+    },
+    "pair_72f973dc7aa568fe0cde": {
+      "component_id": "component_d1fa67c60343fa97",
+      "split": "test"
+    },
+    "pair_73d36fdc6d9a004508fd": {
+      "component_id": "component_dec2bd2eaae4cce7",
+      "split": "calibration"
+    },
+    "pair_73e89161a87918d8452f": {
+      "component_id": "component_e74b1a8f9bcf05ad",
+      "split": "calibration"
+    },
+    "pair_7676e4bd82db4648a5d3": {
+      "component_id": "component_38d5d0d5fb2eaaa5",
+      "split": "test"
+    },
+    "pair_7ad35055e3fa7ed0b4a1": {
+      "component_id": "component_136cc3cfa5306549",
+      "split": "test"
+    },
+    "pair_7e78a3f9ca8f10d48104": {
+      "component_id": "component_560c4627200a4bda",
+      "split": "test"
+    },
+    "pair_7fb483c14baf4974b1d4": {
+      "component_id": "component_be29eee993bbe0f7",
+      "split": "calibration"
+    },
+    "pair_80a7790d275311155fad": {
+      "component_id": "component_f264948f5c5cfd28",
+      "split": "test"
+    },
+    "pair_828a899439028f0cd1c7": {
+      "component_id": "component_372e6b87a128a5f8",
+      "split": "calibration"
+    },
+    "pair_845e3d7a06c78ba5a7e3": {
+      "component_id": "component_bcfd1e4b04a87b25",
+      "split": "test"
+    },
+    "pair_84a31eca447e35914e65": {
+      "component_id": "component_231eef9db114dca2",
+      "split": "test"
+    },
+    "pair_84fab0eb52b973e2070e": {
+      "component_id": "component_166e82044aa1d96c",
+      "split": "test"
+    },
+    "pair_85e1e840266b2f6eb20d": {
+      "component_id": "component_a98303128a676299",
+      "split": "calibration"
+    },
+    "pair_86c6ac68047bf8ba0c49": {
+      "component_id": "component_e74b1a8f9bcf05ad",
+      "split": "calibration"
+    },
+    "pair_87ecafe430a43dba052e": {
+      "component_id": "component_c648e71a7028a933",
+      "split": "calibration"
+    },
+    "pair_888c9adbe0624241ef88": {
+      "component_id": "component_06e1bc13e956d669",
+      "split": "test"
+    },
+    "pair_8c50d3ed18b69b19df08": {
+      "component_id": "component_e72574c93c3e1774",
+      "split": "test"
+    },
+    "pair_8c7cd46d13a79dec4862": {
+      "component_id": "component_c28667a7289781fc",
+      "split": "calibration"
+    },
+    "pair_90960351c4d55e50fb41": {
+      "component_id": "component_e8d5dcace8dd52b3",
+      "split": "calibration"
+    },
+    "pair_9270ccfb9f2bc594e3d2": {
+      "component_id": "component_2ee0acd99dbeedc1",
+      "split": "calibration"
+    },
+    "pair_92b8dfd7b97929652cd5": {
+      "component_id": "component_27837d5a27aa4393",
+      "split": "test"
+    },
+    "pair_938c538b4415809dbcae": {
+      "component_id": "component_2ee0acd99dbeedc1",
+      "split": "calibration"
+    },
+    "pair_93947a293e8ffb820016": {
+      "component_id": "component_4494735359e6282e",
+      "split": "calibration"
+    },
+    "pair_94fbf891664b35bcbff3": {
+      "component_id": "component_0d0ccaf6173e7ebd",
+      "split": "calibration"
+    },
+    "pair_95f9ee8df644ee234666": {
+      "component_id": "component_e47f738c604f64f3",
+      "split": "test"
+    },
+    "pair_960ede3160db90a43d27": {
+      "component_id": "component_ec5a59aaab230f9e",
+      "split": "calibration"
+    },
+    "pair_96e7a74f7d2638f42c74": {
+      "component_id": "component_4a8235a13bedb896",
+      "split": "calibration"
+    },
+    "pair_97546685235724e28a7a": {
+      "component_id": "component_d9116ee68cac890f",
+      "split": "test"
+    },
+    "pair_9a44efc39a230519f808": {
+      "component_id": "component_ffbee599da18378d",
+      "split": "test"
+    },
+    "pair_9b85289890ac3f45fc8c": {
+      "component_id": "component_60db491ce0eb14e0",
+      "split": "test"
+    },
+    "pair_9d85d96f2a04e07b2c0d": {
+      "component_id": "component_a98303128a676299",
+      "split": "calibration"
+    },
+    "pair_9ddf52303d26895efcbd": {
+      "component_id": "component_255a333bc2d4989a",
+      "split": "calibration"
+    },
+    "pair_9ea8229393e5607fe5f2": {
+      "component_id": "component_0729c586bb07bdd7",
+      "split": "calibration"
+    },
+    "pair_9f46ffffd151d966414e": {
+      "component_id": "component_5c1275f9028bf68f",
+      "split": "test"
+    },
+    "pair_9feceb8c5c151014adf7": {
+      "component_id": "component_29c85e94599d78f2",
+      "split": "test"
+    },
+    "pair_9ff7381869714e2c0d83": {
+      "component_id": "component_2fe55f53f4e25abf",
+      "split": "calibration"
+    },
+    "pair_a10de4e91a53fd6920e2": {
+      "component_id": "component_4854475baf269971",
+      "split": "test"
+    },
+    "pair_a139ed5041b7d5324e72": {
+      "component_id": "component_211ba8de6fa4d9e6",
+      "split": "calibration"
+    },
+    "pair_a30bb7be5d07caf048da": {
+      "component_id": "component_dc378473ea61c31d",
+      "split": "test"
+    },
+    "pair_a47fe10860bfc77a3582": {
+      "component_id": "component_5b4b78902c94a3ec",
+      "split": "calibration"
+    },
+    "pair_a4f57a32c2440bd0079e": {
+      "component_id": "component_b9a518c52a3b8988",
+      "split": "calibration"
+    },
+    "pair_a81ba4e3222efd3d08fc": {
+      "component_id": "component_f97cfd143c9b696a",
+      "split": "test"
+    },
+    "pair_a8a1ea7a87b73af82aa2": {
+      "component_id": "component_bcf836228153aa13",
+      "split": "calibration"
+    },
+    "pair_aa6eb9eba5da89738c34": {
+      "component_id": "component_03fdb92b6f9450c9",
+      "split": "calibration"
+    },
+    "pair_ab4057f6ed2b57b333fa": {
+      "component_id": "component_9c818cb8f632988d",
+      "split": "calibration"
+    },
+    "pair_ab991e9c049f639f6a91": {
+      "component_id": "component_69c38743cc5f7fa5",
+      "split": "test"
+    },
+    "pair_abb14c91dc1dab97f2fb": {
+      "component_id": "component_8785ea81731eed89",
+      "split": "calibration"
+    },
+    "pair_ac07d334d36e4664e7b9": {
+      "component_id": "component_2e701b2aa3bcf135",
+      "split": "calibration"
+    },
+    "pair_ac473fc788396fd9beaa": {
+      "component_id": "component_dd28fff9a63b5879",
+      "split": "test"
+    },
+    "pair_ad881b079edf2e8faee0": {
+      "component_id": "component_3aa949f94f54930d",
+      "split": "calibration"
+    },
+    "pair_af3b0d5e3af34cd8deb3": {
+      "component_id": "component_89b0fa70b75e5d3f",
+      "split": "test"
+    },
+    "pair_afec9eb2c2bcc694565d": {
+      "component_id": "component_ae0d9851a8661f65",
+      "split": "calibration"
+    },
+    "pair_b1df1682552b8ee4a84f": {
+      "component_id": "component_bfc83be9bc2e43fb",
+      "split": "calibration"
+    },
+    "pair_b500729757d067a1c61c": {
+      "component_id": "component_c5e52bdecb3a219e",
+      "split": "calibration"
+    },
+    "pair_b533696995f8e25b6542": {
+      "component_id": "component_984f8a3301767d7a",
+      "split": "test"
+    },
+    "pair_b58ae329f5a6c767d531": {
+      "component_id": "component_0ba9565da7cf3cf6",
+      "split": "calibration"
+    },
+    "pair_b591528037637598db0e": {
+      "component_id": "component_671471d3bfa2db7e",
+      "split": "calibration"
+    },
+    "pair_b70154cef271bf4770a3": {
+      "component_id": "component_2ee0acd99dbeedc1",
+      "split": "calibration"
+    },
+    "pair_b7d00710338a054ffbcb": {
+      "component_id": "component_749280523fbcf1f2",
+      "split": "calibration"
+    },
+    "pair_b93eeed1ccc9c0127d02": {
+      "component_id": "component_3aa949f94f54930d",
+      "split": "calibration"
+    },
+    "pair_bafada810d9f374675f9": {
+      "component_id": "component_78a62f3a2b44732c",
+      "split": "calibration"
+    },
+    "pair_bb0af9030b0a43fe93af": {
+      "component_id": "component_6657304f48263faa",
+      "split": "test"
+    },
+    "pair_bca7689cdd190b56b569": {
+      "component_id": "component_49233e756d7c5175",
+      "split": "calibration"
+    },
+    "pair_be536301de6dbec439c1": {
+      "component_id": "component_0d0ccaf6173e7ebd",
+      "split": "calibration"
+    },
+    "pair_beaffbc9bdcee13a8afe": {
+      "component_id": "component_0d0ccaf6173e7ebd",
+      "split": "calibration"
+    },
+    "pair_bef85c51805986b7fd9e": {
+      "component_id": "component_ec5a59aaab230f9e",
+      "split": "calibration"
+    },
+    "pair_bfe150fbccf8183a1255": {
+      "component_id": "component_c85bdf6d8e4ca7d1",
+      "split": "test"
+    },
+    "pair_c020f28d7b7dc3c54dae": {
+      "component_id": "component_6736bc391e5666ea",
+      "split": "test"
+    },
+    "pair_c21373ce57c7472eaddb": {
+      "component_id": "component_b4077ddbbe199bbc",
+      "split": "calibration"
+    },
+    "pair_c48753a6506b755e26bd": {
+      "component_id": "component_b9a518c52a3b8988",
+      "split": "calibration"
+    },
+    "pair_c5373e45533cc9b8198d": {
+      "component_id": "component_5b4b78902c94a3ec",
+      "split": "calibration"
+    },
+    "pair_c8d3692ce7b1e88fce32": {
+      "component_id": "component_b74ba15114021090",
+      "split": "test"
+    },
+    "pair_c94113cc1c9a310afd6e": {
+      "component_id": "component_16a58d4675a93288",
+      "split": "calibration"
+    },
+    "pair_c9c1019a31854d66897d": {
+      "component_id": "component_9eeb0e77928cd54d",
+      "split": "calibration"
+    },
+    "pair_cb53d536152a052d0fad": {
+      "component_id": "component_037873eedf4ca71f",
+      "split": "test"
+    },
+    "pair_cbe2d1182731f2fa8f7f": {
+      "component_id": "component_0729c586bb07bdd7",
+      "split": "calibration"
+    },
+    "pair_ccb584ee146eaac3213b": {
+      "component_id": "component_99e6bef2fa03c0e9",
+      "split": "calibration"
+    },
+    "pair_ccfc48f16b67ae9976e1": {
+      "component_id": "component_749280523fbcf1f2",
+      "split": "calibration"
+    },
+    "pair_cdf2b854c593e9244ecb": {
+      "component_id": "component_ca5b91a6a20e9bb5",
+      "split": "test"
+    },
+    "pair_ce6a6382bc8fbb3bc8a4": {
+      "component_id": "component_0384a01f328041aa",
+      "split": "test"
+    },
+    "pair_cedcf6ad44fe7f85c258": {
+      "component_id": "component_24184187b02f0fad",
+      "split": "test"
+    },
+    "pair_ceecb4a18bcd106e8a5e": {
+      "component_id": "component_e3506d6a514b9d65",
+      "split": "calibration"
+    },
+    "pair_d064574f951422b72385": {
+      "component_id": "component_680a61873c97e901",
+      "split": "calibration"
+    },
+    "pair_d188d5d01d5f2451a71d": {
+      "component_id": "component_1bfb3ded36adbfe3",
+      "split": "calibration"
+    },
+    "pair_d18fde2ccb95eb42aec9": {
+      "component_id": "component_2c2a08304fa7a534",
+      "split": "test"
+    },
+    "pair_d480c593280b38bae51f": {
+      "component_id": "component_cb066179236f6bbe",
+      "split": "test"
+    },
+    "pair_d50cbbbb0715ef3ec9a6": {
+      "component_id": "component_99e6bef2fa03c0e9",
+      "split": "calibration"
+    },
+    "pair_d6c00996b8bb874a0e04": {
+      "component_id": "component_789c3b8434b97895",
+      "split": "calibration"
+    },
+    "pair_d7c6101d933b7201bd7d": {
+      "component_id": "component_789c3b8434b97895",
+      "split": "calibration"
+    },
+    "pair_dade21a0726c8eac2f91": {
+      "component_id": "component_943ccd29660c49ea",
+      "split": "test"
+    },
+    "pair_de4ba4e5bf93195367df": {
+      "component_id": "component_d52397c9e2534a21",
+      "split": "calibration"
+    },
+    "pair_de6a8667e4609151ea3d": {
+      "component_id": "component_3824b82e5c41daad",
+      "split": "calibration"
+    },
+    "pair_ded4c6cc998e2d8b1878": {
+      "component_id": "component_3960b8a0669dad13",
+      "split": "calibration"
+    },
+    "pair_defdbf205a5a50cc44f0": {
+      "component_id": "component_16a58d4675a93288",
+      "split": "calibration"
+    },
+    "pair_dfb8e41e6bfa3fceb8dc": {
+      "component_id": "component_14659d4c64c46511",
+      "split": "calibration"
+    },
+    "pair_e01ad8fc2efcc610fe88": {
+      "component_id": "component_bcf836228153aa13",
+      "split": "calibration"
+    },
+    "pair_e0b929d72a44c50c504b": {
+      "component_id": "component_ec7dd088e04deaaa",
+      "split": "test"
+    },
+    "pair_e120bbef1848298e8a89": {
+      "component_id": "component_d617dccc70683673",
+      "split": "test"
+    },
+    "pair_e29adc0628f63c3849e4": {
+      "component_id": "component_2643e8601501e427",
+      "split": "calibration"
+    },
+    "pair_e2b74a7195efd0293b7c": {
+      "component_id": "component_ae0d9851a8661f65",
+      "split": "calibration"
+    },
+    "pair_e2ce1421a083701546d0": {
+      "component_id": "component_713452ae528bdf91",
+      "split": "calibration"
+    },
+    "pair_e2dfb5858e9a514a2752": {
+      "component_id": "component_7e6fc16346c310e7",
+      "split": "test"
+    },
+    "pair_e648742f13a88ae3cf9e": {
+      "component_id": "component_ac533b37c966f50b",
+      "split": "test"
+    },
+    "pair_e8a704083beda963c65b": {
+      "component_id": "component_372e6b87a128a5f8",
+      "split": "calibration"
+    },
+    "pair_e9c0b4fb766bf1a87e71": {
+      "component_id": "component_e3506d6a514b9d65",
+      "split": "calibration"
+    },
+    "pair_ea0cf048bb7b45b38e34": {
+      "component_id": "component_1e190d3d750f6fb6",
+      "split": "test"
+    },
+    "pair_ea502ef02d80a3949deb": {
+      "component_id": "component_5b4b78902c94a3ec",
+      "split": "calibration"
+    },
+    "pair_ebcec0a080a87458e963": {
+      "component_id": "component_ccf344c5ba157e7a",
+      "split": "calibration"
+    },
+    "pair_ec7fca75c9f5d69dc3b7": {
+      "component_id": "component_07e27c8a5846ec8b",
+      "split": "test"
+    },
+    "pair_ecff6917d440c479dbb6": {
+      "component_id": "component_082d481b1cca0fbf",
+      "split": "test"
+    },
+    "pair_edb010f64e5c0ce83978": {
+      "component_id": "component_ae0d9851a8661f65",
+      "split": "calibration"
+    },
+    "pair_ede8ddeaf9d07a1f16e7": {
+      "component_id": "component_18ba871ecdb02550",
+      "split": "calibration"
+    },
+    "pair_f02bc2d789c2eddbee8a": {
+      "component_id": "component_2b17c7c2686242a8",
+      "split": "test"
+    },
+    "pair_f0db6d929fb166cae078": {
+      "component_id": "component_16f1cceb900cee7a",
+      "split": "calibration"
+    },
+    "pair_f10220206a46c4fe3a13": {
+      "component_id": "component_d44c1103af1d05b4",
+      "split": "test"
+    },
+    "pair_f1ff6b5b277a8efd8ebd": {
+      "component_id": "component_cef3f44ebe29b4bc",
+      "split": "calibration"
+    },
+    "pair_f22f2c4428c324d75268": {
+      "component_id": "component_3960b8a0669dad13",
+      "split": "calibration"
+    },
+    "pair_f323eaeb937b92906e0e": {
+      "component_id": "component_f90069cf251e0e5a",
+      "split": "test"
+    },
+    "pair_f4541821d275e8dce609": {
+      "component_id": "component_eb5ed507b34882e3",
+      "split": "calibration"
+    },
+    "pair_f4e06794c7c54edef0ca": {
+      "component_id": "component_211ba8de6fa4d9e6",
+      "split": "calibration"
+    },
+    "pair_f516250ef56b49cf8738": {
+      "component_id": "component_c7a27d6733bd0e76",
+      "split": "calibration"
+    },
+    "pair_f9a5f3623c98099d7ec6": {
+      "component_id": "component_b7ff54c6ae66d879",
+      "split": "calibration"
+    },
+    "pair_fb3a21a30dcb71cd6bef": {
+      "component_id": "component_f8d203e560631c87",
+      "split": "calibration"
+    },
+    "pair_fb8a1ec54b9697ce7399": {
+      "component_id": "component_29299776b9bc2da6",
+      "split": "calibration"
+    },
+    "pair_fbe062da8584b5d487f8": {
+      "component_id": "component_c1663c36700bb25e",
+      "split": "calibration"
+    },
+    "pair_fc69a52cfdb551dd8e59": {
+      "component_id": "component_b4077ddbbe199bbc",
+      "split": "calibration"
+    },
+    "pair_fe394217966f0692f89c": {
+      "component_id": "component_372e6b87a128a5f8",
+      "split": "calibration"
+    },
+    "pair_fe8865f9e493f06990f6": {
+      "component_id": "component_0b18928d953030e5",
+      "split": "test"
+    }
+  },
+  "audit": {
+    "calibration": {
+      "candidate_groups": {
+        "EASY_NEGATIVE_CANDIDATE": 18,
+        "HARD_NEGATIVE_CANDIDATE": 60,
+        "POSITIVE_CANDIDATE": 54
+      },
+      "easy_human_negative": 18,
+      "hard_human_negative": 30,
+      "negative": 62,
+      "pairs": 132,
+      "positive": 70,
+      "unique_cvs": 114,
+      "unique_jobs": 92
+    },
+    "calibration_fraction": 0.6,
+    "component_count": 162,
+    "component_size_distribution": {
+      "1": 129,
+      "2": 19,
+      "3": 6,
+      "4": 5,
+      "5": 3
+    },
+    "largest_component": 5,
+    "leakage": {
+      "cv_id": 0,
+      "job_id": 0,
+      "pair_id": 0
+    },
+    "objective": 76,
+    "test": {
+      "candidate_groups": {
+        "EASY_NEGATIVE_CANDIDATE": 12,
+        "HARD_NEGATIVE_CANDIDATE": 40,
+        "POSITIVE_CANDIDATE": 36
+      },
+      "easy_human_negative": 12,
+      "hard_human_negative": 22,
+      "negative": 42,
+      "pairs": 88,
+      "positive": 46,
+      "unique_cvs": 88,
+      "unique_jobs": 88
+    },
+    "top10": [
+      {
+        "component_id": "component_0d0ccaf6173e7ebd",
+        "pairs": 5
+      },
+      {
+        "component_id": "component_16a58d4675a93288",
+        "pairs": 5
+      },
+      {
+        "component_id": "component_ae0d9851a8661f65",
+        "pairs": 5
+      },
+      {
+        "component_id": "component_2ee0acd99dbeedc1",
+        "pairs": 4
+      },
+      {
+        "component_id": "component_372e6b87a128a5f8",
+        "pairs": 4
+      },
+      {
+        "component_id": "component_5b4b78902c94a3ec",
+        "pairs": 4
+      },
+      {
+        "component_id": "component_99e6bef2fa03c0e9",
+        "pairs": 4
+      },
+      {
+        "component_id": "component_bcf836228153aa13",
+        "pairs": 4
+      },
+      {
+        "component_id": "component_18ba871ecdb02550",
+        "pairs": 3
+      },
+      {
+        "component_id": "component_211ba8de6fa4d9e6",
+        "pairs": 3
+      }
+    ]
+  },
+  "files": {
+    "calibration": {
+      "path": "evaluation\\data\\derived\\calibration_pairs.csv",
+      "sha256": "8f1957b958a8b7fc686053b8fd4dbc4fa330a47ce1cbfc3afb872cb7ef05776d"
+    },
+    "test": {
+      "path": "evaluation\\data\\derived\\test_pairs.csv",
+      "sha256": "e26b5715d0a1a4589616cc23d930ceef89d91e3af79beaf346c7ceaf02743e11"
+    }
+  },
+  "input_sha256": "28f371400b637045155ca12543869052998be29b3f8a3b575b7e46313851fad8",
+  "policy": {
+    "bootstrap_resamples": 1000,
+    "calibration_fraction": 0.6,
+    "calibration_range": [
+      0.55,
+      0.65
+    ],
+    "comparison": "score >= threshold",
+    "grouping": "connected components of typed bipartite CV/JD graph",
+    "limitations": [
+      "Retrospective partition: all 220 labels previously analyzed.",
+      "Frozen baseline IDF used the full corpus: transductive covariate exposure.",
+      "Not a new blind external or fully inductive test."
+    ],
+    "seed": 42,
+    "selection": "max calibration F1, higher precision, lower FP, higher threshold",
+    "threshold_candidates": "observed calibration scores, adjacent midpoints, range endpoints, nextafter(max,+inf)",
+    "version": "grouped-retrospective-holdout-v1"
+  },
+  "policy_file_sha256": "b8e1d8ee202cac8e1e2553af0f55d24e0650511e835f964e32ca06c178d02a9a",
+  "protected_hashes": {
+    "C:\\DATN\\Datasets\\archivecv\\Resume\\Resume.csv": "816a7cd985a9a41e3ce8d1e83cb7e1beb1e854a89c1cf1fd0d75494faaa0559d",
+    "C:\\DATN\\Datasets\\archivejd\\job_postings.csv": "d782e95f35cbd5f658ad7124021c938f5c8c1656f1c059b6dc9d402d1eaa195f",
+    "C:\\DATN\\GJobBackend\\evaluation\\HELDOUT_PROTOCOL.md": "b8e1d8ee202cac8e1e2553af0f55d24e0650511e835f964e32ca06c178d02a9a",
+    "C:\\DATN\\GJobBackend\\evaluation\\baseline_lexical.py": "4aa3f4d459a7ca57fa8403b1a2403ee4d1745ec2d709241bf61fe1854279083d",
+    "C:\\DATN\\GJobBackend\\evaluation\\benchmark_metrics.py": "bdfe3bfe9c249180a0d210548c2d869213791859ca2eed2728e7423f46e668d9",
+    "C:\\DATN\\GJobBackend\\evaluation\\heldout_protocol.py": "93680e30ba12728c89f27bfba3b9e112404d9ad36c1b6664bc727e8f50573d7a",
+    "C:\\DATN\\GJobBackend\\evaluation\\run_heldout_evaluation.py": "8b6e16b757d7c735702c0ddc606c4b6eb0675d84c419815292858a302e25347a",
+    "app\\services\\semantic_matching_service.py": "0c347e9dd24ab68b10e2c95a3eea7d634e40a9c094c07e206aed0e62d1319fdf",
+    "evaluation/data/derived/evaluation_pairs_labeled.csv": "28f371400b637045155ca12543869052998be29b3f8a3b575b7e46313851fad8",
+    "evaluation\\results\\baseline-v1\\false_negatives.csv": "bd512b3f57370ba995a7049c14a8a8171574ab7f1159c27b27945ac2c8b0afe1",
+    "evaluation\\results\\baseline-v1\\false_positives.csv": "4798ea31299672d3f707b023d0c20b7a5cfb87fe550fcc4675b1dffd27f6c3f0",
+    "evaluation\\results\\baseline-v1\\hard_negative_errors.csv": "a707651e4ad59142c66f1df13cebfc10689699d4ec23bec67bc67de1b2c91652",
+    "evaluation\\results\\baseline-v1\\metrics.json": "fcb40f23ac72d0a21f660479b93e1506aa8424390fee7ce3f44e0c4df529508e",
+    "evaluation\\results\\baseline-v1\\predictions.csv": "ac358d98a719838de49fad4209d95b7b3a5523a40d6f077b23a2b6d049fc99e1",
+    "evaluation\\results\\baseline-v1\\report.md": "a269ec6b168dcce00e0a84f971979e063cb2749920c5937190fd8f5afba919fa",
+    "evaluation\\results\\baseline-v1\\threshold_analysis.csv": "3b7a5ad2458a26deff66788dc39f9798506458a1d14e7b6f572a1a381f9d8ba3",
+    "evaluation\\results\\semantic-v1\\false_negatives.csv": "e805cea8e2ea8c0fbc253721c1d49f8ab682b4a9d39182fc41b20692a75c9c29",
+    "evaluation\\results\\semantic-v1\\false_positives.csv": "88fee6a36c8f524da42d33459984e3df4d4b0772b7cf268a6f54d89c300c370f",
+    "evaluation\\results\\semantic-v1\\hard_negative_errors.csv": "23f0ec7996a4ada000dc966db5bf18c3fc16f7a414911da977bde678a38b9fec",
+    "evaluation\\results\\semantic-v1\\metrics.json": "8d9e608c1639e0f16fc2f474f1385b586dd59273baa97fd38fd6be52c49721f3",
+    "evaluation\\results\\semantic-v1\\predictions.csv": "588a6d0fbfddc4ef6f7088fb354166bdf3662b15ace5774e7d572aadc9eaae46",
+    "evaluation\\results\\semantic-v1\\report.md": "65f9bb3099a477fb898992775bec98d52ee6b55b5b24728ff300e1491928640c",
+    "evaluation\\results\\semantic-v1\\threshold_analysis.csv": "6f87a1fabcb3c41260e49c204380f1965830e0a252bc6f3478964fb05ae6e012"
+  },
+  "seed": 42,
+  "timestamp": "2026-10-05T12:35:28.986901+00:00",
+  "validation": {
+    "label_0": 104,
+    "label_1": 116,
+    "rows": 220
+  },
+  "version": "grouped-retrospective-holdout-v1"
+}

@@ -1,0 +1,5 @@
+{
+  "ground_truth_freeze_sha256": "cf297913f16c384bad2a92c458a5986429b3b288968f6e1cbdaf9ae43f7f184a",
+  "intent": "one fresh evaluation; no calibration",
+  "timestamp": "2026-10-05T14:14:46.042764+00:00"
+}

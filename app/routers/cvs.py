@@ -143,7 +143,7 @@ def get_my_cv(
     current_user: User = Depends(require_role(UserRole.CANDIDATE)),
     db: Session = Depends(get_db),
 ):
-    return CVService(db).get_cv(current_user, cv_id)
+    return CVService(db).get_cv_response(current_user, cv_id)
 
 
 @router.get("/{cv_id}/file", summary="Download a candidate-owned uploaded CV")

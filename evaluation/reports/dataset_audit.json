@@ -1,0 +1,1458 @@
+{
+  "config": {
+    "minimum_cv_chars": 200,
+    "minimum_job_description_chars": 100
+  },
+  "inputs": {
+    "benefits.csv": {
+      "path": "C:\\DATN\\Datasets\\archivejd\\benefits.csv",
+      "columns": [
+        "job_id",
+        "inferred",
+        "type"
+      ]
+    },
+    "companies.csv": {
+      "path": "C:\\DATN\\Datasets\\archivejd\\companies.csv",
+      "columns": [
+        "company_id",
+        "name",
+        "description",
+        "company_size",
+        "state",
+        "country",
+        "city",
+        "zip_code",
+        "address",
+        "url"
+      ]
+    },
+    "company_industries.csv": {
+      "path": "C:\\DATN\\Datasets\\archivejd\\company_industries.csv",
+      "columns": [
+        "company_id",
+        "industry"
+      ]
+    },
+    "company_specialities.csv": {
+      "path": "C:\\DATN\\Datasets\\archivejd\\company_specialities.csv",
+      "columns": [
+        "company_id",
+        "speciality"
+      ]
+    },
+    "employee_counts.csv": {
+      "path": "C:\\DATN\\Datasets\\archivejd\\employee_counts.csv",
+      "columns": [
+        "company_id",
+        "employee_count",
+        "follower_count",
+        "time_recorded"
+      ]
+    },
+    "job_industries.csv": {
+      "path": "C:\\DATN\\Datasets\\archivejd\\job_industries.csv",
+      "columns": [
+        "job_id",
+        "industry_id"
+      ]
+    },
+    "job_postings.csv": {
+      "path": "C:\\DATN\\Datasets\\archivejd\\job_postings.csv",
+      "columns": [
+        "job_id",
+        "company_id",
+        "title",
+        "description",
+        "max_salary",
+        "med_salary",
+        "min_salary",
+        "pay_period",
+        "formatted_work_type",
+        "location",
+        "applies",
+        "original_listed_time",
+        "remote_allowed",
+        "views",
+        "job_posting_url",
+        "application_url",
+        "application_type",
+        "expiry",
+        "closed_time",
+        "formatted_experience_level",
+        "skills_desc",
+        "listed_time",
+        "posting_domain",
+        "sponsored",
+        "work_type",
+        "currency",
+        "compensation_type"
+      ]
+    },
+    "job_skills.csv": {
+      "path": "C:\\DATN\\Datasets\\archivejd\\job_skills.csv",
+      "columns": [
+        "job_id",
+        "skill_abr"
+      ]
+    },
+    "Resume.csv": {
+      "path": "C:\\DATN\\Datasets\\archivecv\\Resume\\Resume.csv",
+      "columns": [
+        "ID",
+        "Resume_str",
+        "Resume_html",
+        "Category"
+      ]
+    }
+  },
+  "resume": {
+    "rows": 2484,
+    "unique_ids": 2484,
+    "duplicate_ids": {
+      "groups": 0,
+      "excess_rows": 0
+    },
+    "duplicate_resume_text": {
+      "groups": 2,
+      "excess_rows": 2
+    },
+    "missing_resume_text": 1,
+    "missing_category": 0,
+    "html_available": 2484,
+    "near_empty_below_chars": 200,
+    "near_empty_count": 1,
+    "eligible_count": 2483,
+    "category_distribution": {
+      "INFORMATION-TECHNOLOGY": 120,
+      "BUSINESS-DEVELOPMENT": 120,
+      "ADVOCATE": 118,
+      "CHEF": 118,
+      "FINANCE": 118,
+      "ENGINEERING": 118,
+      "ACCOUNTANT": 118,
+      "FITNESS": 117,
+      "AVIATION": 117,
+      "SALES": 116,
+      "HEALTHCARE": 115,
+      "CONSULTANT": 115,
+      "BANKING": 115,
+      "CONSTRUCTION": 112,
+      "PUBLIC-RELATIONS": 111,
+      "HR": 110,
+      "DESIGNER": 107,
+      "ARTS": 103,
+      "TEACHER": 102,
+      "APPAREL": 97,
+      "DIGITAL-MEDIA": 96,
+      "AGRICULTURE": 63,
+      "AUTOMOBILE": 36,
+      "BPO": 22
+    },
+    "text_length": {
+      "min": 688,
+      "median": 5543.0,
+      "p90": 8618.400000000001,
+      "p95": 10264.7,
+      "max": 35217
+    }
+  },
+  "jobs": {
+    "rows": 15886,
+    "unique_job_ids": 15886,
+    "duplicate_job_ids": {
+      "groups": 0,
+      "excess_rows": 0
+    },
+    "duplicate_descriptions": {
+      "groups": 782,
+      "excess_rows": 2053
+    },
+    "near_duplicate_description_candidates": {
+      "groups": 847,
+      "excess_rows": 2212
+    },
+    "missing_title": 0,
+    "missing_description": 1,
+    "missing_experience_level": 4902,
+    "missing_skills_desc": 15742,
+    "eligible_count": 15833,
+    "top_titles": [
+      {
+        "value": "Sales Director [Owner/Operator]",
+        "count": 83
+      },
+      {
+        "value": "Sales Director {Owner/Operator}",
+        "count": 78
+      },
+      {
+        "value": "Sales Associate",
+        "count": 65
+      },
+      {
+        "value": "Retail Sales Associate",
+        "count": 60
+      },
+      {
+        "value": "Staff Accountant",
+        "count": 42
+      },
+      {
+        "value": "Project Manager",
+        "count": 41
+      },
+      {
+        "value": "Administrative Assistant",
+        "count": 40
+      },
+      {
+        "value": "Customer Service Representative",
+        "count": 39
+      },
+      {
+        "value": "Executive Assistant",
+        "count": 38
+      },
+      {
+        "value": "Call Center Support Rep",
+        "count": 38
+      },
+      {
+        "value": "Senior Accountant",
+        "count": 37
+      },
+      {
+        "value": "Scoring Content Specialist",
+        "count": 36
+      },
+      {
+        "value": "Sales Manager",
+        "count": 34
+      },
+      {
+        "value": "Account Executive",
+        "count": 34
+      },
+      {
+        "value": "Controller",
+        "count": 30
+      },
+      {
+        "value": "Software Engineer",
+        "count": 29
+      },
+      {
+        "value": "Block Advisor - Remote Tax Professional",
+        "count": 29
+      },
+      {
+        "value": "General Superintendent, Mission Critical - Traveling",
+        "count": 29
+      },
+      {
+        "value": "Maintenance Technician",
+        "count": 27
+      },
+      {
+        "value": "Business Analyst",
+        "count": 23
+      },
+      {
+        "value": "Customer Service Representative-Farmers Direct Services P&C Licensed (Kansas/Missouri)",
+        "count": 23
+      },
+      {
+        "value": "Assistant Store Manager",
+        "count": 22
+      },
+      {
+        "value": "Accounting Manager",
+        "count": 22
+      },
+      {
+        "value": "Customer Success & Services Marketing Manager",
+        "count": 21
+      },
+      {
+        "value": "Warehouse Associate",
+        "count": 21
+      },
+      {
+        "value": "Salesperson",
+        "count": 20
+      },
+      {
+        "value": "Sr. Engineering Manager - Opportunity for Working Remotely",
+        "count": 20
+      },
+      {
+        "value": "IT Operations ServiceNow Admin",
+        "count": 19
+      },
+      {
+        "value": "Associate Attorney",
+        "count": 19
+      },
+      {
+        "value": "Program Manager",
+        "count": 19
+      }
+    ],
+    "work_type_distribution": [
+      {
+        "value": "Full-time",
+        "count": 12844
+      },
+      {
+        "value": "Contract",
+        "count": 1739
+      },
+      {
+        "value": "Part-time",
+        "count": 1010
+      },
+      {
+        "value": "Temporary",
+        "count": 121
+      },
+      {
+        "value": "Internship",
+        "count": 111
+      },
+      {
+        "value": "Other",
+        "count": 53
+      },
+      {
+        "value": "Volunteer",
+        "count": 8
+      }
+    ],
+    "description_length": {
+      "min": 6,
+      "median": 3396.0,
+      "p90": 6484.0,
+      "p95": 7477.0,
+      "max": 20347
+    }
+  },
+  "job_skills": {
+    "rows": 27899,
+    "unique_keys": 15637,
+    "unique_values": 35,
+    "missing_key": 0,
+    "missing_value": 0,
+    "duplicate_key_value_pairs": {
+      "groups": 0,
+      "excess_rows": 0
+    },
+    "top_values": [
+      {
+        "value": "IT",
+        "count": 3841
+      },
+      {
+        "value": "SALE",
+        "count": 2904
+      },
+      {
+        "value": "MGMT",
+        "count": 2467
+      },
+      {
+        "value": "MNFC",
+        "count": 2195
+      },
+      {
+        "value": "BD",
+        "count": 1993
+      },
+      {
+        "value": "ENG",
+        "count": 1974
+      },
+      {
+        "value": "OTHR",
+        "count": 1574
+      },
+      {
+        "value": "HCPR",
+        "count": 1346
+      },
+      {
+        "value": "FIN",
+        "count": 1227
+      },
+      {
+        "value": "ACCT",
+        "count": 813
+      },
+      {
+        "value": "MRKT",
+        "count": 802
+      },
+      {
+        "value": "PRJM",
+        "count": 630
+      },
+      {
+        "value": "ADM",
+        "count": 589
+      },
+      {
+        "value": "ANLS",
+        "count": 479
+      },
+      {
+        "value": "RSCH",
+        "count": 430
+      },
+      {
+        "value": "HR",
+        "count": 421
+      },
+      {
+        "value": "CUST",
+        "count": 393
+      },
+      {
+        "value": "DSGN",
+        "count": 358
+      },
+      {
+        "value": "EDU",
+        "count": 331
+      },
+      {
+        "value": "ART",
+        "count": 310
+      },
+      {
+        "value": "LGL",
+        "count": 286
+      },
+      {
+        "value": "CNSL",
+        "count": 284
+      },
+      {
+        "value": "GENB",
+        "count": 245
+      },
+      {
+        "value": "PR",
+        "count": 237
+      },
+      {
+        "value": "WRT",
+        "count": 233
+      },
+      {
+        "value": "QA",
+        "count": 229
+      },
+      {
+        "value": "ADVR",
+        "count": 221
+      },
+      {
+        "value": "STRA",
+        "count": 203
+      },
+      {
+        "value": "TRNG",
+        "count": 188
+      },
+      {
+        "value": "SUPL",
+        "count": 186
+      },
+      {
+        "value": "PRDM",
+        "count": 166
+      },
+      {
+        "value": "SCI",
+        "count": 104
+      },
+      {
+        "value": "PRCH",
+        "count": 96
+      },
+      {
+        "value": "PROD",
+        "count": 87
+      },
+      {
+        "value": "DIST",
+        "count": 57
+      }
+    ]
+  },
+  "job_industries": {
+    "rows": 21993,
+    "unique_keys": 15960,
+    "unique_values": 202,
+    "missing_key": 0,
+    "missing_value": 0,
+    "duplicate_key_value_pairs": {
+      "groups": 0,
+      "excess_rows": 0
+    },
+    "top_values": [
+      {
+        "value": "96",
+        "count": 2257
+      },
+      {
+        "value": "14",
+        "count": 1614
+      },
+      {
+        "value": "4",
+        "count": 1100
+      },
+      {
+        "value": "27",
+        "count": 1084
+      },
+      {
+        "value": "104",
+        "count": 995
+      },
+      {
+        "value": "43",
+        "count": 939
+      },
+      {
+        "value": "6",
+        "count": 768
+      },
+      {
+        "value": "48",
+        "count": 539
+      },
+      {
+        "value": "42",
+        "count": 408
+      },
+      {
+        "value": "25",
+        "count": 383
+      },
+      {
+        "value": "80",
+        "count": 349
+      },
+      {
+        "value": "44",
+        "count": 341
+      },
+      {
+        "value": "8",
+        "count": 325
+      },
+      {
+        "value": "112",
+        "count": 311
+      },
+      {
+        "value": "15",
+        "count": 309
+      },
+      {
+        "value": "68",
+        "count": 295
+      },
+      {
+        "value": "31",
+        "count": 281
+      },
+      {
+        "value": "11",
+        "count": 275
+      },
+      {
+        "value": "17",
+        "count": 273
+      },
+      {
+        "value": "47",
+        "count": 272
+      },
+      {
+        "value": "100",
+        "count": 272
+      },
+      {
+        "value": "34",
+        "count": 258
+      },
+      {
+        "value": "53",
+        "count": 253
+      },
+      {
+        "value": "12",
+        "count": 248
+      },
+      {
+        "value": "41",
+        "count": 247
+      },
+      {
+        "value": "69",
+        "count": 220
+      },
+      {
+        "value": "124",
+        "count": 216
+      },
+      {
+        "value": "135",
+        "count": 212
+      },
+      {
+        "value": "116",
+        "count": 203
+      },
+      {
+        "value": "51",
+        "count": 190
+      },
+      {
+        "value": "92",
+        "count": 189
+      },
+      {
+        "value": "57",
+        "count": 180
+      },
+      {
+        "value": "86",
+        "count": 180
+      },
+      {
+        "value": "84",
+        "count": 179
+      },
+      {
+        "value": "23",
+        "count": 179
+      },
+      {
+        "value": "82",
+        "count": 172
+      },
+      {
+        "value": "19",
+        "count": 171
+      },
+      {
+        "value": "32",
+        "count": 171
+      },
+      {
+        "value": "75",
+        "count": 170
+      },
+      {
+        "value": "59",
+        "count": 167
+      }
+    ]
+  },
+  "metadata": {
+    "companies": {
+      "rows": 6063,
+      "unique_keys": 6063,
+      "unique_values": 6024,
+      "missing_key": 0,
+      "missing_value": 0,
+      "duplicate_key_value_pairs": {
+        "groups": 0,
+        "excess_rows": 0
+      },
+      "top_values": [
+        {
+          "value": "CenterWell Home Health",
+          "count": 9
+        },
+        {
+          "value": "Intertek",
+          "count": 5
+        },
+        {
+          "value": "CenterWell Senior Primary Care",
+          "count": 5
+        },
+        {
+          "value": "Confidential",
+          "count": 4
+        },
+        {
+          "value": "Home Chef",
+          "count": 4
+        },
+        {
+          "value": "Leonardo DRS",
+          "count": 3
+        },
+        {
+          "value": "Roth Staffing",
+          "count": 3
+        },
+        {
+          "value": "Mercy Health",
+          "count": 2
+        },
+        {
+          "value": "Johnstone Supply",
+          "count": 2
+        },
+        {
+          "value": "Lexington Medical Center",
+          "count": 2
+        },
+        {
+          "value": "Milestone Technologies, Inc.",
+          "count": 2
+        },
+        {
+          "value": "eTeam",
+          "count": 2
+        },
+        {
+          "value": "Ascendo Resources",
+          "count": 2
+        },
+        {
+          "value": "RPM Living",
+          "count": 2
+        },
+        {
+          "value": "Talent Table",
+          "count": 2
+        },
+        {
+          "value": "Galaxy i technologies Inc",
+          "count": 2
+        },
+        {
+          "value": "BYREDO",
+          "count": 2
+        },
+        {
+          "value": "Apricot Solar",
+          "count": 2
+        },
+        {
+          "value": "The Crox Group",
+          "count": 2
+        },
+        {
+          "value": "Uppfront",
+          "count": 2
+        },
+        {
+          "value": "IBM",
+          "count": 1
+        },
+        {
+          "value": "GE HealthCare",
+          "count": 1
+        },
+        {
+          "value": "GE Power",
+          "count": 1
+        },
+        {
+          "value": "Hewlett Packard Enterprise",
+          "count": 1
+        },
+        {
+          "value": "Oracle",
+          "count": 1
+        },
+        {
+          "value": "Deloitte",
+          "count": 1
+        },
+        {
+          "value": "Siemens",
+          "count": 1
+        },
+        {
+          "value": "PwC",
+          "count": 1
+        },
+        {
+          "value": "Ericsson",
+          "count": 1
+        },
+        {
+          "value": "Cisco",
+          "count": 1
+        },
+        {
+          "value": "JPMorgan Chase & Co.",
+          "count": 1
+        },
+        {
+          "value": "Verizon",
+          "count": 1
+        },
+        {
+          "value": "SAP",
+          "count": 1
+        },
+        {
+          "value": "Procter & Gamble",
+          "count": 1
+        },
+        {
+          "value": "Bank of America",
+          "count": 1
+        },
+        {
+          "value": "Pfizer",
+          "count": 1
+        },
+        {
+          "value": "HSBC",
+          "count": 1
+        },
+        {
+          "value": "Unilever",
+          "count": 1
+        },
+        {
+          "value": "PlayStation",
+          "count": 1
+        },
+        {
+          "value": "Atos",
+          "count": 1
+        }
+      ]
+    },
+    "company_industries": {
+      "rows": 15880,
+      "unique_keys": 6003,
+      "unique_values": 141,
+      "missing_key": 0,
+      "missing_value": 0,
+      "duplicate_key_value_pairs": {
+        "groups": 2022,
+        "excess_rows": 9877
+      },
+      "top_values": [
+        {
+          "value": "Staffing & Recruiting",
+          "count": 2245
+        },
+        {
+          "value": "Information Technology & Services",
+          "count": 2164
+        },
+        {
+          "value": "Hospital & Health Care",
+          "count": 1392
+        },
+        {
+          "value": "Retail",
+          "count": 968
+        },
+        {
+          "value": "Computer Software",
+          "count": 868
+        },
+        {
+          "value": "Financial Services",
+          "count": 531
+        },
+        {
+          "value": "Construction",
+          "count": 315
+        },
+        {
+          "value": "Transportation/Trucking/Railroad",
+          "count": 305
+        },
+        {
+          "value": "Real Estate",
+          "count": 285
+        },
+        {
+          "value": "Higher Education",
+          "count": 267
+        },
+        {
+          "value": "Non-profit Organization Management",
+          "count": 249
+        },
+        {
+          "value": "Insurance",
+          "count": 245
+        },
+        {
+          "value": "Management Consulting",
+          "count": 243
+        },
+        {
+          "value": "Hospitality",
+          "count": 220
+        },
+        {
+          "value": "Internet",
+          "count": 189
+        },
+        {
+          "value": "Telecommunications",
+          "count": 180
+        },
+        {
+          "value": "Automotive",
+          "count": 167
+        },
+        {
+          "value": "Publishing",
+          "count": 166
+        },
+        {
+          "value": "Electrical & Electronic Manufacturing",
+          "count": 153
+        },
+        {
+          "value": "Human Resources",
+          "count": 153
+        },
+        {
+          "value": "Government Administration",
+          "count": 152
+        },
+        {
+          "value": "Consumer Goods",
+          "count": 151
+        },
+        {
+          "value": "Food Production",
+          "count": 147
+        },
+        {
+          "value": "Restaurants",
+          "count": 145
+        },
+        {
+          "value": "Biotechnology",
+          "count": 144
+        },
+        {
+          "value": "Food & Beverages",
+          "count": 136
+        },
+        {
+          "value": "Environmental Services",
+          "count": 134
+        },
+        {
+          "value": "Marketing & Advertising",
+          "count": 132
+        },
+        {
+          "value": "Banking",
+          "count": 132
+        },
+        {
+          "value": "Medical Device",
+          "count": 130
+        },
+        {
+          "value": "Pharmaceuticals",
+          "count": 129
+        },
+        {
+          "value": "Law Practice",
+          "count": 126
+        },
+        {
+          "value": "Mechanical Or Industrial Engineering",
+          "count": 125
+        },
+        {
+          "value": "Apparel & Fashion",
+          "count": 118
+        },
+        {
+          "value": "Utilities",
+          "count": 118
+        },
+        {
+          "value": "Accounting",
+          "count": 116
+        },
+        {
+          "value": "Defense & Space",
+          "count": 107
+        },
+        {
+          "value": "Entertainment",
+          "count": 97
+        },
+        {
+          "value": "Building Materials",
+          "count": 97
+        },
+        {
+          "value": "Civil Engineering",
+          "count": 93
+        }
+      ]
+    },
+    "company_specialities": {
+      "rows": 128355,
+      "unique_keys": 4487,
+      "unique_values": 24534,
+      "missing_key": 0,
+      "missing_value": 0,
+      "duplicate_key_value_pairs": {
+        "groups": 16553,
+        "excess_rows": 85753
+      },
+      "top_values": [
+        {
+          "value": "Technology",
+          "count": 1037
+        },
+        {
+          "value": "Information Technology",
+          "count": 841
+        },
+        {
+          "value": "Human Resources",
+          "count": 831
+        },
+        {
+          "value": "Healthcare",
+          "count": 824
+        },
+        {
+          "value": "Staffing",
+          "count": 668
+        },
+        {
+          "value": "Engineering",
+          "count": 646
+        },
+        {
+          "value": "Retail",
+          "count": 605
+        },
+        {
+          "value": "Recruiting",
+          "count": 587
+        },
+        {
+          "value": "Jobs",
+          "count": 585
+        },
+        {
+          "value": "Software Development",
+          "count": 539
+        },
+        {
+          "value": "Consulting",
+          "count": 476
+        },
+        {
+          "value": "Remote Jobs",
+          "count": 411
+        },
+        {
+          "value": "IT Staffing",
+          "count": 392
+        },
+        {
+          "value": "Recruitment",
+          "count": 389
+        },
+        {
+          "value": "Marketing",
+          "count": 379
+        },
+        {
+          "value": "Manufacturing",
+          "count": 374
+        },
+        {
+          "value": "Executive Search",
+          "count": 346
+        },
+        {
+          "value": "staffing",
+          "count": 339
+        },
+        {
+          "value": "Managed Services",
+          "count": 336
+        },
+        {
+          "value": "Construction",
+          "count": 319
+        },
+        {
+          "value": "Sales",
+          "count": 315
+        },
+        {
+          "value": "IT",
+          "count": 294
+        },
+        {
+          "value": "Operations",
+          "count": 275
+        },
+        {
+          "value": "Digital Transformation",
+          "count": 274
+        },
+        {
+          "value": "Finance",
+          "count": 268
+        },
+        {
+          "value": "Financial Services",
+          "count": 263
+        },
+        {
+          "value": "Community",
+          "count": 261
+        },
+        {
+          "value": "Project Management",
+          "count": 258
+        },
+        {
+          "value": "recruitment",
+          "count": 258
+        },
+        {
+          "value": "Advertising",
+          "count": 251
+        },
+        {
+          "value": "Transportation",
+          "count": 243
+        },
+        {
+          "value": "Analytics",
+          "count": 242
+        },
+        {
+          "value": "Customer Service",
+          "count": 230
+        },
+        {
+          "value": "Accounting",
+          "count": 227
+        },
+        {
+          "value": "technology",
+          "count": 223
+        },
+        {
+          "value": "Real Estate",
+          "count": 220
+        },
+        {
+          "value": "Security",
+          "count": 217
+        },
+        {
+          "value": "Cloud",
+          "count": 207
+        },
+        {
+          "value": "Talent Acquisition",
+          "count": 205
+        },
+        {
+          "value": "Logistics",
+          "count": 203
+        }
+      ]
+    },
+    "benefits": {
+      "rows": 13761,
+      "unique_keys": 5496,
+      "unique_values": 12,
+      "missing_key": 0,
+      "missing_value": 0,
+      "duplicate_key_value_pairs": {
+        "groups": 0,
+        "excess_rows": 0
+      },
+      "top_values": [
+        {
+          "value": "401(k)",
+          "count": 4426
+        },
+        {
+          "value": "Medical insurance",
+          "count": 2065
+        },
+        {
+          "value": "Vision insurance",
+          "count": 1989
+        },
+        {
+          "value": "Dental insurance",
+          "count": 1611
+        },
+        {
+          "value": "Disability insurance",
+          "count": 1468
+        },
+        {
+          "value": "Tuition assistance",
+          "count": 598
+        },
+        {
+          "value": "Commuter benefits",
+          "count": 427
+        },
+        {
+          "value": "Paid maternity leave",
+          "count": 417
+        },
+        {
+          "value": "Paid paternity leave",
+          "count": 394
+        },
+        {
+          "value": "Pension plan",
+          "count": 237
+        },
+        {
+          "value": "Student loan assistance",
+          "count": 67
+        },
+        {
+          "value": "Child care support",
+          "count": 62
+        }
+      ]
+    },
+    "employee_counts": {
+      "rows": 15907,
+      "unique_keys": 6030,
+      "unique_values": 2639,
+      "missing_key": 0,
+      "missing_value": 0,
+      "duplicate_key_value_pairs": {
+        "groups": 2060,
+        "excess_rows": 9693
+      },
+      "top_values": [
+        {
+          "value": "2480",
+          "count": 412
+        },
+        {
+          "value": "347",
+          "count": 168
+        },
+        {
+          "value": "2",
+          "count": 128
+        },
+        {
+          "value": "4",
+          "count": 120
+        },
+        {
+          "value": "95609",
+          "count": 113
+        },
+        {
+          "value": "13096",
+          "count": 108
+        },
+        {
+          "value": "829111",
+          "count": 93
+        },
+        {
+          "value": "897",
+          "count": 92
+        },
+        {
+          "value": "286089",
+          "count": 90
+        },
+        {
+          "value": "7",
+          "count": 85
+        },
+        {
+          "value": "1",
+          "count": 85
+        },
+        {
+          "value": "3",
+          "count": 83
+        },
+        {
+          "value": "6",
+          "count": 80
+        },
+        {
+          "value": "352",
+          "count": 74
+        },
+        {
+          "value": "5",
+          "count": 72
+        },
+        {
+          "value": "12",
+          "count": 72
+        },
+        {
+          "value": "38277",
+          "count": 70
+        },
+        {
+          "value": "38972",
+          "count": 68
+        },
+        {
+          "value": "10",
+          "count": 61
+        },
+        {
+          "value": "9",
+          "count": 59
+        },
+        {
+          "value": "8",
+          "count": 58
+        },
+        {
+          "value": "0",
+          "count": 55
+        },
+        {
+          "value": "20",
+          "count": 54
+        },
+        {
+          "value": "11",
+          "count": 54
+        },
+        {
+          "value": "18",
+          "count": 54
+        },
+        {
+          "value": "1054",
+          "count": 54
+        },
+        {
+          "value": "32197",
+          "count": 53
+        },
+        {
+          "value": "15497",
+          "count": 52
+        },
+        {
+          "value": "10158",
+          "count": 52
+        },
+        {
+          "value": "27",
+          "count": 50
+        },
+        {
+          "value": "4764",
+          "count": 50
+        },
+        {
+          "value": "14",
+          "count": 49
+        },
+        {
+          "value": "7397",
+          "count": 49
+        },
+        {
+          "value": "15",
+          "count": 48
+        },
+        {
+          "value": "98",
+          "count": 47
+        },
+        {
+          "value": "2148",
+          "count": 47
+        },
+        {
+          "value": "17",
+          "count": 46
+        },
+        {
+          "value": "12457",
+          "count": 46
+        },
+        {
+          "value": "127293",
+          "count": 46
+        },
+        {
+          "value": "21471",
+          "count": 44
+        }
+      ]
+    }
+  },
+  "join_coverage": {
+    "job_to_skills": {
+      "covered": 15249,
+      "total": 15886,
+      "percent": 95.99
+    },
+    "job_to_industry": {
+      "covered": 15572,
+      "total": 15886,
+      "percent": 98.02
+    },
+    "job_to_company": {
+      "covered": 15470,
+      "total": 15886,
+      "percent": 97.38
+    },
+    "company_to_industry": {
+      "covered": 5953,
+      "total": 6063,
+      "percent": 98.19
+    },
+    "jobs_with_title_and_description": {
+      "covered": 15885,
+      "total": 15886,
+      "percent": 99.99
+    },
+    "jobs_with_title_description_and_skill_signal": {
+      "covered": 15248,
+      "total": 15886,
+      "percent": 95.98
+    }
+  },
+  "limitations": [
+    "job skill abbreviations have no code dictionary in the supplied files and remain opaque grouping metadata",
+    "near-duplicate JD detection is a deterministic normalized-text candidate check, not semantic deduplication",
+    "no CV-to-JD ground-truth labels exist in the raw inputs"
+  ]
+}
