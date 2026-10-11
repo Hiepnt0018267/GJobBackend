@@ -1,0 +1,1451 @@
+{
+  "deterministic_alignment_completion": {
+    "cv_success": 94,
+    "existing_success_payloads_unchanged": 92,
+    "final_evaluation_tests": {
+      "passed": 138,
+      "seconds": 9.43,
+      "warnings": 2
+    },
+    "final_focused_tests": {
+      "passed": 247,
+      "seconds": 1.65,
+      "warnings": 1
+    },
+    "full_pytest": {
+      "database": "gjob_db_test",
+      "exit_code": 0,
+      "passed": 638,
+      "seconds": 106.73,
+      "warnings": 3
+    },
+    "new_model_calls": 0,
+    "private_files_unchanged": true,
+    "ready_pairs": 99,
+    "remaining_source_diagnosis": {
+      "candidate_index": 7,
+      "company_component": 1000,
+      "cv_id": "70750649",
+      "date_component": 1000,
+      "experience_index": 7,
+      "normalized_range_offsets": [
+        7612,
+        7630
+      ],
+      "normalized_source_span": [
+        7595,
+        7913
+      ],
+      "other_candidates_ineligible": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "required_decision": "Authoritative source adjudication or separately authorized source-conflict contract. Current rule does not permit swapping an actually reversed source range. No new model needed/authorized.",
+      "responsibility_component": 1000,
+      "role_component": 1000,
+      "source_end_precision": "month",
+      "source_order_definitely_impossible": true,
+      "source_start_precision": "month"
+    },
+    "results": {
+      "18442517": {
+        "provenance": {
+          "alignments": [
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 0,
+              "range_offsets": [
+                1865,
+                1890
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 0,
+              "source_span": [
+                1847,
+                2906
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 1,
+              "range_offsets": [
+                2932,
+                2962
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 1,
+              "source_span": [
+                2906,
+                3919
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 0,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 2,
+              "range_offsets": [
+                3955,
+                3983
+              ],
+              "score": 10000,
+              "section": "experiences",
+              "source_candidate_index": 2,
+              "source_span": [
+                3919,
+                4486
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 0,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 3,
+              "range_offsets": [
+                4503,
+                4531
+              ],
+              "score": 10000,
+              "section": "experiences",
+              "source_candidate_index": 3,
+              "source_span": [
+                4486,
+                4739
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 4,
+              "range_offsets": [
+                4754,
+                4782
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 4,
+              "source_span": [
+                4739,
+                5587
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 5,
+              "range_offsets": [
+                5615,
+                5642
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 5,
+              "source_span": [
+                5587,
+                6163
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 6,
+              "range_offsets": [
+                6190,
+                6217
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 6,
+              "source_span": [
+                6163,
+                6639
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 7,
+              "range_offsets": [
+                6662,
+                6688
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 7,
+              "source_span": [
+                6639,
+                8109
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "index": 0,
+              "open_ended": false,
+              "section": "educations",
+              "status": "ambiguous_local_year"
+            }
+          ],
+          "correction_category": "source_grounded_date_metadata",
+          "evidence_contract": "cv-local-date-range-evidence-v2-composite",
+          "new_model_calls": 0,
+          "private_checkpoint_sha256": "3d841325d221bd9043bff417a2b11b4190fdb8dfe1a2a5607295b48783e231cc",
+          "private_payload_sha256": "98fdf00edaa4702b291c23acdcf593ca48d6454ce8431c52feccff8b0a3f6be1",
+          "recovered_at": "2026-10-07T02:43:17.670870+00:00",
+          "recovery_rule": "cv-composite-monotonic-alignment-v1",
+          "source_sha256": "7e9b8f1f5212ddc8f90c669a449e4357f7a27939ef69adc295b479804cdde6c8",
+          "validation_status": "PASS"
+        },
+        "status": "PASS"
+      },
+      "24964303": {
+        "provenance": {
+          "alignments": [
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 0,
+              "range_offsets": [
+                533,
+                551
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 0,
+              "source_span": [
+                498,
+                1172
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 1,
+              "range_offsets": [
+                1207,
+                1225
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 1,
+              "source_span": [
+                1172,
+                1767
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 2,
+              "range_offsets": [
+                1802,
+                1820
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 2,
+              "source_span": [
+                1767,
+                2064
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 3,
+              "range_offsets": [
+                2120,
+                2138
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 3,
+              "source_span": [
+                2064,
+                2621
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 4,
+              "range_offsets": [
+                2638,
+                2656
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 4,
+              "source_span": [
+                2621,
+                2998
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 5,
+              "range_offsets": [
+                3031,
+                3049
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 5,
+              "source_span": [
+                2998,
+                3406
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 6,
+              "range_offsets": [
+                3436,
+                3454
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 6,
+              "source_span": [
+                3406,
+                3885
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 7,
+              "range_offsets": [
+                3893,
+                3911
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 7,
+              "source_span": [
+                3885,
+                4297
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 8,
+              "range_offsets": [
+                4314,
+                4332
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 8,
+              "source_span": [
+                4297,
+                4718
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "index": 0,
+              "open_ended": false,
+              "section": "educations",
+              "status": "ambiguous_unique_institution_local_year"
+            },
+            {
+              "index": 1,
+              "open_ended": false,
+              "section": "educations",
+              "status": "ambiguous_local_year"
+            }
+          ],
+          "correction_category": "source_grounded_date_metadata",
+          "evidence_contract": "cv-local-date-range-evidence-v2-composite",
+          "new_model_calls": 0,
+          "private_checkpoint_sha256": "b8cfa4595e1b4de623f613b6506ae10cbacb4f3acca5242759528c2d9419631f",
+          "private_payload_sha256": "5ef53af411d9147e5ba6cb7e299aca0602a8b5c3aeb7db507470e03094d74707",
+          "recovered_at": "2026-10-07T02:43:17.686092+00:00",
+          "recovery_rule": "cv-composite-monotonic-alignment-v1",
+          "source_sha256": "678e4463136952aa0ab70a4164fc84a4a9de41c2312c208f3f9f8dd09cd8ced4",
+          "validation_status": "PASS"
+        },
+        "status": "PASS"
+      },
+      "70750649": {
+        "category": "SOURCE_CHRONOLOGY_CONTRADICTION",
+        "contradictory_ranges": [
+          {
+            "components": {
+              "company": 1000,
+              "dates": 1000,
+              "responsibilities": 1000,
+              "role": 1000
+            },
+            "experience_index": 7,
+            "range_offsets": [
+              7612,
+              7630
+            ],
+            "score": 12000,
+            "source_candidate_index": 7,
+            "source_span": [
+              7595,
+              7913
+            ],
+            "status": "unique_ordered_assignment"
+          }
+        ],
+        "errors": [
+          {
+            "path": [
+              "experiences",
+              7
+            ],
+            "type": "value_error"
+          }
+        ],
+        "provenance": {
+          "alignments": [
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 0,
+              "range_offsets": [
+                1040,
+                1058
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 0,
+              "source_span": [
+                1010,
+                2864
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 1,
+              "range_offsets": [
+                2875,
+                2893
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 1,
+              "source_span": [
+                2864,
+                4226
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 2,
+              "range_offsets": [
+                4244,
+                4262
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 2,
+              "source_span": [
+                4226,
+                5064
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 3,
+              "range_offsets": [
+                5091,
+                5109
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 3,
+              "source_span": [
+                5064,
+                5419
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 990,
+                "role": 1000
+              },
+              "index": 4,
+              "range_offsets": [
+                5446,
+                5464
+              ],
+              "score": 11970,
+              "section": "experiences",
+              "source_candidate_index": 4,
+              "source_span": [
+                5419,
+                6620
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 5,
+              "range_offsets": [
+                6647,
+                6665
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 5,
+              "source_span": [
+                6620,
+                7136
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 6,
+              "range_offsets": [
+                7187,
+                7205
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 6,
+              "source_span": [
+                7136,
+                7595
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "components": {
+                "company": 1000,
+                "dates": 1000,
+                "responsibilities": 1000,
+                "role": 1000
+              },
+              "index": 7,
+              "range_offsets": [
+                7612,
+                7630
+              ],
+              "score": 12000,
+              "section": "experiences",
+              "source_candidate_index": 7,
+              "source_span": [
+                7595,
+                7913
+              ],
+              "status": "unique_ordered_assignment"
+            },
+            {
+              "index": 0,
+              "open_ended": false,
+              "section": "educations",
+              "status": "ambiguous_local_year"
+            },
+            {
+              "index": 1,
+              "open_ended": false,
+              "section": "educations",
+              "status": "ambiguous_local_year"
+            }
+          ],
+          "evidence_contract": "cv-local-date-range-evidence-v2-composite",
+          "new_model_calls": 0,
+          "private_checkpoint_sha256": "8573b1add61553b3986390e306dd6f7bcee0b26ad3d0db30524bc23e87da0d8f",
+          "private_payload_sha256": "c569ddd24ad9ea2046e4309faafaae462690745f5b490a1a8c009a3d0a0f2206",
+          "recovered_at": "2026-10-07T02:43:17.699154+00:00",
+          "recovery_rule": "cv-composite-monotonic-alignment-v1",
+          "source_sha256": "1e425ae2ad7d147fe9907e7b417790b09a73507b3229da6707ddaeb3c99bccd9",
+          "validation_status": "FAILED"
+        },
+        "status": "FAILED"
+      }
+    },
+    "status": "BLOCKED",
+    "task": "14C.1.10"
+  },
+  "final_recovery": {
+    "canonical_cv_success": 89,
+    "canonical_jd_success": 10,
+    "count_limitation": "First-pass schema/HTTP counters were not persisted. Workflow counts are exact; HTTP retries are bounded, not measured.",
+    "dev_database_used": false,
+    "diagnostic_scope": "Paths/root categories above come from earlier safe diagnostics; final pass persisted SCHEMA_VALIDATION_FAILED only, not individual final Pydantic locations.",
+    "final_correction_generation_count": 6,
+    "final_correction_workflows": 6,
+    "first_recovery_generation_bounds": [
+      24,
+      48
+    ],
+    "first_recovery_generation_count": null,
+    "first_recovery_workflows": 24,
+    "frozen": false,
+    "full_pytest": {
+      "database": "gjob_db_test",
+      "exit_code": 0,
+      "passed": 606,
+      "seconds": 138.24,
+      "warnings": 3
+    },
+    "ground_truth_unchanged": true,
+    "http_attempt_count": null,
+    "initial_failed_cvs": 24,
+    "maximum_generations_this_task_per_initial_failure": 3,
+    "per_generation_timeout_seconds": 180,
+    "ready_pairs": 93,
+    "recovered_by_initial_category": {
+      "identity_overlap": 2,
+      "schema": 10,
+      "timeout": 6
+    },
+    "recovered_cvs": 18,
+    "remaining": [
+      {
+        "cv_id": "18442517",
+        "diagnosed_path": "educations[].dates",
+        "root_cause": "start_date/end_date chronological validator failure"
+      },
+      {
+        "cv_id": "24964303",
+        "diagnosed_path": "experiences[7].end_date",
+        "root_cause": "date_from_datetime_parsing"
+      },
+      {
+        "cv_id": "27152464",
+        "diagnosed_path": "experiences[2].dates",
+        "root_cause": "start_date/end_date chronological validator failure"
+      },
+      {
+        "cv_id": "30304575",
+        "diagnosed_path": "experiences[5].dates",
+        "root_cause": "start_date/end_date chronological validator failure"
+      },
+      {
+        "cv_id": "36517781",
+        "diagnosed_path": "experiences[3].dates",
+        "root_cause": "start_date/end_date chronological validator failure"
+      },
+      {
+        "cv_id": "70750649",
+        "diagnosed_path": "experiences[7].dates",
+        "root_cause": "start_date/end_date chronological validator failure"
+      }
+    ],
+    "remaining_blocker": "Same production schema and one final correction generation still failed. Further model calls exceed this task's completed recovery budget. No date swapping, hand editing, forced null schema or silent exclusion.",
+    "semantic_scoring_performed": false,
+    "status": "BLOCKED"
+  },
+  "final_source_conflict_policy": {
+    "canonical_cv_success":95,
+    "canonical_jd_success":10,
+    "ready_pairs":100,
+    "privacy_audit_pass":105,
+    "frozen":true,
+    "full_pytest":{"passed":642,"warnings":3,"seconds":105.40,"exit_code":0,"database":"gjob_db_test"},
+    "chronology_derived_features_usable": false,
+    "dates_not_swapped": true,
+    "existing_success_payloads_unchanged": 94,
+    "new_model_calls": 0,
+    "raw_private_file_unchanged": true,
+    "source_conflicts": [
+      {
+        "chronology_usable": false,
+        "experience_index": 7,
+        "range_offsets": [
+          7612,
+          7630
+        ],
+        "rule_version": "cv-source-date-consistency-v1",
+        "source_sha256": "10840d1aa1c24f670411d4240913897224e30b8d4c9d7d6d2a3dc432a1d7d3d7",
+        "state": "SOURCE_DATA_CONFLICT"
+      }
+    ],
+    "source_preserved": true,
+    "status": "PASS"
+  },
+  "initial_failures": [
+    {
+      "actual_type": "nested object with inconsistent date order (inferred from model validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "10235429",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1664,
+      "expected": "start_date <= end_date",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].dates",
+      "input_characters": 6657,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "1fe1730ea96bb80ee258e711bd54d50dcf321ca3d881ec4a72f437267302c562"
+    },
+    {
+      "actual_type": "blank string (inferred from sole field validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "11432686",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 2725,
+      "expected": "nullable nonblank text",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "educations[].field_of_study",
+      "input_characters": 10901,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "0f6d1589e88bc7ed7dbd2b45e139c945dec739ba44cf618d8a50c655e36a199f"
+    },
+    {
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "12472574",
+      "error_type": "AITimeoutError",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 4511,
+      "failure_category": "PROVIDER_UNAVAILABLE",
+      "input_characters": 18043,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "cb0a00c3b45bcd4235de8f9fe2f131ca02a4ba7a99a24157b8d3a5b170008031"
+    },
+    {
+      "actual_type": "blank string (inferred from sole field validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "17166018",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 742,
+      "expected": "nullable nonblank text",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].description",
+      "input_characters": 2967,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "5bb591820b5f939e9c263bccf9cc5fe17cdac7c537bff74fdd829e091cc57a85"
+    },
+    {
+      "actual_type": "nested object with inconsistent date order (inferred from model validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "18442517",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 2127,
+      "expected": "start_date <= end_date",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "educations[].dates",
+      "input_characters": 8509,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "7e9b8f1f5212ddc8f90c669a449e4357f7a27939ef69adc295b479804cdde6c8"
+    },
+    {
+      "actual_type": "blank string (inferred from sole field validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "23155093",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1442,
+      "expected": "nullable nonblank text",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "educations[].field_of_study",
+      "input_characters": 5766,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "45319d0e55b520bca452f3643714d88bbf008374b1abf505ac5ceada3b40136e"
+    },
+    {
+      "actual_type": "blank string (inferred from sole field validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "23438112",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1390,
+      "expected": "nullable nonblank text",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].description",
+      "input_characters": 5562,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "c024a17baecc9e758eba0b37a7252a46606e4d9555e32f946ed3f805ca94fdf5"
+    },
+    {
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "24588864",
+      "error_type": "AITimeoutError",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 3538,
+      "failure_category": "PROVIDER_UNAVAILABLE",
+      "input_characters": 14150,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "dfd784d4e409f7cbf7c6db823051326466a522ec8dd5d9645c6abd70e5e553c9"
+    },
+    {
+      "actual_type": "invalid date string",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "24964303",
+      "error_type": "date_from_datetime_parsing",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1382,
+      "expected": "ISO date or null",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[7].end_date",
+      "input_characters": 5529,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "678e4463136952aa0ab70a4164fc84a4a9de41c2312c208f3f9f8dd09cd8ced4"
+    },
+    {
+      "actual_type": "nested object with inconsistent date order (inferred from model validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "25413261",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 2907,
+      "expected": "start_date <= end_date",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].dates",
+      "input_characters": 11628,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "9e1c4a52ca9eccfe6ad1649577aa9d20c4d86929aab4b6fe89eada808f81ff3f"
+    },
+    {
+      "actual_type": "nested object with inconsistent date order (inferred from model validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "27152464",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1538,
+      "expected": "start_date <= end_date",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].dates",
+      "input_characters": 6152,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "a2ffdd7e815677bd44964eb003b1f8378fe840cd3561a0b9d9a11857a52b394a"
+    },
+    {
+      "actual_type": "nested object with inconsistent date order (inferred from model validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "29329075",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1458,
+      "expected": "start_date <= end_date",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].dates",
+      "input_characters": 5833,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "7538f58b1d303cf44949d3e93ac553f4ea81e3115a386b913154b0d4d8336eff"
+    },
+    {
+      "actual_type": "nested object with inconsistent date order (inferred from model validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "30304575",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 2091,
+      "expected": "start_date <= end_date",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].dates",
+      "input_characters": 8365,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "8d6eccdbf22abafd917707e01a71df1938d17976ee5c98814c78ed1c44baab14"
+    },
+    {
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "31243710",
+      "error_type": "AITimeoutError",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 2012,
+      "failure_category": "PROVIDER_UNAVAILABLE",
+      "input_characters": 8049,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "3ddfdf7d7b663868609e3345f50a0ce42bed8e4bf83f3e929e354b3bf2cb6343"
+    },
+    {
+      "actual_type": "nested object with inconsistent date order (inferred from model validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "3547447",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1324,
+      "expected": "start_date <= end_date",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].dates",
+      "input_characters": 5295,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "ceee46e65fdc055dc23962e8e86fc8f322d0da7bce9d4623693e1d36819cf64a"
+    },
+    {
+      "actual_type": "nested object with inconsistent date order (inferred from model validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "36517781",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1666,
+      "expected": "start_date <= end_date",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].dates",
+      "input_characters": 6662,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "3ab7b730562e0513506b04e8cfa8a320cb92e4a08cb9401d2030c11798f76c5b"
+    },
+    {
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "58208591",
+      "error_type": "AITimeoutError",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 3246,
+      "failure_category": "PROVIDER_UNAVAILABLE",
+      "input_characters": 12984,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "b61a353f016017242ccbd1439864f2a7df8aea7f32a9a2ce3eb6a0805e6e91e2"
+    },
+    {
+      "actual_type": "nested object with inconsistent date order (inferred from model validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "70750649",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 2304,
+      "expected": "start_date <= end_date",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "experiences[].dates",
+      "input_characters": 9218,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "1e425ae2ad7d147fe9907e7b417790b09a73507b3229da6707ddaeb3c99bccd9"
+    },
+    {
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "73075521",
+      "error_type": "AITimeoutError",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 3209,
+      "failure_category": "PROVIDER_UNAVAILABLE",
+      "input_characters": 12837,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "9676a77337660ec06b53223b422ff0f226b4ba428c1d8462b1c05619b479bf14"
+    },
+    {
+      "actual_type": "blank string (inferred from sole field validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "74552449",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 819,
+      "expected": "nullable nonblank text",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "educations[].description",
+      "input_characters": 3275,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "21ecad5a61bd39a4ae3e274a1e06bf8f9a4190ed50b8c36b3733d46398efe5b8"
+    },
+    {
+      "actual_type": "blank string (inferred from sole field validator)",
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "79376680",
+      "error_type": "value_error",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1400,
+      "expected": "nullable nonblank text",
+      "failure_category": "SCHEMA_VALIDATION_FAILED",
+      "field_path": "educations[].description",
+      "input_characters": 5598,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "dddc997e0c9175bf7d7f29a2c5a30ec1b51d807c86eccd947c45d0368481b02c"
+    },
+    {
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "classification": "requires structural/source recheck, not assumed PII",
+      "configured_duration_seconds": 90,
+      "cv_id": "80527194",
+      "error_type": "identity substring collision",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 1826,
+      "failure_category": "AMBIGUOUS_IDENTITY_OVERLAP",
+      "field_path": "personal_info.full_name",
+      "input_characters": 7302,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "e7243bf8e19c4d0db71113a40f09ca7b463089457d4ba23d2f2069a60a0cbf19"
+    },
+    {
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "configured_duration_seconds": 90,
+      "cv_id": "98300955",
+      "error_type": "AITimeoutError",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 2846,
+      "failure_category": "PROVIDER_UNAVAILABLE",
+      "input_characters": 11382,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "fa5cba53bf6380152a5c267663c5fc5e3f132b5e75698cc3db9cd6bac5e892da"
+    },
+    {
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "classification": "requires structural/source recheck, not assumed PII",
+      "configured_duration_seconds": 90,
+      "cv_id": "99561379",
+      "error_type": "identity substring collision",
+      "estimate_note": "character heuristic, not tokenizer count",
+      "estimated_tokens": 2842,
+      "failure_category": "AMBIGUOUS_IDENTITY_OVERLAP",
+      "field_path": "personal_info.full_name",
+      "input_characters": 11369,
+      "model": "qwen3:8b",
+      "prior_workflow_attempts": 2,
+      "provider": "ollama",
+      "source_hash": "1344cc0526931fa144bf96359a94424bca023a21e5a5678dd02724999ea70e91"
+    }
+  ],
+  "partial_date_recovery": {
+    "canonical_cv_success": 92,
+    "canonical_jd_success": 10,
+    "correction_generations": 4,
+    "date_contract": "cv-date-precision-v1",
+    "diagnostic_limitation": "Positive-pattern evidence could not validate the generated end dates; unsupported source notation versus model fidelity is not adjudicated because offending values were not persisted. Not proof of date-contract insufficiency or fabricated dates.",
+    "existing_success_payloads_unchanged": 89,
+    "frozen": false,
+    "full_pytest": {
+      "database": "gjob_db_test",
+      "exit_code": 0,
+      "passed": 623,
+      "seconds": 105.29,
+      "warnings": 3
+    },
+    "generation_budget": 12,
+    "generations": 10,
+    "hard_stop": "Three remaining CVs consumed 2 generations each. No third call; unused total slots do not override per-CV budget.",
+    "http_requests": 10,
+    "http_retries": 0,
+    "per_cv_generations": {
+      "18442517": 2,
+      "24964303": 2,
+      "27152464": 2,
+      "30304575": 1,
+      "36517781": 1,
+      "70750649": 2
+    },
+    "primary_generations": 6,
+    "ready_pairs": 97,
+    "remaining_final_category": "source_date_precision_not_supported",
+    "remaining_final_stage": "source_date_precision_evidence",
+    "results": {
+      "18442517": "FAILED",
+      "24964303": "FAILED",
+      "27152464": "SUCCEEDED",
+      "30304575": "SUCCEEDED",
+      "36517781": "SUCCEEDED",
+      "70750649": "FAILED"
+    },
+    "runtime_seconds": 585.0720224999823,
+    "safe_validation_errors": {
+      "18442517": [
+        [
+          {
+            "path": [
+              "educations",
+              "0"
+            ],
+            "type": "value_error"
+          }
+        ],
+        [
+          {
+            "path": [
+              "experiences",
+              "0",
+              "end_date"
+            ],
+            "type": "value_error"
+          }
+        ]
+      ],
+      "24964303": [
+        [
+          {
+            "path": [
+              "experiences",
+              "0",
+              "end_date"
+            ],
+            "type": "value_error"
+          },
+          {
+            "path": [
+              "experiences",
+              "1",
+              "end_date"
+            ],
+            "type": "value_error"
+          },
+          {
+            "path": [
+              "experiences",
+              "2",
+              "end_date"
+            ],
+            "type": "value_error"
+          }
+        ],
+        [
+          {
+            "path": [
+              "experiences",
+              "0",
+              "end_date"
+            ],
+            "type": "value_error"
+          },
+          {
+            "path": [
+              "experiences",
+              "1",
+              "end_date"
+            ],
+            "type": "value_error"
+          },
+          {
+            "path": [
+              "experiences",
+              "2",
+              "end_date"
+            ],
+            "type": "value_error"
+          }
+        ]
+      ],
+      "27152464": [
+        [
+          {
+            "path": [
+              "experiences",
+              "2"
+            ],
+            "type": "value_error"
+          }
+        ]
+      ],
+      "30304575": [],
+      "36517781": [],
+      "70750649": [
+        [
+          {
+            "path": [
+              "experiences",
+              "7"
+            ],
+            "type": "value_error"
+          }
+        ],
+        [
+          {
+            "path": [
+              "experiences",
+              "0",
+              "end_date"
+            ],
+            "type": "value_error"
+          }
+        ]
+      ]
+    },
+    "semantic_scoring_performed": false,
+    "source_date_audit": {
+      "27152464": {
+        "partial_date_count": 11,
+        "professional_date_count": 11,
+        "source_date_evidence_passed": true
+      },
+      "30304575": {
+        "partial_date_count": 18,
+        "professional_date_count": 18,
+        "source_date_evidence_passed": true
+      },
+      "36517781": {
+        "partial_date_count": 14,
+        "professional_date_count": 14,
+        "source_date_evidence_passed": true
+      }
+    },
+    "status": "BLOCKED"
+  },
+  "raw_payload_reconstruction": {
+    "canonical_cv_success": 92,
+    "canonical_jd_success": 10,
+    "correction_generations": 0,
+    "deterministic_work_remaining": {
+      "18442517": "Unique adjacent role/range rejected by secondary company anchor mismatch at experiences[2/3].",
+      "24964303": "Repeated role/company context with multiple plausible ranges at experiences[0/1/2]; education[0] local range unresolved.",
+      "70750649": "Grounded experiences[7] month/month interval definitely reversed; source-range association/inconsistency adjudication required, no swapping."
+    },
+    "frozen": false,
+    "full_pytest": {
+      "database": "gjob_db_test",
+      "exit_code": 0,
+      "passed": 631,
+      "seconds": 106.14,
+      "warnings": 3
+    },
+    "generation_budget": 3,
+    "hard_stop": "3/3 new generations consumed; no further model calls. Private raw responses retained before validation.",
+    "http_retries": 0,
+    "new_generations": 3,
+    "per_cv_generations": {
+      "18442517": 1,
+      "24964303": 1,
+      "70750649": 1
+    },
+    "private_checkpoint_directory": "evaluation\\cache\\ranking-payload-recovery-v1",
+    "raw_private_payloads_retained": 3,
+    "ready_pairs": 97,
+    "results": {
+      "18442517": {
+        "category": "DATE_EVIDENCE_LOCAL_RANGE_UNRESOLVED",
+        "errors": [],
+        "raw_retained": true,
+        "raw_validation_status": "PROVIDER_SCHEMA_FAIL",
+        "stage": "deterministic"
+      },
+      "24964303": {
+        "category": "DATE_EVIDENCE_LOCAL_RANGE_UNRESOLVED",
+        "errors": [],
+        "raw_retained": true,
+        "raw_validation_status": "PROVIDER_SCHEMA_PASS",
+        "stage": "deterministic"
+      },
+      "70750649": {
+        "category": "DETERMINISTIC_DOMAIN_VALIDATION_FAILED",
+        "errors": [
+          {
+            "path": [
+              "experiences",
+              7
+            ],
+            "type": "value_error"
+          }
+        ],
+        "raw_retained": true,
+        "raw_validation_status": "PROVIDER_SCHEMA_FAIL",
+        "stage": "deterministic"
+      }
+    },
+    "runtime_seconds": 195.6704730000347,
+    "semantic_scoring_performed": false,
+    "status": "BLOCKED",
+    "unchanged_existing_success_payloads": 92
+  },
+  "source_grounded_completion_audit": {
+    "active_structured_payloads_found": 0,
+    "artifact_search": "Backend JSON/JSONL filename search including private ignored artifacts; matching canonical history records contain status/metrics only.",
+    "blocker": "Previous rejection occurred before successful-payload checkpointing. No retained structured experiences/values to align local evidence. Ambiguity metadata cannot reconstruct missing CV sections.",
+    "canonical_artifacts_changed": false,
+    "canonical_cv_success": 92,
+    "canonical_jd_success": 10,
+    "cv_ids": [
+      "18442517",
+      "24964303",
+      "70750649"
+    ],
+    "date_expression_evidence_present": true,
+    "frozen": false,
+    "historical_structured_payloads_found": 0,
+    "new_model_calls": 0,
+    "production_code_changed": false,
+    "ready_pairs": 97,
+    "required_input": "Source-matched structured payload backups for the three CVs, or explicit authorization for a materially different reconstruction strategy.",
+    "source_present": true,
+    "status": "BLOCKED_MISSING_STRUCTURED_PAYLOADS",
+    "task": "14C.1.9",
+    "tests": {
+      "evaluation_passed": 138,
+      "evaluation_seconds": 10.87,
+      "evaluation_warnings": 2,
+      "focused_passed": 232,
+      "focused_seconds": 2.39,
+      "focused_warnings": 1
+    }
+  },
+  "task": "14C.1.8"
+}

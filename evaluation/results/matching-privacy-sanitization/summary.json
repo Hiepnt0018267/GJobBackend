@@ -1,0 +1,33 @@
+{
+  "task": "14C.1.6",
+  "status": "PASS",
+  "sanitizer_shared": true,
+  "sanitizer_api": "app.services.matching_text_privacy.sanitize_matching_text",
+  "canonical_version": "matching-canonical-v2-contact-sanitized",
+  "cv_path_covered": true,
+  "jd_path_covered": true,
+  "evaluation_uses_same_mapper": true,
+  "contact_categories": ["email", "phone", "contact_url"],
+  "replacement": "[CONTACT]",
+  "cache_identity_includes_canonical_version": true,
+  "jd_audit": {"total": 10, "passed": 10, "original_email_issue_jobs": 2},
+  "ground_truth_sha256": "a7225aeb073f343c55e283b99b6dd5a38cca426e3ab44a86945d0c5e2cd0e36d",
+  "ground_truth_modified": false,
+  "production_raw_data_modified": false,
+  "historical_benchmark_artifacts_modified": false,
+  "dev_database_access": false,
+  "migration": false,
+  "live_provider_calls": 0,
+  "semantic_scores_created": false,
+  "ranking_metrics_computed": false,
+  "tests": {
+    "focused": {"passed": 133, "warnings": 0, "seconds": 0.99, "exit_code": 0},
+    "evaluation": {"passed": 138, "warnings": 2, "seconds": 5.90, "exit_code": 0},
+    "full": {"passed": 585, "warnings": 3, "seconds": 103.00, "exit_code": 0, "database": "gjob_db_test"}
+  },
+  "ready_to_resume_14c1_5": true,
+  "ready_for_14c2_scoring": false,
+  "resume_requires_explicit_unfrozen_jd_draft_upgrade": true,
+  "resume_flag": "--refresh-jd-drafts",
+  "limitations": ["Conservative supported contact syntax, not a general PII detector", "Unknown unlabeled numeric identifiers may be ambiguous", "Full canonical CV dataset has not been generated or frozen"]
+}

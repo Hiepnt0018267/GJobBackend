@@ -1,0 +1,209 @@
+{
+  "policy_version": "recruiter-ranking-policy-v1",
+  "task": "14C.6",
+  "task_14c_complete": true,
+  "frozen": true,
+  "approval": "APPROVED FOR OPTIONAL RECRUITER-SIDE RANKING DECISION SUPPORT",
+  "deployment_performed": false,
+  "algorithm": "semantic-v1",
+  "activation": "opt-in",
+  "sort": "ai_match",
+  "default_sort": "newest",
+  "default_order": [
+    "application.created_at DESC",
+    "application.id DESC"
+  ],
+  "default_sort_unchanged": true,
+  "eligibility": "Existing authorized application/business filters only, never AI score",
+  "threshold": null,
+  "auto_hide": false,
+  "auto_reject": false,
+  "auto_shortlist": false,
+  "auto_hire": false,
+  "auto_status_mutation": false,
+  "auto_decision_notification": false,
+  "full_logical_result_set_default": true,
+  "explicit_limit_parameter": "ai_top_n",
+  "explicit_limit_policy": "rank_all_then_take_n_or_all_when_fewer",
+  "pagination_is_transport_only": true,
+  "missing_signal_score": null,
+  "missing_signal_rank": null,
+  "human_review_required": true,
+  "ranking_states": {
+    "ranked": "Compatible validated vectors and finite raw cosine available",
+    "pending": "Canonical input ready, compatible vector absent/not yet prepared",
+    "unavailable": "Usable production canonical input absent or semantic text empty",
+    "error": "Canonical/cache/provider/computation/ownership-consistency error"
+  },
+  "ordering": {
+    "ranked": "raw cosine DESC at full precision",
+    "tie_break": [
+      "application.created_at DESC",
+      "application.id DESC"
+    ],
+    "non_ranked": "After ranked; application.created_at DESC,application.id DESC",
+    "identity_sensitive_tie_break": false
+  },
+  "snapshot": {
+    "ttl_seconds": 600,
+    "later_pages_require_token": true,
+    "availability_only_change": "same snapshot retains ordering and status view",
+    "new_snapshot": "may observe new availability/order",
+    "input_or_membership_or_filter_or_profile_change": "409 restart page1",
+    "corrupt_or_expired_or_missing": "409 restart page1",
+    "missing_later_page_token": "422",
+    "storage_unavailable": "503; offer existing default sort",
+    "whole_manifest_validation": true,
+    "duplicate_application_input": "409; no duplicate response"
+  },
+  "embedding_profile": {
+    "provider": "ollama",
+    "model": "bge-m3",
+    "version": "full-input-context-batch-v2",
+    "num_ctx": 8192,
+    "num_batch": 4096,
+    "truncate": false,
+    "dimensions": 1024,
+    "vector_postprocessing": "none",
+    "profile_fingerprint": "bcfd85c8e892993fa3111882be45f8beb92a610d191edb4455abb2aed0a908cc",
+    "model_digest": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+    "digest_policy": "Deliberate deployment pin; verify local tags before and after precompute, not network discovery during list"
+  },
+  "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+  "input_selection": "Application-attached CV; Builder direct; uploaded confirmed copy authoritative, otherwise newest successful extraction",
+  "cache": {
+    "root": ".cache/recruiter-ranking",
+    "identity": [
+      "canonical version",
+      "canonical fingerprint",
+      "semantic text SHA-256",
+      "embedding profile fingerprint",
+      "model digest",
+      "semantic engine"
+    ],
+    "stale": "miss/non-ranked; never relabel",
+    "corrupt": "ERROR/null; invalid vectors never ranked",
+    "storage": "private shared deployment disk,service-account permissions; no evaluation cache reuse",
+    "trust_boundary": "Shape/finite validation is not authentication of arbitrary semantically wrong disk contents"
+  },
+  "precompute": {
+    "strategy": "one-entity best-effort post-commit lifecycle BackgroundTasks",
+    "list_live_embedding_budget": 0,
+    "list_extraction_calls": 0,
+    "per_task_max_embed_requests": 1,
+    "durable_retry_or_backfill": false,
+    "pending_completion_deadline": null,
+    "hooks": [
+      "CV create/update",
+      "uploaded extraction success/confirmation",
+      "recruiter JD create/update"
+    ],
+    "crash_lease": "no automatic takeover; verified operator recovery",
+    "provider_outage": "compatible existing cache usable; missing/error remains visible"
+  },
+  "score_exposure": {
+    "backend_raw_cosine_allowed": true,
+    "api_fields": [
+      "ai_rank",
+      "ranking_status",
+      "semantic_match_score"
+    ],
+    "preferred_recruiter_display": [
+      "ai_rank",
+      "ranking_status"
+    ],
+    "raw_score_hidden_by_default_recommendation": true,
+    "allowed_label": "similarity score",
+    "percentage_or_probability": false,
+    "calibrated_suitability": false
+  },
+  "privacy": {
+    "direct_identity_contact_photo_DOB_intended_features": false,
+    "raw_semantic_text_or_vectors_in_ranking_response": false,
+    "authorized_existing_identity_display_and_search_preserved": true,
+    "free_prose_exclusion_guaranteed": false,
+    "demographic_inference": false
+  },
+  "fairness_claim": "not_established",
+  "protected_group_disparity": "not_measured",
+  "robustness_claim": "limited_synthetic_evidence_not_universal_guarantee",
+  "ranking_selection": {
+    "semantic_v1": "selected recruiter ordering signal",
+    "baseline_v1_offline": "reference/evaluation only,not ranking signal",
+    "hybrid_v1": "not production-selected",
+    "existing_separate_structured_pairwise_baseline": "unchanged,outside this recruiter-list freeze"
+  },
+  "known_limitations": [
+    "Useful but inconsistent,10-job constructed benchmark",
+    "No calibrated probability,autonomous decision or live recruiter study",
+    "Protected-group disparity unmeasured;structural exclusion not fairness",
+    "Sensitive/proxy professional prose may survive",
+    "Proxy/noise/generic JD sensitivity;single-reference stuffing result not universal immunity",
+    "Ranked-first exposure plus persistent PENDING;no durable automatic backfill/SLA",
+    "Poor/sparse CV or generic JD reduces informative ordering",
+    "Full-set memory/disk cost;no production throughput certification",
+    "Private shared storage/model pin/operator retention and lease recovery required",
+    "Cross-job cosines not calibrated comparable suitability",
+    "Serialized source-conflict metadata still requires proof-aware validation;not unchecked flag bypass"
+  ],
+  "monitoring_recommendations": [
+    "ranking-state distribution by legitimate operational source cohorts",
+    "pending duration and legacy/backfill backlog",
+    "AI sort usage/latency",
+    "cache hits/misses and provider failures",
+    "invalid snapshot/cache/duplicate-input incidents",
+    "recruiter complaints/observed usefulness"
+  ],
+  "monitoring_not_implemented_here": true,
+  "reevaluation_triggers": [
+    "larger independent per-job evidence",
+    "appropriately governed reliable protected-group audit data",
+    "model/digest/profile/canonical representation change",
+    "significant complaints or poor recruiter outcomes",
+    "high/prolonged pending or repeated integrity/provider failures",
+    "material proxy/robustness finding",
+    "recruiter behavior study"
+  ],
+  "out_of_scope": [
+    "candidate-side job recommendation (Task15)",
+    "new benchmark/relabeling",
+    "model/threshold/policy tuning",
+    "frontend implementation"
+  ],
+  "closure": "Task14C complete;no further Semantic-v1 tuning inside14C;future change requires explicit roadmap/evidence or genuine correctness blocker",
+  "evidence_sha256": {
+    "evaluation/results/ranking-semantic-v1/report.md": "0d1a1118b613040b94a6a83e3020aeffef93901f07cb5d240848b8a3e237ebc0",
+    "evaluation/results/ranking-semantic-v1/metrics.json": "00c3851910cd5e9aabf852639122179e9bb0df44be5d6a246a353218e42cb268",
+    "evaluation/results/recruiter-ranking-integration/report.md": "66928c758d312b7dff9a05a43959e1d1b031000cc98c6066cf1d1e2b6211e5bf",
+    "evaluation/results/ranking-fairness-audit/report.md": "2f3107c09169b6678050dae079427f225f6cd80365bddaaad6b39b5fad21ced5",
+    "evaluation/results/ranking-fairness-audit/audit_summary.json": "67ea26234c6bd37d0cb800a072027d961cece839f48a3d2218ba5c5622bfbe7e",
+    "evaluation/results/ranking-robustness/report.md": "deb2dee7ccec4777790bdcdab73527e19992424d69ef3d189f6ee594a316fed6",
+    "evaluation/results/ranking-robustness/robustness_metrics.json": "52c159a1633f3826f7a26dc07e12d1cc333dbd808ad500940e585ed783fdb580"
+  },
+  "production_source_sha256": {
+    "app/services/applicant_ranking_service.py": "7c3bc12b9d3caa02a991d8e7ee122ced80338fcf6ed15ec5504c39350d2fe36c",
+    "app/services/ranking_cache.py": "dc0f8d47d0678e560d0abd66d8a07c2a8e081b05f80868a6252ee5a4fe7a86f1",
+    "app/services/ranking_precompute.py": "1dee7ae7135cce291cd92a3e36738972c7f78c3e764dd3fb3f3d7271b5114562",
+    "app/services/semantic_matching_service.py": "0c347e9dd24ab68b10e2c95a3eea7d634e40a9c094c07e206aed0e62d1319fdf",
+    "app/services/matching_input_mapper.py": "dbdc285414bf8e0505e0b4f673f8c88b9c903e1b78d85c105274bfb93f54ce93",
+    "app/services/matching_input_service.py": "f5bd3a8953f8761fae8e8422e6828908a94ea0a449665e93c42069ac0a69b776",
+    "app/services/matching_fingerprint.py": "0d9126c20c4b5a6d1fe054c9dade55524d5e0a6234f5976ca87544950ebc9ffc",
+    "app/services/matching_text_privacy.py": "84948128b3e405e2e31b26ff59a8eb507484d17f85e1b4bb6f38c47db9d068a4",
+    "app/embeddings/profile.py": "1aac09c0020afdb83bb5b89303f0f90da0c9b9d44a598ea04219db078c1996bd",
+    "app/embeddings/factory.py": "51755fc23cf2d1be82793d029d67144b53e2a50e99c76628515b0f4170a54a7d",
+    "app/embeddings/ollama_provider.py": "7a3586fab48a88dc4caf8d0a0adf858615f32fc7afce3c9e7e810f6a3f83109a",
+    "app/routers/recruiter_applications.py": "27448a8930aa41019a6844b01111334b53c6759b6e70a284bf57b5daac5cee60",
+    "app/services/recruiter_application_service.py": "1add58d7183a8d1437747f84ee84176703ad134a948d2b7521e95dd18f0200b0",
+    "app/repositories/recruiter_application_repository.py": "8a5de2ac791f162e5f6c9f5434dcc1d1ba186a829c154db35ba0eb2fcf91696c",
+    "app/schemas/recruiter_application.py": "82d0b33917e3e5715cbc852277c25f6c4d4ffff1caf4673ea7c75ea960339f50",
+    "app/core/config.py": "ea2c6a72b6a7c6ca703b3f453836d75a297854379763484ea3189feb35acb371",
+    "app/routers/cvs.py": "c2cc9a3a7211849b37ae157255dce0c0f95c1b4811cb6cca2de8c9779f850bad",
+    "app/routers/recruiters.py": "0d4fa1f5c3570acb244d27c0c3a0c748cbb110a88a22bf7662071530aa82f252"
+  },
+  "frozen_input_sha256": {
+    "evaluation/data/derived/ranking_canonical_cvs.jsonl": "0a7da44fde0cde5f0ff45259093bb7f194cbc40bea502bf02c50bfe66682f615",
+    "evaluation/data/derived/ranking_canonical_jds.jsonl": "9da55f0731adf98c1c7aefe7072759effc04816f6568ddee9caef9f1e14fedc1",
+    "evaluation/data/derived/ranking_canonical_pair_manifest.csv": "cd715793e5ba37272d7cd1b82847f58e78879b1aaaf2577efab1c520f1ae92b9",
+    "evaluation/data/derived/ranking_pairs_labeled.csv": "a7225aeb073f343c55e283b99b6dd5a38cca426e3ab44a86945d0c5e2cd0e36d"
+  }
+}

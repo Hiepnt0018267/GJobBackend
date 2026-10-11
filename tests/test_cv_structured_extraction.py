@@ -16,6 +16,7 @@ from app.ai.exceptions import (
 )
 from app.models.cv import CVSourceType
 from app.schemas.cv_extraction import StructuredCVExtractionResult
+from app.schemas.cv_extraction_wire import CVExtractionProviderResponse
 from app.services.cv_structured_extraction_service import (
     CVAIRateLimitError,
     CVAIProviderRequestError,
@@ -132,7 +133,7 @@ def test_extract_from_text_returns_validated_vietnamese_result() -> None:
     )
 
     assert result.personal_info.full_name == "Nguyễn Văn A"
-    assert provider.last_response_schema is StructuredCVExtractionResult
+    assert provider.last_response_schema is CVExtractionProviderResponse
     assert provider.last_temperature == 0.0
     assert provider.last_system_instruction == CV_EXTRACTION_SYSTEM_INSTRUCTION
 

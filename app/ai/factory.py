@@ -24,6 +24,8 @@ def create_ai_provider() -> AIProvider:
             model=settings.ollama_llm_model,
             timeout_seconds=settings.ollama_llm_timeout_seconds,
             num_ctx=settings.ollama_llm_num_ctx,
+            num_predict=settings.ollama_llm_num_predict,
+            safety_margin=settings.ollama_llm_safety_margin,
         )
 
     raise AIConfigurationError(f"Unsupported AI provider configured: '{provider_name}'")
@@ -37,3 +39,4 @@ def configured_ai_model() -> str:
     if provider_name == "ollama":
         return settings.ollama_llm_model
     raise AIConfigurationError(f"Unsupported AI provider configured: '{provider_name}'")
+

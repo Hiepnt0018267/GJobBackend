@@ -7,7 +7,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Protocol
 
-import fitz
+import pymupdf as fitz
 from docx import Document
 from docx.oxml.table import CT_Tbl
 from docx.oxml.text.paragraph import CT_P

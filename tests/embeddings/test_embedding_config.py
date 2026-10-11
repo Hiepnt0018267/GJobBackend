@@ -19,9 +19,11 @@ def test_embedding_settings_defaults() -> None:
     assert configured.embedding_model == "bge-m3"
     assert configured.ollama_base_url == "http://localhost:11434"
     assert configured.embedding_timeout_seconds == 30.0
+    assert configured.embedding_num_ctx==8192
+    assert configured.embedding_num_batch==4096
     assert configured.ollama_llm_model == "qwen3:8b"
-    assert configured.ollama_llm_timeout_seconds == 90.0
-    assert configured.ollama_llm_num_ctx == 8192
+    assert configured.ollama_llm_timeout_seconds == 165.0
+    assert configured.ollama_llm_num_ctx == 10240
 
 
 @pytest.mark.parametrize(
@@ -33,9 +35,13 @@ def test_embedding_settings_defaults() -> None:
         ("embedding_timeout_seconds", 0),
         ("embedding_timeout_seconds", -1),
         ("embedding_timeout_seconds", 121),
+        ("embedding_num_ctx", 1023),
+        ("embedding_num_ctx", 8193),
+        ("embedding_num_batch", 1023),
+        ("embedding_num_batch", 4097),
         ("ollama_llm_model", ""),
         ("ollama_llm_timeout_seconds", 0),
-        ("ollama_llm_timeout_seconds", 121),
+        ("ollama_llm_timeout_seconds", 181),
         ("ollama_llm_num_ctx", 1023),
         ("ollama_llm_num_ctx", 131_073),
     ],

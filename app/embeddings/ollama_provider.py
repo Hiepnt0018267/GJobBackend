@@ -7,6 +7,7 @@ from typing import Any
 import httpx
 
 from app.embeddings.base import EmbeddingBatchResult
+from app.embeddings.profile import embedding_profile
 from app.embeddings.exceptions import (
     EmbeddingDimensionMismatchError,
     EmbeddingInputError,
@@ -27,13 +28,18 @@ class OllamaEmbeddingProvider:
         model: str,
         timeout_seconds: float,
         transport: httpx.AsyncBaseTransport | None = None,
+        num_ctx: int = 8192,
+        num_batch: int = 4096,
     ) -> None:
         self._base_url = base_url.rstrip("/")
         self._model = model
         self._timeout_seconds = timeout_seconds
         self._transport = transport
+        self.profile=embedding_profile(self.provider_name,model,num_ctx,num_batch)
+        self.last_prompt_eval_count=None
 
     async def embed_many(self, texts: Sequence[str]) -> EmbeddingBatchResult:
+        self.last_prompt_eval_count=None
         normalized_texts = list(texts)
         if not normalized_texts:
             raise EmbeddingInputError("At least one text is required for embedding.")
@@ -52,6 +58,7 @@ class OllamaEmbeddingProvider:
                         "model": self._model,
                         "input": normalized_texts,
                         "truncate": False,
+                        "options": {"num_ctx":self.profile['num_ctx'],"num_batch":self.profile['num_batch']},
                     },
                 )
         except httpx.RequestError as exc:
@@ -69,7 +76,12 @@ class OllamaEmbeddingProvider:
                 "The embedding provider returned unreadable JSON."
             ) from exc
 
-        return self._validate_response(payload, expected_count=len(normalized_texts))
+        result=self._validate_response(payload, expected_count=len(normalized_texts))
+        count=payload.get('prompt_eval_count')
+        if count is not None and (isinstance(count,bool) or not isinstance(count,int) or count<0):
+            raise EmbeddingValidationError('Invalid embedding token accounting.')
+        self.last_prompt_eval_count=count
+        return result
 
     def _raise_http_error(self, response: httpx.Response) -> None:
         message = ""

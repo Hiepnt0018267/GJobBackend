@@ -250,7 +250,7 @@ def test_first_match_persists_and_second_match_reuses_without_semantic_call() ->
         assert records[0].baseline_result == first.baseline.result.model_dump(mode="json")
         assert records[0].embedding_provider == "fake"
         assert records[0].embedding_model == "fake-model"
-        assert records[0].embedding_model_config == "fake-model"
+        assert records[0].embedding_model_config == service.expected_model_config
         assert records[0].embedding_dimensions == 3
         assert records[0].computed_at is not None
     finally:

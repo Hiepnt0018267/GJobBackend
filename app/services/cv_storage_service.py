@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path, PurePosixPath, PureWindowsPath
 
-import fitz
+import pymupdf as fitz
 from docx import Document
 from fastapi import UploadFile
 from PIL import Image, ImageOps, UnidentifiedImageError

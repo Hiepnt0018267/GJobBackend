@@ -49,3 +49,27 @@ class AIResponseValidationError(AIProviderError):
     """The provider returned an empty, malformed, or schema-invalid response."""
 
     pass
+
+
+class AIContextBudgetExceededError(AIContextLimitError):
+    """Full rendered prompt plus output reservation cannot fit before generation."""
+
+
+class AIOutputBudgetExceededError(AIProviderError):
+    """Generation hit/exceeded the explicit output limit; never accept its JSON."""
+
+
+class AITokenAccountingUnavailableError(AIProviderError):
+    """Authoritative same-model/template counting could not be verified."""
+
+
+class AIJSONParseError(AIResponseValidationError):
+    """Complete provider envelope contains malformed JSON."""
+
+
+class AISchemaValidationError(AIResponseValidationError):
+    """Parsed JSON violates the requested domain schema."""
+
+
+class AIPatchRepairError(AIResponseValidationError):
+    """Fixed structural reason only; never contains payload values."""

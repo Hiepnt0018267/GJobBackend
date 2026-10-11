@@ -1,13 +1,15 @@
 import uuid
 from datetime import date, datetime
 from enum import Enum
-from typing import Any
+from typing import Any, get_args
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, HttpUrl, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, HttpUrl, PrivateAttr, ValidationInfo, field_validator, model_validator
 
 from app.schemas.cv_template import CVTemplateSummary
 from app.models.cv import CVSourceType
 from app.models.cv_extraction import CVExtractionStatus
+from app.schemas.partial_date import CVDate, definitely_reversed
+from app.schemas.source_date_consistency import SourceDateConsistency, VerifiedSourceConflicts
 
 
 class CVSkillLevel(str, Enum):
@@ -28,6 +30,13 @@ class CVLanguageProficiency(str, Enum):
 class _StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    @field_validator('*', mode='before')
+    @classmethod
+    def normalize_absent_nullable(cls, value, info):
+        if isinstance(value, str) and not value.strip() and type(None) in get_args(cls.model_fields[info.field_name].annotation):
+            return None
+        return value
+
 
 def _trim_non_blank(value: Any) -> Any:
     if isinstance(value, str):
@@ -37,8 +46,20 @@ def _trim_non_blank(value: Any) -> Any:
     return value
 
 
+def _trim_nullable_or_non_blank(cls, value, info):
+    if isinstance(value, str) and not value.strip() and type(None) in get_args(cls.model_fields[info.field_name].annotation):
+        return None
+    return _trim_non_blank(value)
+
+
 class CVPersonalInfo(_StrictModel):
-    full_name: str | None = Field(default=None, max_length=255)
+    full_name: str | None = Field(
+        default=None, max_length=255,
+        description=("Only the candidate's explicitly stated personal name. "
+                     "Never infer a name from job titles, headings, companies, skills, "
+                     "professional summaries or anonymized placeholders. "
+                     "Use null when no clear personal name is present."),
+    )
     email: EmailStr | None = None
     phone: str | None = Field(default=None, max_length=20)
     address: str | None = Field(default=None, max_length=500)
@@ -48,23 +69,23 @@ class CVPersonalInfo(_StrictModel):
     github_url: HttpUrl | None = None
     portfolio_url: HttpUrl | None = None
 
-    _trim_strings = field_validator("full_name", "phone", "address", mode="before")(_trim_non_blank)
+    _trim_strings = field_validator("full_name", "phone", "address", mode="before")(_trim_nullable_or_non_blank)
 
 
 class CVEducationItem(_StrictModel):
     school_name: str = Field(min_length=1, max_length=255)
     degree: str | None = Field(default=None, max_length=255)
     field_of_study: str | None = Field(default=None, max_length=255)
-    start_date: date | None = None
-    end_date: date | None = None
+    start_date: CVDate | None = None
+    end_date: CVDate | None = None
     is_current: bool = False
     description: str | None = Field(default=None, max_length=5000)
 
-    _trim_strings = field_validator("school_name", "degree", "field_of_study", "description", mode="before")(_trim_non_blank)
+    _trim_strings = field_validator("school_name", "degree", "field_of_study", "description", mode="before")(_trim_nullable_or_non_blank)
 
     @model_validator(mode="after")
     def validate_dates(self):
-        if self.start_date and self.end_date and self.start_date > self.end_date:
+        if definitely_reversed(self.start_date, self.end_date):
             raise ValueError("start_date must not be after end_date")
         return self
 
@@ -72,16 +93,24 @@ class CVEducationItem(_StrictModel):
 class CVExperienceItem(_StrictModel):
     company_name: str = Field(min_length=1, max_length=255)
     position: str = Field(min_length=1, max_length=255)
-    start_date: date | None = None
-    end_date: date | None = None
+    start_date: CVDate | None = None
+    end_date: CVDate | None = None
     is_current: bool = False
     description: str | None = Field(default=None, max_length=10000)
+    date_consistency: SourceDateConsistency | None = Field(default=None,exclude_if=lambda value:value is None)
+    _source_conflict_proof: object = PrivateAttr(default=None)
 
-    _trim_strings = field_validator("company_name", "position", "description", mode="before")(_trim_non_blank)
+    _trim_strings = field_validator("company_name", "position", "description", mode="before")(_trim_nullable_or_non_blank)
 
     @model_validator(mode="after")
-    def validate_dates(self):
-        if self.start_date and self.end_date and self.start_date > self.end_date:
+    def validate_dates(self,info:ValidationInfo):
+        reversed_dates=definitely_reversed(self.start_date,self.end_date)
+        if self.date_consistency is not None:
+            proof=(info.context or {}).get('source_conflict_proof') or self._source_conflict_proof
+            if not reversed_dates or not isinstance(proof,VerifiedSourceConflicts) or not proof.allows(self.model_dump(mode='json'),self.date_consistency):
+                raise ValueError('SOURCE_DATA_CONFLICT requires verified source context')
+            self._source_conflict_proof=proof
+        elif reversed_dates:
             raise ValueError("start_date must not be after end_date")
         return self
 
@@ -96,13 +125,13 @@ class CVSkillItem(_StrictModel):
 class CVProjectItem(_StrictModel):
     name: str = Field(min_length=1, max_length=255)
     role: str | None = Field(default=None, max_length=255)
-    start_date: date | None = None
-    end_date: date | None = None
+    start_date: CVDate | None = None
+    end_date: CVDate | None = None
     description: str | None = Field(default=None, max_length=10000)
     technologies: list[str] = Field(default_factory=list, max_length=100)
     project_url: HttpUrl | None = None
 
-    _trim_strings = field_validator("name", "role", "description", mode="before")(_trim_non_blank)
+    _trim_strings = field_validator("name", "role", "description", mode="before")(_trim_nullable_or_non_blank)
 
     @field_validator("technologies", mode="before")
     @classmethod
@@ -113,7 +142,7 @@ class CVProjectItem(_StrictModel):
 
     @model_validator(mode="after")
     def validate_dates(self):
-        if self.start_date and self.end_date and self.start_date > self.end_date:
+        if definitely_reversed(self.start_date, self.end_date):
             raise ValueError("start_date must not be after end_date")
         return self
 
@@ -121,15 +150,15 @@ class CVProjectItem(_StrictModel):
 class CVCertificateItem(_StrictModel):
     name: str = Field(min_length=1, max_length=255)
     organization: str | None = Field(default=None, max_length=255)
-    issue_date: date | None = None
-    expiration_date: date | None = None
+    issue_date: CVDate | None = None
+    expiration_date: CVDate | None = None
     credential_url: HttpUrl | None = None
 
-    _trim_strings = field_validator("name", "organization", mode="before")(_trim_non_blank)
+    _trim_strings = field_validator("name", "organization", mode="before")(_trim_nullable_or_non_blank)
 
     @model_validator(mode="after")
     def validate_dates(self):
-        if self.issue_date and self.expiration_date and self.issue_date > self.expiration_date:
+        if definitely_reversed(self.issue_date, self.expiration_date):
             raise ValueError("issue_date must not be after expiration_date")
         return self
 

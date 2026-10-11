@@ -5,7 +5,7 @@ import uuid
 from sqlalchemy.orm import Session
 
 from app.models.cv import CVSourceType
-from app.models.cv_extraction import CVExtractionStatus
+from app.models.cv_extraction import CVExtraction, CVExtractionStatus
 from app.models.job import JobStatus
 from app.repositories.cv_extraction_repository import CVExtractionRepository
 from app.repositories.cv_repository import CVRepository
@@ -35,6 +35,38 @@ class MatchingInputService:
         self.cv_repository = CVRepository(db)
         self.extraction_repository = CVExtractionRepository(db)
         self.job_repository = JobRepository(db)
+
+    def build_cv_inputs(self, cvs):
+        """Batch equivalent of the single-CV policy; failures remain per entity.
+
+        Relations supplied by an already authorized application query. No model,
+        file decoding or raw-source adapter is involved.
+        """
+        uploaded = [cv.id for cv in cvs if cv.source_type == CVSourceType.UPLOADED]
+        rows = []
+        if uploaded:
+            rows = (self.extraction_repository.db.query(CVExtraction)
+                    .filter(CVExtraction.cv_id.in_(uploaded))
+                    .order_by(CVExtraction.created_at.desc(), CVExtraction.id.desc()).all())
+        confirmed = {row.cv_id for row in rows
+                     if row.status == CVExtractionStatus.SUCCEEDED and row.confirmed_at is not None}
+        successful = {}
+        for row in rows:
+            if row.status == CVExtractionStatus.SUCCEEDED:
+                successful.setdefault(row.cv_id, row)
+        results = {}
+        for cv in cvs:
+            try:
+                if cv.source_type != CVSourceType.UPLOADED or cv.id in confirmed:
+                    results[cv.id] = build_cv_matching_input(cv)
+                elif cv.id in successful and successful[cv.id].structured_result is not None:
+                    structured = StructuredCVExtractionResult.model_validate(successful[cv.id].structured_result)
+                    results[cv.id] = build_cv_matching_input(cv, structured)
+                else:
+                    results[cv.id] = CVNotReadyForMatchingError("No usable structured CV.")
+            except (ValueError, TypeError) as exc:
+                results[cv.id] = exc
+        return results
 
     def build_cv_input(self, cv_id: uuid.UUID) -> CanonicalCVMatchingInput:
         cv = self.cv_repository.get_by_id_for_matching(cv_id)

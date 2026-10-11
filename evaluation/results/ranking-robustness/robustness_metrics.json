@@ -1,0 +1,848 @@
+{
+  "DB_access": false,
+  "Qwen_Gemini_calls": 0,
+  "cache_hits": 1,
+  "cache_misses": 21,
+  "case_inventory": [
+    {
+      "case_id": "REFERENCE_CV",
+      "characters": 285,
+      "kind": "cv",
+      "text_sha256": "910f7ba7c710c63de7769c645bb7d9d8b443c341269cba9b76c9e2890ecee690",
+      "total_tokens_with_specials": 74,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "TRANSFER_CONTROL",
+      "characters": 174,
+      "kind": "cv",
+      "text_sha256": "4dbb11021bb2e6f9d86d25d9143e237ef5651af89d555566ab67e17da9319c82",
+      "total_tokens_with_specials": 45,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "UNRELATED_CONTROL",
+      "characters": 137,
+      "kind": "cv",
+      "text_sha256": "d8ad4e331319ceafe4244292174e446bbc1b36a4165104a941bafcfc9dfe3b78",
+      "total_tokens_with_specials": 42,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "VERY_SHORT_CV",
+      "characters": 14,
+      "kind": "cv",
+      "text_sha256": "17df6f36b1e460ce7eb22555bf27b702c9a9e6d9165986f50ecdcd38de9c98a9",
+      "total_tokens_with_specials": 7,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "SPARSE_CV",
+      "characters": 48,
+      "kind": "cv",
+      "text_sha256": "5b4d6314fe126ba51f1b0b3d1125f59163bea273469ee58aa2436fc5c9211dfb",
+      "total_tokens_with_specials": 18,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "KEYWORD_STUFFED_1X",
+      "characters": 318,
+      "kind": "cv",
+      "text_sha256": "cb0ca1a3e1fba6a21b4ec50b7babab59a6a3baf261322a5adda4cafc8b94435c",
+      "total_tokens_with_specials": 82,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "KEYWORD_STUFFED_5X",
+      "characters": 450,
+      "kind": "cv",
+      "text_sha256": "a68d8cbcd9da30d17aea3d627e147d53d28c4675edbb2a15c6960cf4662649c9",
+      "total_tokens_with_specials": 114,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "KEYWORD_STUFFED_20X",
+      "characters": 945,
+      "kind": "cv",
+      "text_sha256": "d2f83644be858f94016504ad01e6db4635cde549a8697b3ce3c95bae5168d239",
+      "total_tokens_with_specials": 234,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "DUPLICATED_SECTION_CV",
+      "characters": 446,
+      "kind": "cv",
+      "text_sha256": "36fa3bc0d234cbe578cf0c76b5f8d15ff4fa85b3a4889c4c0cec35482d01eaa2",
+      "total_tokens_with_specials": 114,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "LOCATION_HEAVY_CV",
+      "characters": 745,
+      "kind": "cv",
+      "text_sha256": "e397f46aaccb6c9331ff1a0782a927baa9eb368c9bd6308dadef835dc212bd94",
+      "total_tokens_with_specials": 134,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "SCHOOL_PRESTIGE_HEAVY_CV",
+      "characters": 1065,
+      "kind": "cv",
+      "text_sha256": "7d9c5bc65af0a6de0436fd4588dcd6c1f5100a329e42b7c878ece336c41de37d",
+      "total_tokens_with_specials": 154,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "EMPLOYER_PRESTIGE_HEAVY_CV",
+      "characters": 625,
+      "kind": "cv",
+      "text_sha256": "cca1b6907613e2639350c7d7a266cb29af26169cc36737fd0be4359be12cd4c2",
+      "total_tokens_with_specials": 114,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "LANGUAGE_HEAVY_CV",
+      "characters": 885,
+      "kind": "cv",
+      "text_sha256": "7cb0ec97013475361050ca231dc260b46d2ea00e8fddf9ec807c5f77e709f5d9",
+      "total_tokens_with_specials": 154,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "NOISY_CV",
+      "characters": 2165,
+      "kind": "cv",
+      "text_sha256": "ae2a4ed94fc2097a9dd0c1d2d3deb64a3858f8e3a73e911d73c9af54adc52b2e",
+      "total_tokens_with_specials": 414,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "IDENTITY_VARIANT",
+      "characters": 285,
+      "kind": "cv",
+      "text_sha256": "910f7ba7c710c63de7769c645bb7d9d8b443c341269cba9b76c9e2890ecee690",
+      "total_tokens_with_specials": 74,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "VERY_LONG_CV",
+      "characters": 19384,
+      "kind": "cv",
+      "text_sha256": "90463ce63df722005f9baf1b66a63fdf036650d2da7a23a14c0857a61588e394",
+      "total_tokens_with_specials": 3928,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "OVERLIMIT_CV",
+      "characters": 21082,
+      "kind": "cv",
+      "text_sha256": "81fdf523baabe710d44b6900368353bc785e7ec0e8eb1b33611292fe664c8609",
+      "total_tokens_with_specials": 4271,
+      "ranking_status": "error",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "REFERENCE_JD",
+      "characters": 257,
+      "kind": "jd",
+      "text_sha256": "c6eec8d3baf0f8e318e2a54697998f103fff8b0a892b4246cfc0f89e643603f5",
+      "total_tokens_with_specials": 74,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "VERY_SHORT_JD",
+      "characters": 78,
+      "kind": "jd",
+      "text_sha256": "aeb9c6c4e11594ffe6989bd029b5d6c1f073412eca9c3c1b97c7306e44c7d982",
+      "total_tokens_with_specials": 26,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "GENERIC_JD",
+      "characters": 165,
+      "kind": "jd",
+      "text_sha256": "6da9ad56b72db47dc7ee7d27f26e19e25a127676541ac9ecfd83e25adc11d3ac",
+      "total_tokens_with_specials": 41,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "NOISY_JD",
+      "characters": 2057,
+      "kind": "jd",
+      "text_sha256": "f5b4d86afcab91ba361f161705e2c65f6e0d685d89160b7b1e96c517bfa7f9b5",
+      "total_tokens_with_specials": 354,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "VERY_LONG_JD",
+      "characters": 19286,
+      "kind": "jd",
+      "text_sha256": "91d34a76ca4152269f7866e97770fe6dd3f6da0fe92ff49ff587a1ecbe465369",
+      "total_tokens_with_specials": 3919,
+      "ranking_status": "ranked",
+      "measurement": "live embedding (identity uses exact text cache hit)"
+    },
+    {
+      "case_id": "EXACT_TIE_CANDIDATES",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "fixed equal vectors/scores"
+    },
+    {
+      "case_id": "NEAR_TIE_CANDIDATES",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "full precision 0.700000/0.699999/0.699998"
+    },
+    {
+      "case_id": "MISSING_EMBEDDING",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "visible pending/null"
+    },
+    {
+      "case_id": "PROFILE_MISMATCH",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "old profile/digest/canonical cache not reused"
+    },
+    {
+      "case_id": "PROVIDER_OUTAGE",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "mock precompute failure + cached fallback"
+    },
+    {
+      "case_id": "PENDING_TO_RANKED_STATE_CHANGE",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "same snapshot stable, fresh snapshot changed"
+    },
+    {
+      "case_id": "LEGACY_PROFILE",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "old identity + held lease"
+    },
+    {
+      "case_id": "CACHE_CORRUPTION",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "nonobject/missing identity"
+    },
+    {
+      "case_id": "SNAPSHOT_CORRUPTION",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "duplicate/unknown ID/invalid state/score/rank/shape"
+    },
+    {
+      "case_id": "INVALID_VECTOR",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "wrong dimension/zero/NaN/Inf/bool"
+    },
+    {
+      "case_id": "DUPLICATE_APPLICATION",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "409 boundary guard"
+    },
+    {
+      "case_id": "SHARED_CV_MULTIPLE_JOBS",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "one CV lookup/two independent job cosines"
+    },
+    {
+      "case_id": "SCALE_100",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "101 entity lookups;100 outputs"
+    },
+    {
+      "case_id": "EMPTY_SINGLE_ALL_PENDING_ALL_TIED",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "0/1/100 applicant fixtures"
+    },
+    {
+      "case_id": "FILTERS_LIMIT_AUTH_PARAMS",
+      "measurement": "synthetic/mock operational test",
+      "status": "PASS",
+      "notes": "existing API regression/synthetic guarded fixtures"
+    }
+  ],
+  "cv_perturbations": [
+    {
+      "absolute_delta": 0,
+      "case_id": "REFERENCE_CV",
+      "flags": [],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": 0,
+      "semantic_score": 0.9276139888544448
+    },
+    {
+      "absolute_delta": 0.38240558400648306,
+      "case_id": "VERY_SHORT_CV",
+      "flags": [
+        "MATERIAL_SCORE_SHIFT"
+      ],
+      "kind": "cv",
+      "rank": 2,
+      "rank_delta": 1,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.38240558400648306,
+      "semantic_score": 0.5452084048479617
+    },
+    {
+      "absolute_delta": 0.27634199950148075,
+      "case_id": "SPARSE_CV",
+      "flags": [
+        "MATERIAL_SCORE_SHIFT"
+      ],
+      "kind": "cv",
+      "rank": 2,
+      "rank_delta": 1,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.27634199950148075,
+      "semantic_score": 0.651271989352964
+    },
+    {
+      "absolute_delta": 0.001729895384052993,
+      "case_id": "KEYWORD_STUFFED_1X",
+      "flags": [],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.001729895384052993,
+      "semantic_score": 0.9258840934703918
+    },
+    {
+      "absolute_delta": 0.016042088062158344,
+      "case_id": "KEYWORD_STUFFED_5X",
+      "flags": [],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.016042088062158344,
+      "semantic_score": 0.9115719007922864
+    },
+    {
+      "absolute_delta": 0.03456517055688901,
+      "case_id": "KEYWORD_STUFFED_20X",
+      "flags": [],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.03456517055688901,
+      "semantic_score": 0.8930488182975558
+    },
+    {
+      "absolute_delta": 0.0014006029179935986,
+      "case_id": "DUPLICATED_SECTION_CV",
+      "flags": [],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.0014006029179935986,
+      "semantic_score": 0.9262133859364512
+    },
+    {
+      "absolute_delta": 0.07400449740358106,
+      "case_id": "LOCATION_HEAVY_CV",
+      "flags": [
+        "MATERIAL_SCORE_SHIFT",
+        "PROXY_TEXT_SENSITIVITY"
+      ],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.07400449740358106,
+      "semantic_score": 0.8536094914508637
+    },
+    {
+      "absolute_delta": 0.08591880666489915,
+      "case_id": "SCHOOL_PRESTIGE_HEAVY_CV",
+      "flags": [
+        "MATERIAL_SCORE_SHIFT",
+        "PROXY_TEXT_SENSITIVITY"
+      ],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.08591880666489915,
+      "semantic_score": 0.8416951821895456
+    },
+    {
+      "absolute_delta": 0.06850187790216156,
+      "case_id": "EMPLOYER_PRESTIGE_HEAVY_CV",
+      "flags": [
+        "MATERIAL_SCORE_SHIFT",
+        "PROXY_TEXT_SENSITIVITY"
+      ],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.06850187790216156,
+      "semantic_score": 0.8591121109522832
+    },
+    {
+      "absolute_delta": 0.06429623504659765,
+      "case_id": "LANGUAGE_HEAVY_CV",
+      "flags": [
+        "MATERIAL_SCORE_SHIFT",
+        "PROXY_TEXT_SENSITIVITY"
+      ],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.06429623504659765,
+      "semantic_score": 0.8633177538078471
+    },
+    {
+      "absolute_delta": 0.0966862565769051,
+      "case_id": "NOISY_CV",
+      "flags": [
+        "MATERIAL_SCORE_SHIFT",
+        "NOISE_SENSITIVITY"
+      ],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.0966862565769051,
+      "semantic_score": 0.8309277322775397
+    },
+    {
+      "absolute_delta": 0,
+      "case_id": "IDENTITY_VARIANT",
+      "flags": [],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": 0,
+      "semantic_score": 0.9276139888544448
+    },
+    {
+      "absolute_delta": 0.19867517662155676,
+      "case_id": "VERY_LONG_CV",
+      "flags": [
+        "MATERIAL_SCORE_SHIFT"
+      ],
+      "kind": "cv",
+      "rank": 1,
+      "rank_delta": 0,
+      "ranking_status": "ranked",
+      "reference_rank": 1,
+      "reference_score": 0.9276139888544448,
+      "score_delta": -0.19867517662155676,
+      "semantic_score": 0.728938812232888
+    }
+  ],
+  "jd_perturbations": [
+    {
+      "case_id": "REFERENCE_JD",
+      "exact_tied_pairs": 0,
+      "flags": [],
+      "kind": "jd",
+      "near_tied_pairs": 0,
+      "rank_deltas": [
+        0,
+        0,
+        0
+      ],
+      "ranks": [
+        1,
+        2,
+        3
+      ],
+      "score_deltas": [
+        0,
+        0,
+        0
+      ],
+      "scores": [
+        0.9276139888544448,
+        0.7076760044450191,
+        0.5310328531402161
+      ],
+      "spread": 0.3965811357142287
+    },
+    {
+      "case_id": "VERY_SHORT_JD",
+      "exact_tied_pairs": 0,
+      "flags": [
+        "MATERIAL_SCORE_SHIFT"
+      ],
+      "kind": "jd",
+      "near_tied_pairs": 0,
+      "rank_deltas": [
+        0,
+        0,
+        0
+      ],
+      "ranks": [
+        1,
+        2,
+        3
+      ],
+      "score_deltas": [
+        -0.28409909306980996,
+        -0.06947864586509889,
+        -0.004605539321872909
+      ],
+      "scores": [
+        0.6435148957846348,
+        0.6381973585799202,
+        0.5264273138183432
+      ],
+      "spread": 0.11708758196629165
+    },
+    {
+      "case_id": "GENERIC_JD",
+      "exact_tied_pairs": 0,
+      "flags": [
+        "MATERIAL_RANK_SHIFT",
+        "MATERIAL_SCORE_SHIFT"
+      ],
+      "kind": "jd",
+      "near_tied_pairs": 0,
+      "rank_deltas": [
+        2,
+        0,
+        -2
+      ],
+      "ranks": [
+        3,
+        2,
+        1
+      ],
+      "score_deltas": [
+        -0.40480446883676313,
+        -0.16567785909383825,
+        0.048451666683672956
+      ],
+      "scores": [
+        0.5228095200176817,
+        0.5419981453511808,
+        0.579484519823889
+      ],
+      "spread": 0.05667499980620738
+    },
+    {
+      "case_id": "NOISY_JD",
+      "exact_tied_pairs": 0,
+      "flags": [],
+      "kind": "jd",
+      "near_tied_pairs": 0,
+      "rank_deltas": [
+        0,
+        0,
+        0
+      ],
+      "ranks": [
+        1,
+        2,
+        3
+      ],
+      "score_deltas": [
+        -0.04416299546881031,
+        -0.03264083258609374,
+        -0.03276211863637718
+      ],
+      "scores": [
+        0.8834509933856345,
+        0.6750351718589254,
+        0.4982707345038389
+      ],
+      "spread": 0.3851802588817956
+    },
+    {
+      "case_id": "VERY_LONG_JD",
+      "exact_tied_pairs": 0,
+      "flags": [
+        "MATERIAL_SCORE_SHIFT"
+      ],
+      "kind": "jd",
+      "near_tied_pairs": 0,
+      "rank_deltas": [
+        0,
+        0,
+        0
+      ],
+      "ranks": [
+        1,
+        2,
+        3
+      ],
+      "score_deltas": [
+        -0.259613027722144,
+        -0.13944370499110625,
+        -0.09755317001371266
+      ],
+      "scores": [
+        0.6680009611323008,
+        0.5682322994539128,
+        0.4334796831265034
+      ],
+      "spread": 0.23452127800579736
+    }
+  ],
+  "keyword_scores": [
+    0.9258840934703918,
+    0.9115719007922864,
+    0.8930488182975558
+  ],
+  "live_embedding_requests": 21,
+  "protocol": {
+    "frozen_benchmark_used": false,
+    "identity": {
+      "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+      "engine": "semantic-v1",
+      "model_digest": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+      "profile": "bcfd85c8e892993fa3111882be45f8beb92a610d191edb4455abb2aed0a908cc"
+    },
+    "keyword_repetitions": [
+      1,
+      5,
+      20
+    ],
+    "long_target_max_total_tokens": 3950,
+    "material_rank_abs_delta": 2,
+    "material_score_abs_delta": 0.05,
+    "max_embedding_requests": 22,
+    "model": "bge-m3",
+    "near_tie_gap": 0.00001,
+    "no_Qwen_Gemini": true,
+    "num_batch": 4096,
+    "num_ctx": 8192,
+    "overflow_target_min_total_tokens": 4250,
+    "proxy_repetitions": 20,
+    "rank_rule": "raw cosine DESC; fixed default application order reference,transfer,unrelated for ties (created_at DESC,id DESC); replace only reference slot",
+    "recipe_sha256": "64fc4dcbb8bcfd61fb443c936e984aeabf1cfc2921ab4c3d57808996172de1d2",
+    "recipe_version": "synthetic-robustness-v1",
+    "reference_pool": [
+      "REFERENCE_CV",
+      "TRANSFER_CONTROL",
+      "UNRELATED_CONTROL"
+    ],
+    "retry_count": 0,
+    "seed": 42,
+    "sequential": true,
+    "stop": "Any unexpected request error, profile/digest mismatch, changed recipe/protocol, budget overflow or unavailable same-model tokenizer; one expected synthetic overflow rejection allowed",
+    "task": "14C.5",
+    "text_hashes": {
+      "DUPLICATED_SECTION_CV": "36fa3bc0d234cbe578cf0c76b5f8d15ff4fa85b3a4889c4c0cec35482d01eaa2",
+      "EMPLOYER_PRESTIGE_HEAVY_CV": "cca1b6907613e2639350c7d7a266cb29af26169cc36737fd0be4359be12cd4c2",
+      "GENERIC_JD": "6da9ad56b72db47dc7ee7d27f26e19e25a127676541ac9ecfd83e25adc11d3ac",
+      "IDENTITY_VARIANT": "910f7ba7c710c63de7769c645bb7d9d8b443c341269cba9b76c9e2890ecee690",
+      "KEYWORD_STUFFED_1X": "cb0ca1a3e1fba6a21b4ec50b7babab59a6a3baf261322a5adda4cafc8b94435c",
+      "KEYWORD_STUFFED_20X": "d2f83644be858f94016504ad01e6db4635cde549a8697b3ce3c95bae5168d239",
+      "KEYWORD_STUFFED_5X": "a68d8cbcd9da30d17aea3d627e147d53d28c4675edbb2a15c6960cf4662649c9",
+      "LANGUAGE_HEAVY_CV": "7cb0ec97013475361050ca231dc260b46d2ea00e8fddf9ec807c5f77e709f5d9",
+      "LOCATION_HEAVY_CV": "e397f46aaccb6c9331ff1a0782a927baa9eb368c9bd6308dadef835dc212bd94",
+      "NOISY_CV": "ae2a4ed94fc2097a9dd0c1d2d3deb64a3858f8e3a73e911d73c9af54adc52b2e",
+      "NOISY_JD": "f5b4d86afcab91ba361f161705e2c65f6e0d685d89160b7b1e96c517bfa7f9b5",
+      "REFERENCE_CV": "910f7ba7c710c63de7769c645bb7d9d8b443c341269cba9b76c9e2890ecee690",
+      "REFERENCE_JD": "c6eec8d3baf0f8e318e2a54697998f103fff8b0a892b4246cfc0f89e643603f5",
+      "SCHOOL_PRESTIGE_HEAVY_CV": "7d9c5bc65af0a6de0436fd4588dcd6c1f5100a329e42b7c878ece336c41de37d",
+      "SPARSE_CV": "5b4d6314fe126ba51f1b0b3d1125f59163bea273469ee58aa2436fc5c9211dfb",
+      "TRANSFER_CONTROL": "4dbb11021bb2e6f9d86d25d9143e237ef5651af89d555566ab67e17da9319c82",
+      "UNRELATED_CONTROL": "d8ad4e331319ceafe4244292174e446bbc1b36a4165104a941bafcfc9dfe3b78",
+      "VERY_SHORT_CV": "17df6f36b1e460ce7eb22555bf27b702c9a9e6d9165986f50ecdcd38de9c98a9",
+      "VERY_SHORT_JD": "aeb9c6c4e11594ffe6989bd029b5d6c1f073412eca9c3c1b97c7306e44c7d982"
+    },
+    "thresholds_are_arbitrary_diagnostics_not_production_policy": true,
+    "truncate": false
+  },
+  "runtime_gate": {
+    "count_gt2048": 0,
+    "count_gt4096": 0,
+    "count_gt8192": 0,
+    "count_method": "same loaded BGE /tokenize add_special=true",
+    "inputs_counted": 1,
+    "maximum_total_tokens": 74,
+    "per_input": [
+      {
+        "add_special": true,
+        "count": 74,
+        "ends_eos": true,
+        "entity_id": "REFERENCE_CV",
+        "kind": "cv",
+        "starts_bos": true
+      }
+    ],
+    "verified_runner_flags": {
+      "--keep": 4,
+      "--log-verbosity": 4,
+      "--port": 49502,
+      "-b": 4096,
+      "-c": 8192,
+      "-np": 1,
+      "-ub": 4096
+    }
+  },
+  "runtime_seconds": 52.886117000016384,
+  "task": "14C.5",
+  "status": "PASS WITH LIMITATIONS",
+  "correctness_fixes": {
+    "pre_fix_test_result": "10 failed,14 passed in1.48s",
+    "post_fix_focused_result": "135 passed,1 warning in2.35s",
+    "changed_production_files": [
+      "app/services/ranking_cache.py",
+      "app/services/applicant_ranking_service.py"
+    ],
+    "algorithm_or_policy_tuning": false,
+    "fixes": [
+      "Reject malformed vector cache records as ERROR/null",
+      "Validate whole snapshot rows/count/unique owned IDs/state/finite cosine/rank/order before slicing",
+      "Reject duplicate application IDs at service boundary with409"
+    ]
+  },
+  "findings": [
+    {
+      "id": "R1",
+      "severity": "HIGH",
+      "category": "CACHE_SAFETY_FAILURE",
+      "status": "FIXED",
+      "evidence": "Nonobject cache JSON produced AttributeError; now ERROR/null guard"
+    },
+    {
+      "id": "R2",
+      "severity": "HIGH",
+      "category": "SNAPSHOT_INSTABILITY",
+      "status": "FIXED",
+      "evidence": "Corrupt snapshot manifest accepted or crashed; now full traversal invariant validation/409"
+    },
+    {
+      "id": "R3",
+      "severity": "MEDIUM",
+      "category": "DUPLICATE_APPLICATION",
+      "status": "FIXED_DEFENSIVE_GUARD",
+      "evidence": "Injected duplicate boundary row returned duplicate applicant; duplicate IDs now409; normal ORM query not observed duplicating"
+    },
+    {
+      "id": "R4",
+      "severity": "MEDIUM",
+      "category": "PROXY_TEXT_SENSITIVITY",
+      "status": "OBSERVED_NOT_TUNED",
+      "evidence": "Four repeated proxy narratives reduce cosine by0.0643..0.0859; reference rank unchanged"
+    },
+    {
+      "id": "R5",
+      "severity": "MEDIUM",
+      "category": "GENERIC_JD_SENSITIVITY",
+      "status": "OBSERVED_NOT_TUNED",
+      "evidence": "3-slot order changes [1,2,3] to [3,2,1]; no new human relevance labels"
+    },
+    {
+      "id": "R6",
+      "severity": "MEDIUM",
+      "category": "NOISE_LENGTH_SENSITIVITY",
+      "status": "OBSERVED_NOT_TUNED",
+      "evidence": "Noisy CV delta-0.0967; long CV-0.1987; long JD reference-0.2596; content/length confounded"
+    },
+    {
+      "id": "R7",
+      "severity": "MEDIUM",
+      "category": "PERSISTENT_PENDING",
+      "status": "KNOWN_NOT_FIXED",
+      "evidence": "No durable retry/backfill/SLA; held lease and all-pending snapshot stay visible but lower exposure"
+    },
+    {
+      "id": "R8",
+      "severity": "LOW",
+      "category": "KEYWORD_DUPLICATION",
+      "status": "LIMITED_NEGATIVE_OBSERVATION",
+      "evidence": "1x/5x/20x keyword cosines monotonically decrease; duplicate section delta-0.0014; not proof of broad resistance"
+    }
+  ],
+  "tests": {
+    "focused": "135 passed,1 warning in2.35s",
+    "evaluation": "151 passed,2 warnings in7.30s",
+    "full": "727 passed,3 warnings in202.97s (0:03:22),exit0; existing guarded gjob_db_test only"
+  },
+  "integrity": {
+    "protected_files_unchanged": 146,
+    "changed": [
+      "app/services/applicant_ranking_service.py",
+      "app/services/ranking_cache.py"
+    ],
+    "hashes": {
+      "app/services/applicant_ranking_service.py": {
+        "before": "80ce4a9a062b83be3a0fb597c1e8d8817f58de0a071be8c0c92835f75b1e8041",
+        "after": "45778a40e46a46af6ff79ccbae512459ff3636bc74d3c24cd716f54b6624f34b"
+      },
+      "app/services/ranking_cache.py": {
+        "before": "f99663e3049cdb5ad7cab8d95134de4ab11b225ebc6f9150dc2cb76babb98e7e",
+        "after": "cb46b6aebc26ccb1d265564eedd7a5123c902df0bf5c41b7bda2d1ce91cc0092"
+      }
+    },
+    "semantic_core_sha256": "0c347e9dd24ab68b10e2c95a3eea7d634e40a9c094c07e206aed0e62d1319fdf",
+    "frozen_inputs": {
+      "evaluation/data/derived/ranking_canonical_cvs.jsonl": "0a7da44fde0cde5f0ff45259093bb7f194cbc40bea502bf02c50bfe66682f615",
+      "evaluation/data/derived/ranking_canonical_jds.jsonl": "9da55f0731adf98c1c7aefe7072759effc04816f6568ddee9caef9f1e14fedc1",
+      "evaluation/data/derived/ranking_canonical_pair_manifest.csv": "cd715793e5ba37272d7cd1b82847f58e78879b1aaaf2577efab1c520f1ae92b9",
+      "evaluation/data/derived/ranking_pairs_labeled.csv": "a7225aeb073f343c55e283b99b6dd5a38cca426e3ab44a86945d0c5e2cd0e36d"
+    }
+  }
+}

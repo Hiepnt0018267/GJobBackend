@@ -11,6 +11,7 @@ __pycache__/
 
 # Testing
 .pytest_cache/
+.cache/recruiter-ranking/
 
 # IDE
 .vscode/
@@ -26,5 +27,6 @@ evaluation/data/labels/*.csv
 evaluation/data/archive/*.csv
 evaluation/data/archive/**/*.csv
 evaluation/data/derived/**/*.csv
+evaluation/data/derived/ranking_canonical_*.jsonl
 evaluation/cache/
 evaluation/results/**/*.csv

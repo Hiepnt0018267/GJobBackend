@@ -1,4 +1,5 @@
 import uuid
+from enum import Enum
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
@@ -46,7 +47,27 @@ class RecruiterApplicationCVSummary(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class RecruiterApplicationSort(str, Enum):
+    newest = "newest"
+    ai_match = "ai_match"
+
+
+class ApplicantRankingStatus(str, Enum):
+    ranked = "ranked"
+    pending = "pending"
+    unavailable = "unavailable"
+    error = "error"
+
+
+class ApplicantRankingMode(str, Enum):
+    all = "all"
+    top_n = "top_n"
+
+
 class RecruiterApplicationListItem(BaseModel):
+    ai_rank: int | None = None
+    ranking_status: ApplicantRankingStatus | None = None
+    semantic_match_score: float | None = None
     id: uuid.UUID
     status: JobApplicationStatus
     candidate_id: uuid.UUID
@@ -68,6 +89,12 @@ class RecruiterApplicationDetail(RecruiterApplicationListItem):
 
 
 class RecruiterApplicationListResponse(BaseModel):
+    ranking_mode: ApplicantRankingMode | None = None
+    requested_top_n: int | None = None
+    ranked_available_count: int | None = None
+    returned_ranked_count: int | None = None
+    unranked_count: int | None = None
+    ranking_snapshot: str | None = None
     items: list[RecruiterApplicationListItem]
     page: int
     page_size: int

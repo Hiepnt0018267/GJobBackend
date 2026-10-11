@@ -11,6 +11,8 @@ from app.models.user import User, UserRole
 from app.schemas.recruiter_application import (
     RecruiterApplicationDetail,
     RecruiterApplicationListResponse,
+    RecruiterApplicationSort,
+    ApplicantRankingMode,
 )
 from app.services.recruiter_application_service import RecruiterApplicationService
 
@@ -25,11 +27,16 @@ def list_recruiter_applications(
     job_id: uuid.UUID | None = Query(default=None),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=20, ge=1, le=100),
+    sort: RecruiterApplicationSort = Query(default=RecruiterApplicationSort.newest),
+    ai_top_n: int | None = Query(default=None, ge=1),
+    ranking_mode: ApplicantRankingMode | None = Query(default=None),
+    top_n: int | None = Query(default=None, ge=1),
+    ranking_snapshot: str | None = Query(default=None, pattern="^[0-9a-f]{32}$"),
     current_user: User = Depends(require_role(UserRole.RECRUITER)),
     db: Session = Depends(get_db),
 ):
     return RecruiterApplicationService(db).list_applications(
-        current_user, application_status, search, job_id, page, page_size
+        current_user, application_status, search, job_id, page, page_size, sort, ai_top_n, ranking_snapshot, ranking_mode, top_n
     )
 
 
@@ -40,11 +47,16 @@ def list_recruiter_job_applications(
     application_status: JobApplicationStatus | None = Query(default=None, alias="status"),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=20, ge=1, le=100),
+    sort: RecruiterApplicationSort = Query(default=RecruiterApplicationSort.newest),
+    ai_top_n: int | None = Query(default=None, ge=1),
+    ranking_mode: ApplicantRankingMode | None = Query(default=None),
+    top_n: int | None = Query(default=None, ge=1),
+    ranking_snapshot: str | None = Query(default=None, pattern="^[0-9a-f]{32}$"),
     current_user: User = Depends(require_role(UserRole.RECRUITER)),
     db: Session = Depends(get_db),
 ):
     return RecruiterApplicationService(db).list_job_applications(
-        current_user, job_id, application_status, search, page, page_size
+        current_user, job_id, application_status, search, page, page_size, sort, ai_top_n, ranking_snapshot, ranking_mode, top_n
     )
 
 

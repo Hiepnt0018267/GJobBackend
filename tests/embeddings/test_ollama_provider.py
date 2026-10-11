@@ -54,6 +54,7 @@ def test_valid_batch_request_preserves_order_and_normalizes_metadata() -> None:
             "model": "bge-m3",
             "input": ["canonical cv", "canonical job"],
             "truncate": False,
+            "options": {"num_ctx":8192,"num_batch":4096},
         },
     }
     assert result.vectors == ((1.0, 0.0), (0.25, 0.75))

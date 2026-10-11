@@ -17,6 +17,8 @@ from app.models.job import (
     WorkMode,
 )
 from app.schemas.cv import CVLanguageProficiency, CVSkillLevel
+from app.schemas.partial_date import CVDate
+from app.schemas.source_date_consistency import SourceDateConsistency
 
 
 class _CanonicalModel(BaseModel):
@@ -37,18 +39,26 @@ class CanonicalLocation(_CanonicalModel):
 class CanonicalExperience(_CanonicalModel):
     company_name: str
     position: str
-    start_date: date | None = None
-    end_date: date | None = None
+    start_date: CVDate | None = None
+    end_date: CVDate | None = None
     is_current: bool = False
     description: str | None = None
+    date_consistency: SourceDateConsistency | None = Field(default=None,exclude_if=lambda value:value is None)
+
+    @property
+    def chronology_range(self):
+        """Admission boundary for future duration/chronology consumers."""
+        if self.date_consistency is not None and not self.date_consistency.chronology_usable:
+            return None
+        return self.start_date,self.end_date
 
 
 class CanonicalEducation(_CanonicalModel):
     school_name: str
     degree: str | None = None
     field_of_study: str | None = None
-    start_date: date | None = None
-    end_date: date | None = None
+    start_date: CVDate | None = None
+    end_date: CVDate | None = None
     is_current: bool = False
     description: str | None = None
 
@@ -56,8 +66,8 @@ class CanonicalEducation(_CanonicalModel):
 class CanonicalProject(_CanonicalModel):
     name: str
     role: str | None = None
-    start_date: date | None = None
-    end_date: date | None = None
+    start_date: CVDate | None = None
+    end_date: CVDate | None = None
     description: str | None = None
     technologies: list[CanonicalSkill]
 
@@ -65,8 +75,8 @@ class CanonicalProject(_CanonicalModel):
 class CanonicalCertificate(_CanonicalModel):
     name: str
     organization: str | None = None
-    issue_date: date | None = None
-    expiration_date: date | None = None
+    issue_date: CVDate | None = None
+    expiration_date: CVDate | None = None
 
 
 class CanonicalLanguage(_CanonicalModel):

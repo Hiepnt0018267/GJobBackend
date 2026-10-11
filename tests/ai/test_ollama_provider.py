@@ -30,6 +30,7 @@ def _response(content: object, **metadata: object) -> httpx.Response:
         json={
             "model": "qwen3:8b",
             "done": True,
+            "done_reason": "stop",
             "message": {"role": "assistant", "content": content},
             **metadata,
         },
@@ -37,13 +38,24 @@ def _response(content: object, **metadata: object) -> httpx.Response:
 
 
 def _provider(handler, **kwargs) -> OllamaProvider:
+    from app.ai.ollama_token_budget import PromptAccounting
+
+    class _StubCounter:
+        async def count(self, payload):
+            return PromptAccounting(
+                prompt_tokens=800,
+                special_tokens=32,
+                effective_num_ctx=kwargs.get("num_ctx", 8192),
+            )
+
     return OllamaProvider(
         base_url="http://ollama.test:11434",
         model="qwen3:8b",
         timeout_seconds=2,
-        num_ctx=8192,
+        num_ctx=kwargs.pop("num_ctx", 8192),
         retry_delay_seconds=0,
         transport=httpx.MockTransport(handler),
+        token_counter=_StubCounter(),
         **kwargs,
     )
 
@@ -75,7 +87,8 @@ def test_structured_generation_uses_raw_schema_and_validates_result() -> None:
     assert captured["stream"] is False
     assert captured["think"] is False
     assert captured["format"] == ExampleResult.model_json_schema()
-    assert captured["options"] == {"temperature": 0.0, "num_ctx": 8192}
+    assert captured["options"] == {"temperature": 0.0, "num_ctx": 8192, "num_predict": 4608}
+    assert captured['shift'] is False and captured['truncate'] is False
     messages = captured["messages"]
     assert messages[0] == {"role": "system", "content": "Extract facts only"}
     assert messages[1]["role"] == "user"
@@ -135,18 +148,34 @@ def test_invalid_structured_content_fails_without_repair(content: str) -> None:
 
 
 def test_actual_context_saturation_fails_closed() -> None:
+    from app.ai.ollama_token_budget import PromptAccounting
+
+    # Use a stub counter that returns very high prompt_tokens to trigger the
+    # application-level saturation check (context_ratio >= 0.95) after the call.
+    class HighPromptCounter:
+        async def count(self, payload):
+            return PromptAccounting(
+                prompt_tokens=950,
+                special_tokens=0,
+                effective_num_ctx=1000,
+            )
+
     provider = OllamaProvider(
         base_url="http://ollama.test:11434",
         model="qwen3:8b",
         timeout_seconds=2,
         num_ctx=1000,
+        num_predict=10,
+        safety_margin=1,
         retry_delay_seconds=0,
         transport=httpx.MockTransport(
             lambda _: _response(
                 json.dumps({"name": "An", "skills": []}),
                 prompt_eval_count=950,
+                done_reason="stop",
             )
         ),
+        token_counter=HighPromptCounter(),
     )
 
     with pytest.raises(AIContextLimitError):

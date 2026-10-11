@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 
 from sqlalchemy import or_, select, update
 from sqlalchemy.orm import Session, joinedload
+from app.models.skill import JobSkill
 
 from app.models.application import JobApplication, JobApplicationStatus
 from app.models.application_status_history import ApplicationStatusHistory
@@ -31,8 +32,8 @@ class RecruiterApplicationRepository:
         application_status: JobApplicationStatus | None,
         search: str | None,
         job_id: uuid.UUID | None,
-        page: int,
-        page_size: int,
+        page: int | None,
+        page_size: int | None,
     ) -> tuple[list[JobApplication], int]:
         query = (
             self.db.query(JobApplication)
@@ -56,13 +57,16 @@ class RecruiterApplicationRepository:
             )
 
         total = query.order_by(None).count()
-        items = (
-            query.options(*self._relation_loads())
-            .order_by(JobApplication.created_at.desc(), JobApplication.id.desc())
-            .offset((page - 1) * page_size)
-            .limit(page_size)
-            .all()
+        query = query.options(*self._relation_loads()).order_by(
+            JobApplication.created_at.desc(), JobApplication.id.desc()
         )
+        if page is not None and page_size is not None:
+            query = query.offset((page - 1) * page_size).limit(page_size)
+        else:
+            query = query.options(
+                joinedload(JobApplication.job).selectinload(Job.skill_links).joinedload(JobSkill.skill)
+            )
+        items = query.all()
         return items, total
 
     def get_owned_application(

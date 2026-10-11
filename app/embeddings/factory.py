@@ -12,5 +12,7 @@ def get_embedding_provider() -> EmbeddingProvider:
             base_url=settings.ollama_base_url,
             model=settings.embedding_model,
             timeout_seconds=settings.embedding_timeout_seconds,
+            num_ctx=settings.embedding_num_ctx,
+            num_batch=settings.embedding_num_batch,
         )
     raise ValueError(f"Unsupported embedding provider: {provider}")

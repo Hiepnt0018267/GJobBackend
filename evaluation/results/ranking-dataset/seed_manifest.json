@@ -1,0 +1,262 @@
+{
+  "task": "14C.1",
+  "phase": "A",
+  "seed": 42,
+  "frozen_ground_truth": false,
+  "seed_sha256": "12054002ad8bfd48c834ff9d0fce281d631ecd9032f2d139d158b7c90be2930a",
+  "source_hashes": {
+    "Resume.csv": "816a7cd985a9a41e3ce8d1e83cb7e1beb1e854a89c1cf1fd0d75494faaa0559d",
+    "job_postings.csv": "d782e95f35cbd5f658ad7124021c938f5c8c1656f1c059b6dc9d402d1eaa195f"
+  },
+  "old_input_hashes": {
+    "evaluation\\data\\derived\\evaluation_pairs_labeled.csv": "28f371400b637045155ca12543869052998be29b3f8a3b575b7e46313851fad8",
+    "evaluation\\data\\derived\\fresh_test_pairs_labeled.csv": "1d9820ef3439aca231ed79233b59370b2b849306d55af154db6ca81a018805e9",
+    "evaluation\\data\\derived\\evaluation_pairs_draft.csv": "0c11b9771a9797473ba243e89924309469bda19b488b7312be90d5f044d648b3",
+    "evaluation\\data\\derived\\evaluation_pairs_pilot_reviewed.csv": "663ac7fa1007703bed56c71ef24d6da565bda79082a059bdab0a0da555e2bc3e"
+  },
+  "existing_pair_audit": {
+    "evaluation\\data\\derived\\evaluation_pairs_labeled.csv": {
+      "pairs": 220,
+      "jobs": 180,
+      "cvs": 202,
+      "mean": 1.2222222222222223,
+      "median": 1.0,
+      "max": 4,
+      "buckets": {
+        "1": 155,
+        "2": 16,
+        "3-4": 9,
+        "5-9": 0,
+        "10+": 0
+      },
+      "at_least": {
+        "2": 25,
+        "3": 9,
+        "5": 0,
+        "10": 0
+      }
+    },
+    "evaluation\\data\\derived\\fresh_test_pairs_labeled.csv": {
+      "pairs": 70,
+      "jobs": 70,
+      "cvs": 70,
+      "mean": 1,
+      "median": 1.0,
+      "max": 1,
+      "buckets": {
+        "1": 70,
+        "2": 0,
+        "3-4": 0,
+        "5-9": 0,
+        "10+": 0
+      },
+      "at_least": {
+        "2": 0,
+        "3": 0,
+        "5": 0,
+        "10": 0
+      }
+    }
+  },
+  "generation": {
+    "composition": {
+      "rank_job_89fd797f815313096a1d": {
+        "role_family": "science",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      },
+      "rank_job_c6ab53cbebb914bc5cb7": {
+        "role_family": "engineering",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      },
+      "rank_job_030b49989e9b03838e88": {
+        "role_family": "software",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      },
+      "rank_job_a860f9c853a4d145a149": {
+        "role_family": "sales",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      },
+      "rank_job_ba1101c8423ea2bdc5c7": {
+        "role_family": "software",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      },
+      "rank_job_86256e7f060ccec6b807": {
+        "role_family": "hr",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      },
+      "rank_job_d16e63af2f39a31b166d": {
+        "role_family": "operations",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      },
+      "rank_job_7616538cc926787a2a85": {
+        "role_family": "accounting",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      },
+      "rank_job_bfeea8a8b8995516cb3e": {
+        "role_family": "healthcare",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      },
+      "rank_job_047e1ee49c4462d5f0cf": {
+        "role_family": "marketing",
+        "sampling_counts_not_relevance": {
+          "role_aligned": 3,
+          "related_transferable": 3,
+          "specialization_challenge": 3,
+          "cross_domain_sanity": 1
+        }
+      }
+    },
+    "max_cv_reuse": 2,
+    "role_families": 9,
+    "sampling_is_not_relevance": true
+  },
+  "validation": {
+    "rows": 100,
+    "cases": 10,
+    "jobs": 10,
+    "unique_cvs": 95,
+    "pools": {
+      "rank_job_89fd797f815313096a1d": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      },
+      "rank_job_c6ab53cbebb914bc5cb7": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      },
+      "rank_job_030b49989e9b03838e88": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      },
+      "rank_job_a860f9c853a4d145a149": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      },
+      "rank_job_ba1101c8423ea2bdc5c7": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      },
+      "rank_job_86256e7f060ccec6b807": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      },
+      "rank_job_d16e63af2f39a31b166d": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      },
+      "rank_job_7616538cc926787a2a85": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      },
+      "rank_job_bfeea8a8b8995516cb3e": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      },
+      "rank_job_047e1ee49c4462d5f0cf": {
+        "size": 10,
+        "grade_counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "flags": []
+      }
+    }
+  },
+  "generator_sha256": "90b23c1863fe163211018ef3b630b83967bd688d3de82b0fdb22e99dc3b87999",
+  "relevance_rubric": {
+    "0": "Không liên quan: thiếu năng lực cốt lõi hoặc khác biệt đáng kể về vai trò.",
+    "1": "Có tiềm năng: có năng lực liên quan/chuyển giao nhưng còn khoảng trống đáng kể.",
+    "2": "Liên quan mạnh: có bằng chứng đáng kể về nhiệm vụ, kỹ năng và yêu cầu cốt lõi."
+  }
+}

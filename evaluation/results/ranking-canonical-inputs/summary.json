@@ -1,0 +1,68 @@
+{
+  "canonical_cv_sha256": "0a7da44fde0cde5f0ff45259093bb7f194cbc40bea502bf02c50bfe66682f615",
+  "canonical_cv_success": 95,
+  "canonical_jd_sha256": "9da55f0731adf98c1c7aefe7072759effc04816f6568ddee9caef9f1e14fedc1",
+  "canonical_jd_success": 10,
+  "failures": {},
+  "frozen": true,
+  "full_pytest": {"passed":642,"warnings":3,"seconds":105.40,"exit_code":0,"database":"gjob_db_test"},
+  "ground_truth_sha256": "a7225aeb073f343c55e283b99b6dd5a38cca426e3ab44a86945d0c5e2cd0e36d",
+  "manifest_sha256": "cd715793e5ba37272d7cd1b82847f58e78879b1aaaf2577efab1c520f1ae92b9",
+  "new_model_calls": 0,
+  "pairs": 100,
+  "privacy_audit_pass": 105,
+  "profile": {
+    "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+    "date_evidence_contract": "cv-local-date-range-evidence-v2-composite",
+    "extraction_date_contract": "cv-date-precision-v2-source-evidence",
+    "identity": "uuid5-gjob-ranking-canonical-v1",
+    "jd_projection": "title-description-only-absent-taxonomy-v1",
+    "model": "qwen3:8b",
+    "num_ctx": 8192,
+    "privacy": "personal-info-omitted-semantic-equivalence-asserted-v1",
+    "provider": "ollama",
+    "source_code": {
+      "app/ai/cv_extraction_prompt.py": "b62bedb48181d680a3dfbad0ddfa47fcbbc766d39d4ba305f770390a1a03eaf0",
+      "app/ai/ollama_provider.py": "c0d53922e11e8ce1c27c1c6440e1c500e755daa74bcb61159a7585ae68464df4",
+      "app/schemas/cv.py": "7f8441c8ff111820f7d48e3e6189b18fb2384db2c8d462e78a7fd011f523313e",
+      "app/schemas/cv_extraction.py": "4e5c69b25fb749b98070e578e8e79efae8d3871643c4b4c3024ab2298176fdb5",
+      "app/schemas/matching.py": "d8b496b4f12c61198d0ceefb411ff2a2b03e8bd0f65281795547b7954596c7f5",
+      "app/schemas/partial_date.py": "c83a70456cd5768b0e9f6c319cb105061e9c2589c9898c5ce76baace70995866",
+      "app/schemas/source_date_consistency.py": "5240f2809d03afbe92509e908c114922673e63c7265dd4be4cbff25338092698",
+      "app/services/cv_date_evidence.py": "7cf61bdcdb92b1921ef1eba728642edbd37ce30981e5e449054e462ca70e341e",
+      "app/services/cv_experience_alignment.py": "c65966f56fcb9bc6c69a19df65b81af3edd3702b5b0091357dd1e332a40628fb",
+      "app/services/cv_source_consistency.py": "2f54a1323dee600039b2570f82581d6e0105f5a1af1e57d39219a13a6f749fe9",
+      "app/services/cv_structured_extraction_service.py": "0ae1e3d165072ca922a4d28fe455f9307d2b78c3f069069afcefd5d66daf530f",
+      "app/services/matching_fingerprint.py": "0d9126c20c4b5a6d1fe054c9dade55524d5e0a6234f5976ca87544950ebc9ffc",
+      "app/services/matching_input_mapper.py": "dbdc285414bf8e0505e0b4f673f8c88b9c903e1b78d85c105274bfb93f54ce93",
+      "app/services/matching_text_privacy.py": "84948128b3e405e2e31b26ff59a8eb507484d17f85e1b4bb6f38c47db9d068a4",
+      "evaluation/prepare_ranking_canonical.py": "75d038819aaf6ef0a8a74547894bd75015684e9bc626b5dce5f83a27e188de24"
+    },
+    "source_consistency_contract": "cv-source-date-consistency-v1",
+    "task": "14C.1.5",
+    "temperature": 0,
+    "think": false,
+    "timeout": 180.0
+  },
+  "ranking_metrics_computed": false,
+  "ready_for_task_14c2": true,
+  "ready_pairs": 100,
+  "semantic_scores_created": false,
+  "source_chronology_conflicts": [
+    {
+      "chronology_usable": false,
+      "experience_index": 7,
+      "range_offsets": [
+        7612,
+        7630
+      ],
+      "rule_version": "cv-source-date-consistency-v1",
+      "source_sha256": "10840d1aa1c24f670411d4240913897224e30b8d4c9d7d6d2a3dc432a1d7d3d7",
+      "state": "SOURCE_DATA_CONFLICT"
+    }
+  ],
+  "status": "PASS",
+  "task": "14C.1.5",
+  "unique_cvs": 95,
+  "unique_jds": 10
+}

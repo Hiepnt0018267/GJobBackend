@@ -1,6 +1,7 @@
 """Pure ORM-to-domain mapping for future matching algorithms."""
 
 from collections.abc import Iterable
+from app.services.matching_text_privacy import sanitize_matching_text
 
 from app.models.cv import CV
 from app.models.job import Job
@@ -101,7 +102,7 @@ def _section(title: str, values: Iterable[str | None]) -> str | None:
 
 
 def _semantic_text(sections: Iterable[str | None]) -> str:
-    return "\n\n".join(section for section in sections if section)
+    return sanitize_matching_text("\n\n".join(section for section in sections if section))
 
 
 def build_cv_matching_input(
@@ -123,6 +124,7 @@ def build_cv_matching_input(
         CanonicalExperience(
             company_name=compact_whitespace(item.company_name) or item.company_name,
             position=compact_whitespace(item.position) or item.position,
+            date_consistency=item.date_consistency,
             start_date=item.start_date,
             end_date=item.end_date,
             is_current=item.is_current,
@@ -171,6 +173,9 @@ def build_cv_matching_input(
         for item in languages
     ]
     objective = normalize_multiline_text(source.career_objective)
+    # Explicit professional-field allowlist. NEVER serialize personal_info or
+    # recover a name/heading into objective when professional fields are absent.
+    # A misclassified identity field cannot remove otherwise valid role evidence.
     semantic_text = _semantic_text(
         (
             _section("CAREER OBJECTIVE", [objective]),

@@ -12,6 +12,8 @@ from app.schemas.recruiter_application import (
     RecruiterApplicationDetail,
     RecruiterApplicationListItem,
     RecruiterApplicationListResponse,
+    RecruiterApplicationSort,
+    ApplicantRankingMode,
 )
 from app.services.cv_storage_service import CVStorageService
 
@@ -31,6 +33,7 @@ class RecruiterApplicationService:
     }
 
     def __init__(self, db: Session) -> None:
+        self.db = db
         self.repository = RecruiterApplicationRepository(db)
         self.storage = CVStorageService()
 
@@ -54,8 +57,34 @@ class RecruiterApplicationService:
         job_id: uuid.UUID | None,
         page: int,
         page_size: int,
+        sort: RecruiterApplicationSort = RecruiterApplicationSort.newest,
+        ai_top_n: int | None = None,
+        ranking_snapshot: str | None = None,
+        ranking_mode: ApplicantRankingMode | None = None,
+        top_n: int | None = None,
     ) -> RecruiterApplicationListResponse:
+        from app.services.applicant_ranking_service import validate_ranking_options
+        if top_n is not None and ranking_mode is None:
+            raise HTTPException(422, "top_n requires ranking_mode=top_n.")
+        if ranking_mode is not None and ai_top_n is not None:
+            raise HTTPException(422, "Do not combine legacy ai_top_n with ranking_mode.")
+        validate_ranking_options(ranking_mode, top_n)
         normalized_search = " ".join(search.split()) if search else None
+        if sort == RecruiterApplicationSort.ai_match:
+            if job_id is not None:
+                self._job_or_404(job_id, current_user.id, self.repository)
+            # Full owner-filtered query FIRST; no AI before authorization.
+            items, _ = self.repository.list_owned_applications(
+                current_user.id, application_status, normalized_search, job_id, None, None
+            )
+            from app.services.applicant_ranking_service import ApplicantRankingService
+            return ApplicantRankingService(self.db).list(items, owner=current_user.id,
+                filters=[str(job_id) if job_id else None,
+                         application_status.value if application_status else None, normalized_search],
+                page=page, page_size=page_size, top_n=top_n if ranking_mode else ai_top_n,
+                snapshot=ranking_snapshot, ranking_mode=ranking_mode)
+        if ai_top_n is not None or ranking_snapshot is not None or ranking_mode is not None:
+            raise HTTPException(422, "AI result options require sort=ai_match.")
         items, total = self.repository.list_owned_applications(
             current_user.id,
             application_status,
@@ -80,6 +109,11 @@ class RecruiterApplicationService:
         search: str | None,
         page: int,
         page_size: int,
+        sort: RecruiterApplicationSort = RecruiterApplicationSort.newest,
+        ai_top_n: int | None = None,
+        ranking_snapshot: str | None = None,
+        ranking_mode: ApplicantRankingMode | None = None,
+        top_n: int | None = None,
     ) -> RecruiterApplicationListResponse:
         self._job_or_404(job_id, current_user.id, self.repository)
         return self.list_applications(
@@ -89,6 +123,11 @@ class RecruiterApplicationService:
             job_id,
             page,
             page_size,
+            sort,
+            ai_top_n,
+            ranking_snapshot,
+            ranking_mode,
+            top_n,
         )
 
     def get_application(

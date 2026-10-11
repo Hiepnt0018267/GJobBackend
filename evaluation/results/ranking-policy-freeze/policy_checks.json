@@ -1,0 +1,89 @@
+{
+  "task": "14C.6",
+  "policy_version": "recruiter-ranking-policy-v1",
+  "source_policy_consistency": "PASS",
+  "production_changes": true,
+  "live_model_calls": 0,
+  "Qwen_Gemini_calls": 0,
+  "new_benchmark_runs": 0,
+  "DEV_DB_access": false,
+  "checks": [
+    {
+      "id": "APPROVAL_SCOPE",
+      "status": "PASS",
+      "basis": "Reviewed14C.2quality/14C.3integration/14C.4fairness/14C.5robustness; optional recruiter decision support only"
+    },
+    {
+      "id": "DEFAULT_OPT_IN",
+      "status": "PASS",
+      "basis": "Actual default service argument/OpenAPI enum and repository order; new default no-AI test + existing API regression"
+    },
+    {
+      "id": "NO_THRESHOLD_FULL_SET_NULL",
+      "status": "PASS",
+      "basis": "New .95/.40/.01+pending/unavailable/error contract test; all retained,non-ranked score/rank null"
+    },
+    {
+      "id": "NO_AUTO_DECISION",
+      "status": "PASS",
+      "basis": "List source read-only,synthetic before/after business statuses + guarded API unchanged-status regression"
+    },
+    {
+      "id": "GLOBAL_LIMIT_SNAPSHOT",
+      "status": "PASS",
+      "basis": "Full17 thenN/page,stable4-page traversal,statechange/fresh snapshot,expiry/input binding/corruption regressions"
+    },
+    {
+      "id": "CACHE_DUPLICATES_AUTH",
+      "status": "PASS",
+      "basis": "Existing14C.5 corrupt vector/snapshot and duplicate guard tests; unauthorized API no AI work"
+    },
+    {
+      "id": "PROFILE_PRIVACY",
+      "status": "PASS",
+      "basis": "Actual factory8192/4096/truncatefalse+digest/profile/version guard; existing direct identity/photo/DOB invariance"
+    },
+    {
+      "id": "NO_SCOPE_EXPANSION",
+      "status": "PASS",
+      "basis": "No new production matcher/model/front-end/candidate recommendation/monitoring infrastructure"
+    }
+  ],
+  "tests": {
+    "focused": "140 passed,1 warning in2.32s",
+    "evaluation": "151 passed,2 warnings in7.15s",
+    "full": "734 passed,3 warnings in167.15s (0:02:47),exit0; existing guarded gjob_db_test only"
+  },
+  "known_unresolved": [
+    "fairness not established",
+    "proxy/noise/genericJD sensitivity",
+    "persistent pending/backfill/lease recovery",
+    "private storage and deployment pin assumptions"
+  ],
+  "integrity": {
+    "protected_files_at_start": 150,
+    "protected_files_unchanged": 148,
+    "changed_production_files": [
+      "app/services/applicant_ranking_service.py",
+      "app/services/ranking_cache.py"
+    ],
+    "all_frozen_inputs_and_prior_evidence_unchanged": true,
+    "semantic_core_unchanged": true
+  },
+  "policy_sha256": "391f72429c98d598aa086cb6e0ccbc70ce9041d726c28c946f56ea8651182862",
+  "task_14c_complete": true,
+  "correctness_fix": {
+    "category": "Oversized JSON integer overflow guard",
+    "production_files": [
+      "app/services/applicant_ranking_service.py",
+      "app/services/ranking_cache.py"
+    ],
+    "pre_fix": "5 passed,2 failed in1.13s; OverflowError reproduced for vector cache and snapshot",
+    "fix": "Cache catches OverflowError; snapshot checks intrinsic [-1,1] domain before isfinite. No cosine/model/threshold/normal-order change",
+    "regressions": [
+      "test_extreme_integer_cache_corruption_is_safe",
+      "test_extreme_integer_snapshot_corruption_is_safe"
+    ]
+  },
+  "final_status": "PASS"
+}

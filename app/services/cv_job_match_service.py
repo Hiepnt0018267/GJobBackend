@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
+from app.embeddings.profile import embedding_profile,profile_fingerprint
 from app.embeddings import (
     EmbeddingError,
     EmbeddingInputTooLongError,
@@ -74,6 +75,7 @@ class CVJobMatchService:
             expected_provider or settings.embedding_provider
         ).strip().lower()
         self.expected_model = (expected_model or settings.embedding_model).strip()
+        self.expected_model_config=profile_fingerprint(embedding_profile(self.expected_provider,self.expected_model,settings.embedding_num_ctx,settings.embedding_num_batch))
 
     async def match_for_candidate(
         self,
@@ -193,7 +195,7 @@ class CVJobMatchService:
                     "semantic_similarity": semantic_result.semantic_similarity,
                     "embedding_provider": semantic_result.provider,
                     "embedding_model": semantic_result.model,
-                    "embedding_model_config": self.expected_model,
+                    "embedding_model_config": self.expected_model_config,
                     "embedding_dimensions": semantic_result.dimensions,
                     "baseline_engine_version": BASELINE_MATCHING_VERSION,
                     "semantic_engine_version": SEMANTIC_MATCHING_VERSION,
@@ -327,7 +329,7 @@ class CVJobMatchService:
             and record.baseline_engine_version == BASELINE_MATCHING_VERSION
             and record.semantic_engine_version == SEMANTIC_MATCHING_VERSION
             and record.embedding_provider.casefold() == self.expected_provider.casefold()
-            and record.embedding_model_config == self.expected_model
+            and record.embedding_model_config == self.expected_model_config
             and record.embedding_dimensions > 0
         )
 

@@ -1,4 +1,9 @@
 import uuid
+import asyncio
+import logging
+import time
+import json
+from contextlib import contextmanager
 from datetime import datetime, timezone
 
 from fastapi import HTTPException, status
@@ -23,6 +28,9 @@ from app.services.cv_structured_extraction_service import (
     CVAIContextLimitError,
     CVAIProviderRequestError,
     CVAIProviderUnavailableError,
+    CVExtractionDeadlineError,
+    CVAIProviderTimeoutError, CVAIOutputBudgetError, CVAIContextBudgetError,
+    CVExtractionJSONError, CVExtractionSchemaError, CVExtractionCorrectionError, CVAITokenAccountingError,
     CVExtractionValidationError,
     CVStructuredExtractionError,
     CVStructuredExtractionService,
@@ -32,6 +40,14 @@ from app.services.document_text_extractor import DocumentExtractionError
 
 
 class CVExtractionFailureCode:
+    AI_PROVIDER_TIMEOUT = "AI_PROVIDER_TIMEOUT"
+    AI_OPERATION_DEADLINE_EXCEEDED = "AI_OPERATION_DEADLINE_EXCEEDED"
+    AI_CONTEXT_BUDGET_EXCEEDED = "AI_CONTEXT_BUDGET_EXCEEDED"
+    AI_OUTPUT_BUDGET_EXCEEDED = "AI_OUTPUT_BUDGET_EXCEEDED"
+    AI_JSON_INVALID = "AI_JSON_INVALID"
+    AI_SCHEMA_INVALID = "AI_SCHEMA_INVALID"
+    AI_CORRECTION_FAILED = "AI_CORRECTION_FAILED"
+    AI_TOKEN_ACCOUNTING_UNAVAILABLE = "AI_TOKEN_ACCOUNTING_UNAVAILABLE"
     DOCUMENT_EXTRACTION_FAILED = "DOCUMENT_EXTRACTION_FAILED"
     AI_PROVIDER_UNAVAILABLE = "AI_PROVIDER_UNAVAILABLE"
     AI_PROVIDER_REQUEST_INVALID = "AI_PROVIDER_REQUEST_INVALID"
@@ -134,6 +150,7 @@ class CandidateCVExtractionService:
                 if self.structured_extractor is not None
                 else CVStructuredExtractionService()
             )
+            self._diagnostic_extractor = extractor
             result = await extractor.extract_uploaded_cv(extraction_source)
         except DocumentExtractionError as exc:
             self._persist_failure(
@@ -145,6 +162,25 @@ class CandidateCVExtractionService:
                 status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="The uploaded CV document could not be extracted.",
             ) from exc
+        except (CVAIProviderTimeoutError, CVExtractionDeadlineError, CVAIOutputBudgetError,
+                CVAIContextBudgetError, CVExtractionJSONError, CVExtractionSchemaError,
+                CVExtractionCorrectionError, CVAITokenAccountingError) as exc:
+            errors = {
+                CVAIProviderTimeoutError: ("AI_PROVIDER_TIMEOUT", 504, "Quá trình phân tích CV mất quá nhiều thời gian."),
+                CVExtractionDeadlineError: ("AI_OPERATION_DEADLINE_EXCEEDED", 504, "Quá trình phân tích CV đã hết thời gian xử lý."),
+                CVAIOutputBudgetError: ("AI_OUTPUT_BUDGET_EXCEEDED", 502, "AI chưa tạo được kết quả CV hoàn chỉnh trong giới hạn xử lý."),
+                CVAIContextBudgetError: ("AI_CONTEXT_BUDGET_EXCEEDED", 422, "Nội dung CV vượt quá phạm vi xử lý an toàn hiện tại."),
+                CVExtractionJSONError: ("AI_JSON_INVALID", 502, "AI trả về kết quả CV không hợp lệ."),
+                CVExtractionSchemaError: ("AI_SCHEMA_INVALID", 502, "Kết quả AI chưa đúng cấu trúc thông tin CV."),
+                CVExtractionCorrectionError: ("AI_CORRECTION_FAILED", 502, "AI chưa thể hoàn thiện cấu trúc CV sau lần kiểm tra lại."),
+                CVAITokenAccountingError: ("AI_TOKEN_ACCOUNTING_UNAVAILABLE", 503, "Dịch vụ phân tích CV chưa sẵn sàng để xử lý an toàn."),
+            }
+            code, http_status, message = errors[type(exc)]
+            self._persist_failure(extraction_id, code, message)
+            raise HTTPException(http_status, detail={"code": code, "message": message}) from exc
+        except asyncio.CancelledError:
+            self._persist_failure(extraction_id, "AI_REQUEST_CANCELLED", "Yêu cầu phân tích CV đã bị hủy.")
+            raise
         except CVExtractionValidationError as exc:
             self._persist_failure(
                 extraction_id,
@@ -222,11 +258,12 @@ class CandidateCVExtractionService:
                 detail="CV extraction failed.",
             ) from exc
 
-        persisted = self.extraction_repository.mark_succeeded(
-            extraction_id,
-            result.model_dump(mode="json"),
-            datetime.now(timezone.utc),
-        )
+        with self._persistence_diagnostics(extraction_id):
+            persisted = self.extraction_repository.mark_succeeded(
+                extraction_id,
+                result.model_dump(mode="json"),
+                datetime.now(timezone.utc),
+            )
         return self._response(persisted), True
 
     def confirm(
@@ -294,9 +331,23 @@ class CandidateCVExtractionService:
         error_code: str,
         failure_reason: str,
     ) -> None:
-        self.extraction_repository.mark_failed(
-            extraction_id,
-            error_code,
-            failure_reason,
-            datetime.now(timezone.utc),
-        )
+        logging.getLogger(__name__).warning("CV extraction terminal failure extraction_id=%s code=%s", extraction_id, error_code)
+        with self._persistence_diagnostics(extraction_id, failed=True):
+            self.extraction_repository.mark_failed(
+                extraction_id,
+                error_code,
+                failure_reason,
+                datetime.now(timezone.utc),
+            )
+
+    @contextmanager
+    def _persistence_diagnostics(self, extraction_id, failed=False):
+        started = time.perf_counter()
+        try:
+            yield
+        finally:
+            diagnostics = getattr(getattr(self, '_diagnostic_extractor', None), 'last_diagnostics', None)
+            if diagnostics is not None:
+                diagnostics.timings['persistence_ms'] = max(0, time.perf_counter() - started) * 1000
+                log = logging.getLogger(__name__).warning if failed else logging.getLogger(__name__).info
+                log('CV extraction diagnostics extraction_id=%s summary=%s', extraction_id, json.dumps(diagnostics.snapshot()))

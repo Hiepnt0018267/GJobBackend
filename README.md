@@ -34,9 +34,27 @@ fallback:
 AI_PROVIDER=ollama
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_LLM_MODEL=qwen3:8b
-OLLAMA_LLM_TIMEOUT_SECONDS=90
-OLLAMA_LLM_NUM_CTX=8192
+OLLAMA_LLM_TIMEOUT_SECONDS=165
+OLLAMA_LLM_NUM_CTX=10240
+OLLAMA_LLM_NUM_PREDICT=4608
+OLLAMA_LLM_SAFETY_MARGIN=256
+CV_EXTRACTION_TOTAL_TIMEOUT_SECONDS=230
+CV_EXTRACTION_CORRECTION_MIN_SECONDS=60
+CV_EXTRACTION_NETWORK_MARGIN_SECONDS=20
 ```
+
+Structured CV extraction reserves the output cap and safety margin before generation
+when authoritative counting is available. Local Windows/Ollama0.34.2 uses render-only
+plus the same model's native tokenizer. If unavailable, character estimates are
+diagnostic only: a verified runtime enforces `shift=false`, `truncate=false` and
+`num_predict`. Unknown runtime safety is a typed readiness error, not a CV-size claim.
+
+The total deadline covers document reading, preflight, generation, validation and at
+most one correction, which requires60s remaining. Candidate clients read
+`GET /api/v1/candidate/cvs/extraction-policy` for operation/request timeouts (default
+230s+20s margin). Context/output/deadline failures are terminal; no automatic limit
+increase or bulk retry. Installed Qwen metadata supports40960; extraction now uses
+explicit10240 with the same output/deadline budgets. BGE-M3 remains8192/4096.
 
 For the initial 8 GB GPU deployment, run Ollama with `OLLAMA_NUM_PARALLEL=1`.
 The API sends `think=false`, `temperature=0`, and rejects a result when Ollama's
@@ -89,6 +107,8 @@ EMBEDDING_PROVIDER=ollama
 EMBEDDING_MODEL=bge-m3
 OLLAMA_BASE_URL=http://localhost:11434
 EMBEDDING_TIMEOUT_SECONDS=30
+EMBEDDING_NUM_CTX=8192
+EMBEDDING_NUM_BATCH=4096
 ```
 
 For a local smoke check, install Ollama, run `ollama pull bge-m3`, and start the
@@ -99,10 +119,48 @@ or network access.
 
 Candidate and recruiter detail workflows can request an on-demand CV/job match.
 The backend stores one current derived result per CV/job pair and reuses it only
-while deterministic matching fingerprints, engine versions, provider, and model
+while deterministic matching fingerprints, engine versions, provider, model and embedding profile(context included)
 remain current. Baseline evidence and raw semantic similarity stay separate.
 
 Only the validated baseline result and semantic scalar/metadata are persisted.
 Canonical text and raw embedding vectors are never stored, and this feature does
 not require pgvector. Candidate access is limited to an owned CV and approved Job;
 Recruiter access is limited to the CV referenced by an application for an owned Job.
+
+## Opt-in recruiter applicant AI ordering
+
+Existing applicant GET endpoints preserve `created_at DESC, id DESC` by default.
+`sort=ai_match` orders the complete owner/business-filtered set using cached BGE-M3
+vectors and raw cosine, then paginates. No embedding/extraction is performed by GET.
+Ranked applicants precede pending/unavailable/error applicants; all remain accessible
+unless the caller explicitly supplies `ai_top_n=N`. `page_size` is transport only.
+Cosine is NOT a percentage, probability, eligibility rule or hiring decision.
+
+AI page 1 returns `ranking_snapshot`; pass the same token, filters, page_size and
+ai_top_n on subsequent pages. Its ten-minute order and availability view stays fixed
+when precompute finishes. Membership/status/canonical/profile changes return 409;
+restart at page 1. Expiration also returns 409. AI page >1 without token returns 422.
+Default pages retain existing semantics and need no token.
+
+After CV create/update, successful extraction/confirmation, and recruiter job
+create/update, a best-effort BackgroundTask precomputes ONE entity. It owns a fresh
+DB session, closes it before provider work, invokes no extraction, and performs at
+most one `/api/embed` request. A cache hit makes no provider request. This is not a
+durable queue: failed/crashed work may remain pending/error until another lifecycle
+event or an operator invokes `precompute_entity(kind, UUID)` for that one entity.
+Old unchanged entities are not automatically backfilled by list requests.
+
+Private production storage: `RANKING_CACHE_ROOT=.cache/recruiter-ranking` (ignored,
+never under a public/static directory). Share this root between workers of one
+deployment and restrict OS access to the service account; snapshots/vectors are
+private derived data. It must NOT point to evaluation caches. Expired snapshots are
+removed when accessed; operators should periodically remove expired snapshots and
+obsolete vector identities under this dedicated root. Crash leases require verified
+operator cleanup, not automatic takeover. No migration or pgvector is required.
+
+`RANKING_MODEL_DIGEST` pins the verified BGE-M3 digest (current default
+`7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab`). Precompute verifies
+it against local Ollama tags before and after generation. Model replacement requires
+an explicit pin update and new cache identities. The shared frozen request remains
+8192 context,4096 physical batch,truncate=false,1024 dimensions. List performs no
+runtime model discovery; a compatible cached vector is tied to this deployment pin.

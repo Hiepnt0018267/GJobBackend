@@ -95,6 +95,20 @@ def pytest_runtest_setup() -> None:
     _assert_active_test_database()
 
 
+@pytest.fixture(autouse=True)
+def isolate_ranking_lifecycle(monkeypatch, tmp_path):
+    """New lifecycle hooks must never contact a live embedding server in pytest.
+
+    Focused ranking tests exercise precompute separately with synthetic providers.
+    """
+    from app.routers import cvs, recruiters
+    async def no_live_precompute(*args, **kwargs):
+        return None
+    monkeypatch.setattr(cvs, "precompute_entity", no_live_precompute)
+    monkeypatch.setattr(recruiters, "precompute_entity", no_live_precompute)
+    monkeypatch.setattr(settings, "ranking_cache_root", str(tmp_path / "ranking"))
+
+
 def pytest_sessionfinish() -> None:
     app.dependency_overrides.pop(database_module.get_db, None)
     test_engine.dispose()

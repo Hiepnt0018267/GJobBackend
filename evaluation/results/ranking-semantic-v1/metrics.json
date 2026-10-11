@@ -1,0 +1,560 @@
+{
+  "algorithm": "semantic-v1",
+  "embedding_identity": {
+    "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+    "model": "bge-m3",
+    "model_digest": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+    "provider": "ollama",
+    "provider_core_sha256": "7a3586fab48a88dc4caf8d0a0adf858615f32fc7afce3c9e7e810f6a3f83109a",
+    "provider_version": "0.34.2",
+    "request_profile": {
+      "endpoint": "/api/embed",
+      "options": {
+        "num_batch": 4096,
+        "num_ctx": 8192
+      },
+      "timeout_seconds": 30.0,
+      "truncate": false
+    },
+    "semantic_core_sha256": "0c347e9dd24ab68b10e2c95a3eea7d634e40a9c094c07e206aed0e62d1319fdf",
+    "shared_profile": {
+      "model": "bge-m3",
+      "num_batch": 4096,
+      "num_ctx": 8192,
+      "provider": "ollama",
+      "truncate": false,
+      "vector_postprocessing": "none",
+      "version": "full-input-context-batch-v2"
+    },
+    "shared_profile_fingerprint": "bcfd85c8e892993fa3111882be45f8beb92a610d191edb4455abb2aed0a908cc"
+  },
+  "embedding_stats": {
+    "cache_hits": 0,
+    "cache_misses": 105,
+    "dimensions": 1024,
+    "model": "bge-m3",
+    "provider": "ollama",
+    "runtime_seconds": 69.48778209998272,
+    "unique_cvs": 95,
+    "unique_jds": 10,
+    "unique_texts": 105
+  },
+  "error_counts": {
+    "DEEP_LIST_INVERSION": 9,
+    "GRADE2_BELOW_TOP3": 8,
+    "GRADE2_BELOW_TOP5": 4,
+    "RELEVANCE_INVERSION": 11,
+    "TOP1_IRRELEVANT": 3,
+    "TOP3_POLLUTION": 22
+  },
+  "explicit_limit_policy": "rank all then take first N",
+  "frozen_inputs": {
+    "ranking_canonical_cvs.jsonl": {
+      "path": "evaluation\\data\\derived\\ranking_canonical_cvs.jsonl",
+      "sha256": "0a7da44fde0cde5f0ff45259093bb7f194cbc40bea502bf02c50bfe66682f615"
+    },
+    "ranking_canonical_jds.jsonl": {
+      "path": "evaluation\\data\\derived\\ranking_canonical_jds.jsonl",
+      "sha256": "9da55f0731adf98c1c7aefe7072759effc04816f6568ddee9caef9f1e14fedc1"
+    },
+    "ranking_canonical_pair_manifest.csv": {
+      "path": "evaluation\\data\\derived\\ranking_canonical_pair_manifest.csv",
+      "sha256": "cd715793e5ba37272d7cd1b82847f58e78879b1aaaf2577efab1c520f1ae92b9"
+    },
+    "ranking_pairs_labeled.csv": {
+      "path": "evaluation\\data\\derived\\ranking_pairs_labeled.csv",
+      "sha256": "a7225aeb073f343c55e283b99b6dd5a38cca426e3ab44a86945d0c5e2cd0e36d"
+    }
+  },
+  "full_list": {
+    "graded_inversions": 54,
+    "jobs_grade2_at_rank1": 3,
+    "jobs_relevant_at_rank1": 7,
+    "relevant_below_top5": 17
+  },
+  "full_list_ranking": true,
+  "ground_truth_grade_counts": {
+    "0": 54,
+    "1": 32,
+    "2": 14
+  },
+  "jobs": 10,
+  "overall": {
+    "mrr": 0.825,
+    "ndcg@1": 0.7,
+    "ndcg@10": 0.8069030045536996,
+    "ndcg@3": 0.674419852994612,
+    "ndcg@5": 0.6960741994799171,
+    "precision@1": 0.7,
+    "precision@3": 0.6333333333333333,
+    "precision@5": 0.58,
+    "recall@1": 0.13027777777777777,
+    "recall@3": 0.4975,
+    "recall@5": 0.6847222222222222
+  },
+  "pairs": 100,
+  "per_job": [
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 2,
+      "grade2_count": 0,
+      "grade_counts": {
+        "0": 9,
+        "1": 1
+      },
+      "inversions": 1,
+      "job_id": "3693065853",
+      "ndcg@1": 0.0,
+      "ndcg@10": 0.6309297535714575,
+      "ndcg@3": 0.6309297535714575,
+      "ndcg@5": 0.6309297535714575,
+      "precision@1": 0.0,
+      "precision@3": 0.3333333333333333,
+      "precision@5": 0.2,
+      "ranking_case_id": "rank_job_030b49989e9b03838e88",
+      "recall@1": 0.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "reciprocal_rank": 0.5,
+      "relevant_count": 1,
+      "strict_grade2": {
+        "first_relevant_rank": null,
+        "precision@1": null,
+        "precision@3": null,
+        "precision@5": null,
+        "recall@1": null,
+        "recall@3": null,
+        "recall@5": null,
+        "reciprocal_rank": null
+      }
+    },
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 1,
+      "grade2_count": 0,
+      "grade_counts": {
+        "0": 7,
+        "1": 3
+      },
+      "inversions": 5,
+      "job_id": "3693589224",
+      "ndcg@1": 1.0,
+      "ndcg@10": 0.86034433104172,
+      "ndcg@3": 0.7039180890341347,
+      "ndcg@5": 0.7039180890341347,
+      "precision@1": 1.0,
+      "precision@3": 0.6666666666666666,
+      "precision@5": 0.4,
+      "ranking_case_id": "rank_job_047e1ee49c4462d5f0cf",
+      "recall@1": 0.3333333333333333,
+      "recall@3": 0.6666666666666666,
+      "recall@5": 0.6666666666666666,
+      "reciprocal_rank": 1.0,
+      "relevant_count": 3,
+      "strict_grade2": {
+        "first_relevant_rank": null,
+        "precision@1": null,
+        "precision@3": null,
+        "precision@5": null,
+        "recall@1": null,
+        "recall@3": null,
+        "recall@5": null,
+        "reciprocal_rank": null
+      }
+    },
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 1,
+      "grade2_count": 4,
+      "grade_counts": {
+        "0": 4,
+        "1": 2,
+        "2": 4
+      },
+      "inversions": 3,
+      "job_id": "3693046701",
+      "ndcg@1": 1.0,
+      "ndcg@10": 0.9420786775925243,
+      "ndcg@3": 0.8026120593560899,
+      "ndcg@5": 0.9395225786842207,
+      "precision@1": 1.0,
+      "precision@3": 1.0,
+      "precision@5": 1.0,
+      "ranking_case_id": "rank_job_7616538cc926787a2a85",
+      "recall@1": 0.16666666666666666,
+      "recall@3": 0.5,
+      "recall@5": 0.8333333333333334,
+      "reciprocal_rank": 1.0,
+      "relevant_count": 6,
+      "strict_grade2": {
+        "first_relevant_rank": 1,
+        "precision@1": 1.0,
+        "precision@3": 0.6666666666666666,
+        "precision@5": 0.8,
+        "recall@1": 0.25,
+        "recall@3": 0.5,
+        "recall@5": 1.0,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 1,
+      "grade2_count": 0,
+      "grade_counts": {
+        "0": 2,
+        "1": 8
+      },
+      "inversions": 0,
+      "job_id": "3693045435",
+      "ndcg@1": 1.0,
+      "ndcg@10": 1.0,
+      "ndcg@3": 1.0,
+      "ndcg@5": 1.0,
+      "precision@1": 1.0,
+      "precision@3": 1.0,
+      "precision@5": 1.0,
+      "ranking_case_id": "rank_job_86256e7f060ccec6b807",
+      "recall@1": 0.125,
+      "recall@3": 0.375,
+      "recall@5": 0.625,
+      "reciprocal_rank": 1.0,
+      "relevant_count": 8,
+      "strict_grade2": {
+        "first_relevant_rank": null,
+        "precision@1": null,
+        "precision@3": null,
+        "precision@5": null,
+        "recall@1": null,
+        "recall@3": null,
+        "recall@5": null,
+        "reciprocal_rank": null
+      }
+    },
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 1,
+      "grade2_count": 0,
+      "grade_counts": {
+        "0": 4,
+        "1": 6
+      },
+      "inversions": 3,
+      "job_id": "3701321399",
+      "ndcg@1": 1.0,
+      "ndcg@10": 0.9705437052559006,
+      "ndcg@3": 1.0,
+      "ndcg@5": 0.8539316501572937,
+      "precision@1": 1.0,
+      "precision@3": 1.0,
+      "precision@5": 0.8,
+      "ranking_case_id": "rank_job_89fd797f815313096a1d",
+      "recall@1": 0.16666666666666666,
+      "recall@3": 0.5,
+      "recall@5": 0.6666666666666666,
+      "reciprocal_rank": 1.0,
+      "relevant_count": 6,
+      "strict_grade2": {
+        "first_relevant_rank": null,
+        "precision@1": null,
+        "precision@3": null,
+        "precision@5": null,
+        "recall@1": null,
+        "recall@3": null,
+        "recall@5": null,
+        "reciprocal_rank": null
+      }
+    },
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 1,
+      "grade2_count": 5,
+      "grade_counts": {
+        "0": 1,
+        "1": 4,
+        "2": 5
+      },
+      "inversions": 8,
+      "job_id": "3697399507",
+      "ndcg@1": 1.0,
+      "ndcg@10": 0.9327301383515514,
+      "ndcg@3": 0.8026120593560899,
+      "ndcg@5": 0.7698724385020872,
+      "precision@1": 1.0,
+      "precision@3": 1.0,
+      "precision@5": 1.0,
+      "ranking_case_id": "rank_job_a860f9c853a4d145a149",
+      "recall@1": 0.1111111111111111,
+      "recall@3": 0.3333333333333333,
+      "recall@5": 0.5555555555555556,
+      "reciprocal_rank": 1.0,
+      "relevant_count": 9,
+      "strict_grade2": {
+        "first_relevant_rank": 1,
+        "precision@1": 1.0,
+        "precision@3": 0.6666666666666666,
+        "precision@5": 0.6,
+        "recall@1": 0.2,
+        "recall@3": 0.4,
+        "recall@5": 0.6,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 4,
+      "grade2_count": 1,
+      "grade_counts": {
+        "0": 8,
+        "1": 1,
+        "2": 1
+      },
+      "inversions": 7,
+      "job_id": "3699411457",
+      "ndcg@1": 0.0,
+      "ndcg@10": 0.4539434726620534,
+      "ndcg@3": 0.0,
+      "ndcg@5": 0.35583989829307827,
+      "precision@1": 0.0,
+      "precision@3": 0.0,
+      "precision@5": 0.2,
+      "ranking_case_id": "rank_job_ba1101c8423ea2bdc5c7",
+      "recall@1": 0.0,
+      "recall@3": 0.0,
+      "recall@5": 0.5,
+      "reciprocal_rank": 0.25,
+      "relevant_count": 2,
+      "strict_grade2": {
+        "first_relevant_rank": 4,
+        "precision@1": 0.0,
+        "precision@3": 0.0,
+        "precision@5": 0.2,
+        "recall@1": 0.0,
+        "recall@3": 0.0,
+        "recall@5": 1.0,
+        "reciprocal_rank": 0.25
+      }
+    },
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 2,
+      "grade2_count": 0,
+      "grade_counts": {
+        "0": 9,
+        "1": 1
+      },
+      "inversions": 1,
+      "job_id": "3699410505",
+      "ndcg@1": 0.0,
+      "ndcg@10": 0.6309297535714575,
+      "ndcg@3": 0.6309297535714575,
+      "ndcg@5": 0.6309297535714575,
+      "precision@1": 0.0,
+      "precision@3": 0.3333333333333333,
+      "precision@5": 0.2,
+      "ranking_case_id": "rank_job_bfeea8a8b8995516cb3e",
+      "recall@1": 0.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "reciprocal_rank": 0.5,
+      "relevant_count": 1,
+      "strict_grade2": {
+        "first_relevant_rank": null,
+        "precision@1": null,
+        "precision@3": null,
+        "precision@5": null,
+        "recall@1": null,
+        "recall@3": null,
+        "recall@5": null,
+        "reciprocal_rank": null
+      }
+    },
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 1,
+      "grade2_count": 4,
+      "grade_counts": {
+        "0": 5,
+        "1": 1,
+        "2": 4
+      },
+      "inversions": 12,
+      "job_id": "3699421616",
+      "ndcg@1": 1.0,
+      "ndcg@10": 0.8452609404156496,
+      "ndcg@3": 0.7039180890341348,
+      "ndcg@5": 0.6054325501994835,
+      "precision@1": 1.0,
+      "precision@3": 0.6666666666666666,
+      "precision@5": 0.6,
+      "ranking_case_id": "rank_job_c6ab53cbebb914bc5cb7",
+      "recall@1": 0.2,
+      "recall@3": 0.4,
+      "recall@5": 0.6,
+      "reciprocal_rank": 1.0,
+      "relevant_count": 5,
+      "strict_grade2": {
+        "first_relevant_rank": 1,
+        "precision@1": 1.0,
+        "precision@3": 0.6666666666666666,
+        "precision@5": 0.4,
+        "recall@1": 0.25,
+        "recall@3": 0.5,
+        "recall@5": 0.5,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "candidate_count": 10,
+      "first_relevant_rank": 1,
+      "grade2_count": 0,
+      "grade_counts": {
+        "0": 5,
+        "1": 5
+      },
+      "inversions": 14,
+      "job_id": "3693050905",
+      "ndcg@1": 1.0,
+      "ndcg@10": 0.8022692730746812,
+      "ndcg@3": 0.46927872602275644,
+      "ndcg@5": 0.4703652827859579,
+      "precision@1": 1.0,
+      "precision@3": 0.3333333333333333,
+      "precision@5": 0.4,
+      "ranking_case_id": "rank_job_d16e63af2f39a31b166d",
+      "recall@1": 0.2,
+      "recall@3": 0.2,
+      "recall@5": 0.4,
+      "reciprocal_rank": 1.0,
+      "relevant_count": 5,
+      "strict_grade2": {
+        "first_relevant_rank": null,
+        "precision@1": null,
+        "precision@3": null,
+        "precision@5": null,
+        "recall@1": null,
+        "recall@3": null,
+        "recall@5": null,
+        "reciprocal_rank": null
+      }
+    }
+  ],
+  "policy": {
+    "aggregation": "macro by job",
+    "bootstrap_resamples": 1000,
+    "deep_list_inversion": "grade 0 at least 3 ranks above at least 2 grade1 candidates",
+    "discount": "log2(rank + 1)",
+    "explicit_limit_policy": "rank all then take first N",
+    "full_list_ranking": true,
+    "gain": "2^grade - 1",
+    "ndcg_k": [
+      1,
+      3,
+      5,
+      10
+    ],
+    "precision_recall_k": [
+      1,
+      3,
+      5
+    ],
+    "primary_relevant": "grade >= 1",
+    "production_default_limit": null,
+    "seed": 42,
+    "strict_grade2_zero_positive": "undefined, excluded from secondary averages; query retained",
+    "tie_policy": "semantic_score DESC, pair_id ASC"
+  },
+  "production_default_limit": null,
+  "score_ties": {
+    "exact_tie_groups": 0,
+    "jobs_affected": 0,
+    "maximum_group_size": 1,
+    "tied_pairs": 0
+  },
+  "strict_grade2": {
+    "contributing_queries": 4,
+    "precision@1": 0.75,
+    "precision@3": 0.5,
+    "precision@5": 0.5,
+    "recall@1": 0.175,
+    "recall@3": 0.35,
+    "recall@5": 0.775,
+    "reciprocal_rank": 0.8125,
+    "undefined_queries": 6
+  },
+  "task": "14C.2",
+  "top_k_grade_composition": {
+    "1": {
+      "0": {
+        "count": 3,
+        "rate": 0.3
+      },
+      "1": {
+        "count": 4,
+        "rate": 0.4
+      },
+      "2": {
+        "count": 3,
+        "rate": 0.3
+      }
+    },
+    "3": {
+      "0": {
+        "count": 11,
+        "rate": 0.36666666666666664
+      },
+      "1": {
+        "count": 13,
+        "rate": 0.43333333333333335
+      },
+      "2": {
+        "count": 6,
+        "rate": 0.2
+      }
+    },
+    "5": {
+      "0": {
+        "count": 21,
+        "rate": 0.42
+      },
+      "1": {
+        "count": 19,
+        "rate": 0.38
+      },
+      "2": {
+        "count": 10,
+        "rate": 0.2
+      }
+    }
+  },
+  "variance": {
+    "ndcg@10": {
+      "count": 10,
+      "max": 1.0,
+      "mean": 0.8069030045536996,
+      "median": 0.8528026357286849,
+      "min": 0.4539434726620534
+    },
+    "ndcg@5": {
+      "count": 10,
+      "max": 1.0,
+      "mean": 0.6960741994799171,
+      "median": 0.6674239213027962,
+      "min": 0.35583989829307827
+    },
+    "precision@3": {
+      "count": 10,
+      "max": 1.0,
+      "mean": 0.6333333333333333,
+      "median": 0.6666666666666666,
+      "min": 0.0
+    },
+    "recall@3": {
+      "count": 10,
+      "max": 1.0,
+      "mean": 0.4975,
+      "median": 0.45,
+      "min": 0.0
+    }
+  }
+}

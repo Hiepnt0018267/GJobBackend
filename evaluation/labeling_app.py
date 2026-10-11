@@ -22,11 +22,15 @@ class HumanDecision(BaseModel):
 
 def progress_for_input(input_path: Path) -> Path:
     """Each input dataset owns its progress; never fall back to legacy progress."""
+    if input_path.stem == 'ranking_pairs_seed':
+        return input_path.with_name('ranking_labeling_progress.csv')
     suffix = input_path.stem.removeprefix('evaluation_pairs_')
     return input_path.with_name(f'evaluation_labeling_progress_{suffix}.csv')
 
 
 def output_for_input(input_path: Path) -> Path:
+    if input_path.stem == 'ranking_pairs_seed':
+        return input_path.with_name('ranking_pairs_labeled.csv')
     if input_path.stem == 'fresh_test_pairs_seed':
         return input_path.with_name('fresh_test_pairs_labeled.csv')
     return input_path.with_name('evaluation_pairs_labeled.csv')
@@ -50,11 +54,12 @@ def create_app(store: LabelingStore, ai: LabelingAI) -> FastAPI:
 
     @app.get('/', response_class=HTMLResponse)
     def home():
-        return Path(__file__).with_name('labeling_ui.html').read_text(encoding='utf-8').replace('__REVIEW_TOKEN__', token)
+        template = 'ranking_ui.html' if getattr(store, 'is_ranking', False) else 'labeling_ui.html'
+        return Path(__file__).with_name(template).read_text(encoding='utf-8').replace('__REVIEW_TOKEN__', token)
 
     @app.get('/review/state')
     def state():
-        return {**store.summary(), 'model': ai.model}
+        return {**store.summary(), 'model': ai.model if ai is not None else None}
 
     @app.get('/review/pairs/{pid}')
     def pair(pid: str):
@@ -64,6 +69,8 @@ def create_app(store: LabelingStore, ai: LabelingAI) -> FastAPI:
 
     @app.post('/review/pairs/{pid}/suggestion')
     def suggestion(pid: str):
+        if ai is None:
+            raise HTTPException(400, 'Ranking review is human-only; AI suggestions disabled.')
         if pid not in store.by_id:
             raise HTTPException(404, 'Pair not found.')
         try:
@@ -103,18 +110,22 @@ def main(argv=None):
     parser.add_argument('--base-url', default='http://localhost:11434')
     parser.add_argument('--model', default='qwen3:8b')
     parser.add_argument('--port', type=int, default=8501)
+    parser.add_argument('--ranking-manifest', default='evaluation/results/ranking-dataset/seed_manifest.json')
     args = parser.parse_args(argv)
     try:
         input_path = Path(args.input)
         progress = Path(args.progress) if args.progress else progress_for_input(input_path)
         output = Path(args.output) if args.output else output_for_input(input_path)
-        if input_path.stem == 'fresh_test_pairs_seed':
+        if input_path.stem == 'ranking_pairs_seed':
+            from evaluation.ranking_labeling import RankingLabelingStore
+            store = RankingLabelingStore(input_path, Path(args.data_dir), progress, output, Path(args.ranking_manifest))
+        elif input_path.stem == 'fresh_test_pairs_seed':
             from evaluation.fresh_labeling import FreshLabelingStore
             store = FreshLabelingStore(input_path, Path(args.data_dir), progress, output)
         else:
             store = LabelingStore(input_path, Path(args.data_dir), progress, output)
         rubric = Path(__file__).with_name('LABELING_GUIDE.md').read_text(encoding='utf-8')
-        ai = LabelingAI(args.base_url, args.model, rubric)
+        ai = None if getattr(store, 'is_ranking', False) else LabelingAI(args.base_url, args.model, rubric)
     except (EvaluationDataError, OSError) as exc:
         parser.error(str(exc))
     import uvicorn

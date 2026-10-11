@@ -320,3 +320,121 @@ def test_openapi_exposes_explicit_actions_without_generic_status_mutation():
     assert set(paths[f"{BASE}/{{application_id}}/shortlist"]) == {"patch"}
     assert set(paths[f"{BASE}/{{application_id}}/reject"]) == {"patch"}
     assert set(paths[f"{BASE}/{{application_id}}/hire"]) == {"patch"}
+
+
+def test_opt_in_global_ai_paging_authorization_and_no_business_writes(monkeypatch):
+    from app.services.ranking_cache import RankingCache
+    from app.services.cv_structured_extraction_service import CVStructuredExtractionService
+    from app.services import ranking_cache
+    recruiter_token, recruiter_id = _token(UserRole.RECRUITER, "AI Synthetic Owner")
+    other_token, other_id = _token(UserRole.RECRUITER, "AI Synthetic Other")
+    ids = [uuid.UUID(recruiter_id), uuid.UUID(other_id)]
+    scores = {}; lookups = []
+    async def forbidden(*args, **kwargs):
+        raise AssertionError("List must not call extraction/embedding")
+    monkeypatch.setattr(CVStructuredExtractionService, "extract_from_text", forbidden)
+    monkeypatch.setattr(ranking_cache, "get_embedding_provider", lambda: (_ for _ in ()).throw(AssertionError("provider factory in list")))
+    def signals(self, kind, canonical):
+        lookups.append(kind)
+        if kind == "job": return "ranked", [1., 0.]
+        value = scores.get(str(canonical.cv_id))
+        if value is None: return "pending", None
+        return "ranked", [value, (1-value**2)**.5]
+    monkeypatch.setattr(RankingCache, "vector", signals)
+    try:
+        job_id = _create_job(recruiter_id, "AI Synthetic Job")
+        applications = []
+        for i in range(17):
+            candidate_token, candidate_id = _token(UserRole.CANDIDATE, "AI Synthetic Candidate")
+            ids.append(uuid.UUID(candidate_id))
+            cv = _create_cv(candidate_token, f"AI Synthetic CV {i}")
+            applications.append(_apply(candidate_token, job_id, cv["id"]))
+            scores[cv["id"]] = .05 + i*.05
+        newest = client.get(f"/api/v1/recruiters/jobs/{job_id}/applications", headers=_headers(recruiter_token), params={"page_size":100})
+        assert newest.status_code == 200 and newest.json()["total"] == 17 and not lookups
+        default_ids = [item["id"] for item in newest.json()["items"]]
+        assert default_ids == [item["id"] for item in reversed(applications)]
+        denied = client.get(f"/api/v1/recruiters/jobs/{job_id}/applications", headers=_headers(other_token), params={"sort":"ai_match"})
+        assert denied.status_code == 404 and not lookups
+        assert client.get(BASE, headers=_headers(recruiter_token), params={"sort":"invalid"}).status_code == 422
+        assert client.get(BASE, headers=_headers(recruiter_token), params={"ai_top_n":5}).status_code == 422
+        # Move the oldest item to top, proving the database is NOT paginated first.
+        scores[applications[0]["cv_id"]] = .99
+        scores[applications[10]["cv_id"]] = None
+        path = f"/api/v1/recruiters/jobs/{job_id}/applications"
+        params = {"sort":"ai_match", "page_size":5}
+        from sqlalchemy import event
+        from app.core import database
+        queries = []
+        def count_query(connection, cursor, statement, parameters, context, executemany):
+            queries.append(statement)
+        event.listen(database.engine, "before_cursor_execute", count_query)
+        try:
+            first = client.get(path, headers=_headers(recruiter_token), params=params)
+        finally:
+            event.remove(database.engine, "before_cursor_execute", count_query)
+        assert len(queries) <= 8  # constant query count for 17 candidates, not N+1
+        assert first.status_code == 200 and first.json()["items"][0]["id"] == applications[0]["id"]
+        snapshot = first.json()["ranking_snapshot"]
+        scores[applications[10]["cv_id"]] = 1.
+        seen = [item["id"] for item in first.json()["items"]]
+        count = len(lookups)
+        for page in (2,3,4):
+            response = client.get(path, headers=_headers(recruiter_token), params={**params,"page":page,"ranking_snapshot":snapshot})
+            assert response.status_code == 200
+            seen.extend(item["id"] for item in response.json()["items"])
+        assert len(seen) == len(set(seen)) == 17 and len(lookups) == count
+        assert client.get(path, headers=_headers(recruiter_token), params={**params,"page":2}).status_code == 422
+        limited = client.get(path, headers=_headers(recruiter_token), params={"sort":"ai_match","ai_top_n":5,"page_size":100})
+        assert limited.status_code == 200 and limited.json()["total"] == 5
+        assert limited.json()["items"][0]["id"] == applications[10]["id"]
+        empty = client.get(path, headers=_headers(recruiter_token), params={"sort":"ai_match", "search":"no-such-application"})
+        assert empty.status_code == 200 and empty.json()["total"] == 0
+        filtered = client.get(path, headers=_headers(recruiter_token), params={"sort":"ai_match", "status":"REJECTED"})
+        assert filtered.status_code == 200 and filtered.json()["total"] == 0
+        # A positive search selects a one-applicant logical set BEFORE ranking.
+        selected = client.get(path, headers=_headers(recruiter_token), params={"sort":"ai_match", "search":"AI Synthetic CV 16"})
+        assert selected.status_code == 200 and selected.json()["total"] == 1
+        assert selected.json()["items"][0]["id"] == applications[16]["id"]
+        assert selected.json()["items"][0]["ai_rank"] == 1
+        db = SessionLocal()
+        try:
+            statuses = db.query(JobApplication.status).filter(JobApplication.job_id == uuid.UUID(job_id)).all()
+            assert all(row[0] == JobApplicationStatus.SUBMITTED for row in statuses)
+        finally:
+            db.close()
+    finally:
+        # Only this task's unique synthetic principals; FK cascades remove their
+        # CV/job/application fixtures. No DEV engine can reach this guarded test.
+        db = SessionLocal()
+        try:
+            db.query(JobApplication).filter(JobApplication.candidate_id.in_(ids)).delete(synchronize_session=False)
+            db.query(Job).filter(Job.recruiter_id.in_(ids)).delete(synchronize_session=False)
+            db.flush()
+            for user_id in ids:
+                user = db.get(User, user_id)
+                if user is not None: db.delete(user)
+            db.commit()
+        finally:
+            db.close()
+
+
+def test_robustness_invalid_params_and_unauthorized_job_do_no_ai_work(monkeypatch):
+    from app.services.applicant_ranking_service import ApplicantRankingService
+    token,user_id=_token(UserRole.RECRUITER,"Robustness Synthetic Recruiter")
+    def forbidden(*args,**kwargs): raise AssertionError("Invalid/unauthorized request performed AI work")
+    monkeypatch.setattr(ApplicantRankingService,"list",forbidden)
+    try:
+        for params in [{"sort":"invalid"},{"sort":"ai_match","ai_top_n":0},
+                       {"sort":"ai_match","ai_top_n":-1},{"sort":"ai_match","page_size":101},
+                       {"sort":"ai_match","page":0},{"sort":"ai_match","ranking_snapshot":"bad"}]:
+            assert client.get(BASE,headers=_headers(token),params=params).status_code==422
+        denied=client.get(f"{JOB_BASE}/{uuid.uuid4()}/applications",headers=_headers(token),params={"sort":"ai_match"})
+        assert denied.status_code==404
+    finally:
+        db=SessionLocal()
+        try:
+            row=db.get(User,uuid.UUID(user_id))
+            if row is not None: db.delete(row)
+            db.commit()
+        finally: db.close()

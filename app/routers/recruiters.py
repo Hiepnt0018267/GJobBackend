@@ -1,6 +1,7 @@
 import uuid
 
-from fastapi import APIRouter, Depends, Query, Response, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Query, Response, status
+from app.services.ranking_precompute import precompute_entity
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -43,8 +44,10 @@ def list_my_jobs(
 
 
 @router.post("/jobs", response_model=RecruiterJobResponse, status_code=status.HTTP_201_CREATED, summary="Create recruiter job")
-def create_my_job(payload: JobCreateRequest, current_user: User = Depends(require_role(UserRole.RECRUITER)), db: Session = Depends(get_db)):
-    return RecruiterJobService(db).create_job(current_user, payload)
+def create_my_job(payload: JobCreateRequest, background_tasks: BackgroundTasks, current_user: User = Depends(require_role(UserRole.RECRUITER)), db: Session = Depends(get_db)):
+    job = RecruiterJobService(db).create_job(current_user, payload)
+    background_tasks.add_task(precompute_entity, "job", job.id)
+    return job
 
 
 @router.get("/jobs/{job_id}", response_model=RecruiterJobResponse, summary="Get a recruiter-owned job")
@@ -53,8 +56,10 @@ def get_my_job(job_id: uuid.UUID, current_user: User = Depends(require_role(User
 
 
 @router.patch("/jobs/{job_id}", response_model=RecruiterJobResponse, summary="Edit a recruiter-owned job")
-def update_my_job(job_id: uuid.UUID, payload: JobUpdateRequest, current_user: User = Depends(require_role(UserRole.RECRUITER)), db: Session = Depends(get_db)):
-    return RecruiterJobService(db).update_job(current_user, job_id, payload)
+def update_my_job(job_id: uuid.UUID, payload: JobUpdateRequest, background_tasks: BackgroundTasks, current_user: User = Depends(require_role(UserRole.RECRUITER)), db: Session = Depends(get_db)):
+    job = RecruiterJobService(db).update_job(current_user, job_id, payload)
+    background_tasks.add_task(precompute_entity, "job", job.id)
+    return job
 
 
 @router.delete("/jobs/{job_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete a recruiter-owned job")
