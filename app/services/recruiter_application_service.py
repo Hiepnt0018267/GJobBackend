@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.models.application import JobApplicationStatus
 from app.models.cv import CVSourceType
+from app.models.notification import NotificationType
 from app.models.user import User
 from app.repositories.recruiter_application_repository import RecruiterApplicationRepository
 from app.schemas.recruiter_application import (
@@ -16,6 +17,7 @@ from app.schemas.recruiter_application import (
     ApplicantRankingMode,
 )
 from app.services.cv_storage_service import CVStorageService
+from app.services.notification_event_service import NotificationEventService
 
 
 class RecruiterApplicationService:
@@ -36,6 +38,7 @@ class RecruiterApplicationService:
         self.db = db
         self.repository = RecruiterApplicationRepository(db)
         self.storage = CVStorageService()
+        self.notification_events = NotificationEventService(db)
 
     @staticmethod
     def _application_or_404(application_id: uuid.UUID, recruiter_id: uuid.UUID, repository: RecruiterApplicationRepository):
@@ -187,10 +190,24 @@ class RecruiterApplicationService:
             raise
 
         if not transitioned:
+            self.repository.rollback()
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="Application status changed. Please try again.",
             )
+        try:
+            self.notification_events.create_application_notification(
+                application.candidate_id,
+                NotificationType.APPLICATION_STATUS_CHANGED,
+                application.id,
+                application.job.title,
+                status=next_status,
+            )
+            self.db.commit()
+            self.db.expire_all()
+        except Exception:
+            self.repository.rollback()
+            raise
         return RecruiterApplicationDetail.model_validate(
             self._application_or_404(application_id, current_user.id, self.repository)
         )

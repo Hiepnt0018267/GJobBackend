@@ -6,11 +6,13 @@ from sqlalchemy.orm import Session
 
 from app.models.application import JobApplication, JobApplicationStatus
 from app.models.job import JobStatus
+from app.models.notification import NotificationType
 from app.models.user import User
 from app.repositories.application_repository import ApplicationRepository
 from app.repositories.cv_repository import CVRepository
 from app.repositories.job_repository import JobRepository
 from app.schemas.application import JobApplicationCreate
+from app.services.notification_event_service import NotificationEventService
 
 
 class ApplicationService:
@@ -18,6 +20,7 @@ class ApplicationService:
         self.application_repository = ApplicationRepository(db)
         self.cv_repository = CVRepository(db)
         self.job_repository = JobRepository(db)
+        self.notification_events = NotificationEventService(db)
 
     def submit_application(self, user: User, job_id: uuid.UUID, payload: JobApplicationCreate) -> JobApplication:
         job = self.job_repository.get_by_id(job_id)
@@ -42,6 +45,12 @@ class ApplicationService:
         try:
             self.application_repository.flush()
             self.application_repository.add_status_history(application, user.id)
+            self.notification_events.create_application_notification(
+                job.recruiter_id,
+                NotificationType.APPLICATION_SUBMITTED,
+                application.id,
+                job.title,
+            )
             self.application_repository.commit()
         except IntegrityError as exc:
             self.application_repository.rollback()

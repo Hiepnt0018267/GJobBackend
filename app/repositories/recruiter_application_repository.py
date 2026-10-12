@@ -117,8 +117,6 @@ class RecruiterApplicationRepository:
                     changed_by_user_id=changed_by_user_id,
                 )
             )
-        self.db.commit()
-        self.db.expire_all()
         return result.rowcount == 1
 
     def rollback(self) -> None:

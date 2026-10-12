@@ -5,18 +5,21 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models.job import Job, JobStatus
+from app.models.notification import NotificationType
 from app.models.recruiter_profile import RecruiterProfile
 from app.models.user import User
 from app.repositories.admin_job_repository import AdminJobRepository
 from app.repositories.admin_audit_log_repository import AdminAuditLogRepository
 from app.schemas.admin_job import AdminJobListResponse, AdminJobResponse
 from app.schemas.job import JobResponse
+from app.services.notification_event_service import NotificationEventService
 
 
 class AdminJobService:
     def __init__(self, db: Session) -> None:
         self.repository = AdminJobRepository(db)
         self.audit_repository = AdminAuditLogRepository(db)
+        self.notification_events = NotificationEventService(db)
 
     def list_jobs(
         self,
@@ -101,6 +104,17 @@ class AdminJobService:
                     entity_type="JOB",
                     entity_id=job.id,
                     metadata={"from_status": JobStatus.PENDING.value, "to_status": target_status.value},
+                )
+                notification_type = (
+                    NotificationType.JOB_APPROVED
+                    if target_status is JobStatus.APPROVED
+                    else NotificationType.JOB_REJECTED
+                )
+                self.notification_events.create_job_notification(
+                    job.recruiter_id,
+                    notification_type,
+                    job.id,
+                    job.title,
                 )
                 self.repository.commit()
                 return job

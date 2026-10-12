@@ -20,6 +20,7 @@ from app.models.admin_audit_log import AdminAuditLog
 from app.models.skill import JobSkill, Skill
 from app.models.saved_job import SavedJob
 from app.models.cv_job_match import CVJobMatch
+from app.models.notification import Notification, NotificationTargetType, NotificationType
 
 __all__ = [
     "User", "UserRole", "RecruiterProfile", "Job", "JobStatus", "EmploymentType",
@@ -28,4 +29,5 @@ __all__ = [
     "CVTemplate", "CVTemplateLayoutKey", "CVFontFamily", "CVFontScale", "CVSectionSpacing", "CVHeadingStyle", "JobApplication", "JobApplicationStatus",
     "ApplicationStatusHistory", "AdminAuditLog",
     "Skill", "JobSkill", "SavedJob", "CVJobMatch",
+    "Notification", "NotificationType", "NotificationTargetType",
 ]

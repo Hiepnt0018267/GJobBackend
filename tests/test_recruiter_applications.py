@@ -288,20 +288,29 @@ def test_recruiter_transition_and_candidate_withdraw_do_not_overwrite_each_other
     try:
         candidate_repository = CandidateApplicationRepository(candidate_db)
         recruiter_repository = RecruiterApplicationRepository(recruiter_db)
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            withdraw = executor.submit(
-                candidate_repository.withdraw_if_eligible,
+
+        def withdraw_with_service_boundary_commit():
+            result = candidate_repository.withdraw_if_eligible(
                 uuid.UUID(application_id),
                 candidate_id,
                 JobApplicationStatus.REVIEWING,
             )
-            shortlist = executor.submit(
-                recruiter_repository.transition_if_current,
+            candidate_db.commit()
+            return result
+
+        def shortlist_with_service_boundary_commit():
+            result = recruiter_repository.transition_if_current(
                 uuid.UUID(application_id),
                 uuid.UUID(recruiter_id),
                 JobApplicationStatus.REVIEWING,
                 JobApplicationStatus.SHORTLISTED,
             )
+            recruiter_db.commit()
+            return result
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            withdraw = executor.submit(withdraw_with_service_boundary_commit)
+            shortlist = executor.submit(shortlist_with_service_boundary_commit)
         assert sorted([withdraw.result(), shortlist.result()]) == [False, True]
     finally:
         candidate_db.close()

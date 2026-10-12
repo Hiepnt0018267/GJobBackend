@@ -5,6 +5,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models.application import JobApplicationStatus
+from app.models.notification import NotificationType
 from app.models.user import User
 from app.repositories.candidate_application_repository import CandidateApplicationRepository
 from app.schemas.application import (
@@ -14,6 +15,7 @@ from app.schemas.application import (
     CandidateApplicationListItem,
     CandidateApplicationListResponse,
 )
+from app.services.notification_event_service import NotificationEventService
 
 
 class CandidateApplicationService:
@@ -24,7 +26,9 @@ class CandidateApplicationService:
     }
 
     def __init__(self, db: Session) -> None:
+        self.db = db
         self.repository = CandidateApplicationRepository(db)
+        self.notification_events = NotificationEventService(db)
 
     def list_applications(
         self,
@@ -79,10 +83,24 @@ class CandidateApplicationService:
             raise
 
         if not withdrawn:
+            self.repository.rollback()
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="Application status changed. Please try again.",
             )
+
+        try:
+            self.notification_events.create_application_notification(
+                application.job.recruiter_id,
+                NotificationType.APPLICATION_WITHDRAWN,
+                application.id,
+                application.job.title,
+            )
+            self.db.commit()
+            self.db.expire_all()
+        except Exception:
+            self.repository.rollback()
+            raise
 
         updated_application = self.repository.get_owned(application_id, current_user.id)
         if updated_application is None:
