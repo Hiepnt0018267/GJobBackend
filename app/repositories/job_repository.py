@@ -9,6 +9,7 @@ from typing import Optional, Tuple, List
 from sqlalchemy import and_, or_, func
 from sqlalchemy.orm import Session, joinedload, selectinload
 
+from app.models.application import JobApplication
 from app.models.job import (
     Job,
     JobStatus,
@@ -45,6 +46,81 @@ class JobRepository:
 
     # ── Public listing ────────────────────────────────────────────────────────
 
+    def _public_jobs_query(
+        self,
+        keyword: Optional[str] = None,
+        location: Optional[str] = None,
+        employment_type: Optional[EmploymentType] = None,
+        experience_level: Optional[ExperienceLevel] = None,
+        industry: Optional[Industry] = None,
+        experience_requirement: Optional[ExperienceRequirement] = None,
+        level: Optional[JobLevel] = None,
+        work_mode: Optional[WorkMode] = None,
+        salary_type: Optional[SalaryType] = None,
+        salary_min: Optional[int] = None,
+        salary_max: Optional[int] = None,
+        skill: Optional[str] = None,
+    ):
+        """Build the single APPROVED-job filter contract shared by public views."""
+        q = self.db.query(Job).filter(Job.status == JobStatus.APPROVED)
+
+        normalized_keyword = keyword.strip() if keyword else ""
+        if normalized_keyword:
+            kw = f"%{normalized_keyword}%"
+            q = q.filter(
+                or_(
+                    Job.title.ilike(kw),
+                    Job.description.ilike(kw),
+                    Job.company_name.ilike(kw),
+                    func.array_to_string(Job.skills, " ").ilike(kw),
+                )
+            )
+
+        normalized_location = location.strip() if location else ""
+        if normalized_location:
+            q = q.filter(Job.location.ilike(f"%{normalized_location}%"))
+
+        if employment_type:
+            q = q.filter(Job.employment_type == employment_type)
+        if experience_level:
+            q = q.filter(Job.experience_level == experience_level)
+        if industry:
+            q = q.filter(Job.industry == industry)
+        if experience_requirement:
+            q = q.filter(Job.experience_requirement == experience_requirement)
+        if level:
+            q = q.filter(Job.level == level)
+        if work_mode:
+            q = q.filter(Job.work_mode == work_mode)
+        if salary_type:
+            q = q.filter(Job.salary_type == salary_type)
+
+        if salary_min is not None:
+            q = q.filter(
+                or_(
+                    and_(Job.salary_type == SalaryType.RANGE, Job.salary_max >= salary_min),
+                    and_(Job.salary_type == SalaryType.FIXED, Job.salary_fixed >= salary_min),
+                    and_(Job.salary_type.is_(None), Job.salary_max >= salary_min),
+                )
+            )
+        if salary_max is not None:
+            q = q.filter(
+                or_(
+                    and_(Job.salary_type == SalaryType.RANGE, Job.salary_min <= salary_max),
+                    and_(Job.salary_type == SalaryType.FIXED, Job.salary_fixed <= salary_max),
+                    and_(Job.salary_type.is_(None), Job.salary_min <= salary_max),
+                )
+            )
+
+        normalized_skill = normalize_skill_name(skill) if skill else ""
+        if normalized_skill:
+            q = (
+                q.join(JobSkill, JobSkill.job_id == Job.id)
+                .join(Skill, Skill.id == JobSkill.skill_id)
+                .filter(Skill.normalized_name == normalized_skill)
+            )
+        return q
+
     def get_public_jobs(
         self,
         keyword: Optional[str] = None,
@@ -67,78 +143,58 @@ class JobRepository:
         Return (items, total) for the public job listing.
         Only APPROVED jobs are returned.
         """
-        q = self.db.query(Job).filter(Job.status == JobStatus.APPROVED)
-
-        # Keyword: search in title, description, company_name, skills array
-        normalized_keyword = keyword.strip() if keyword else ""
-        if normalized_keyword:
-            kw = f"%{normalized_keyword}%"
-            q = q.filter(
-                or_(
-                    Job.title.ilike(kw),
-                    Job.description.ilike(kw),
-                    Job.company_name.ilike(kw),
-                    # Convert ARRAY to searchable string
-                    func.array_to_string(Job.skills, " ").ilike(kw),
-                )
-            )
-
-        normalized_location = location.strip() if location else ""
-        if normalized_location:
-            q = q.filter(Job.location.ilike(f"%{normalized_location}%"))
-
-        if employment_type:
-            q = q.filter(Job.employment_type == employment_type)
-
-        if experience_level:
-            q = q.filter(Job.experience_level == experience_level)
-
-        if industry:
-            q = q.filter(Job.industry == industry)
-
-        if experience_requirement:
-            q = q.filter(Job.experience_requirement == experience_requirement)
-
-        if level:
-            q = q.filter(Job.level == level)
-
-        if work_mode:
-            q = q.filter(Job.work_mode == work_mode)
-
-        if salary_type:
-            q = q.filter(Job.salary_type == salary_type)
-
-        if salary_min is not None:
-            q = q.filter(
-                or_(
-                    and_(Job.salary_type == SalaryType.RANGE, Job.salary_max >= salary_min),
-                    and_(Job.salary_type == SalaryType.FIXED, Job.salary_fixed >= salary_min),
-                    and_(Job.salary_type.is_(None), Job.salary_max >= salary_min),
-                )
-            )
-
-        if salary_max is not None:
-            q = q.filter(
-                or_(
-                    and_(Job.salary_type == SalaryType.RANGE, Job.salary_min <= salary_max),
-                    and_(Job.salary_type == SalaryType.FIXED, Job.salary_fixed <= salary_max),
-                    and_(Job.salary_type.is_(None), Job.salary_min <= salary_max),
-                )
-            )
-
-        normalized_skill = normalize_skill_name(skill) if skill else ""
-        if normalized_skill:
-            q = (
-                q.join(JobSkill, JobSkill.job_id == Job.id)
-                .join(Skill, Skill.id == JobSkill.skill_id)
-                .filter(Skill.normalized_name == normalized_skill)
-            )
+        q = self._public_jobs_query(
+            keyword, location, employment_type, experience_level, industry,
+            experience_requirement, level, work_mode, salary_type, salary_min,
+            salary_max, skill,
+        )
 
         total = q.count()
         q = _apply_sort(q, sort)
         offset = (page - 1) * page_size
         items = q.offset(offset).limit(page_size).all()
         return items, total
+
+    def get_recommendation_jobs(
+        self,
+        candidate_id: uuid.UUID,
+        keyword: Optional[str] = None,
+        location: Optional[str] = None,
+        employment_type: Optional[EmploymentType] = None,
+        experience_level: Optional[ExperienceLevel] = None,
+        industry: Optional[Industry] = None,
+        experience_requirement: Optional[ExperienceRequirement] = None,
+        level: Optional[JobLevel] = None,
+        work_mode: Optional[WorkMode] = None,
+        salary_type: Optional[SalaryType] = None,
+        salary_min: Optional[int] = None,
+        salary_max: Optional[int] = None,
+        skill: Optional[str] = None,
+    ) -> List[Job]:
+        """Return the complete eligible pool before ranking or pagination.
+
+        Every existing application is excluded, including terminal statuses,
+        because the database application identity prevents re-application.
+        """
+        q = self._public_jobs_query(
+            keyword, location, employment_type, experience_level, industry,
+            experience_requirement, level, work_mode, salary_type, salary_min,
+            salary_max, skill,
+        )
+        already_applied = (
+            self.db.query(JobApplication.id)
+            .filter(
+                JobApplication.candidate_id == candidate_id,
+                JobApplication.job_id == Job.id,
+            )
+            .exists()
+        )
+        return (
+            q.filter(~already_applied)
+            .options(selectinload(Job.skill_links).joinedload(JobSkill.skill))
+            .order_by(Job.created_at.desc(), Job.id.desc())
+            .all()
+        )
 
     # ── Public detail ─────────────────────────────────────────────────────────
 

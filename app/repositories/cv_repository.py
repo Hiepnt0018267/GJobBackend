@@ -13,7 +13,7 @@ class CVRepository:
         return (
             self.db.query(CV).options(joinedload(CV.template))
             .filter(CV.candidate_id == candidate_id)
-            .order_by(CV.is_default.desc(), CV.updated_at.desc())
+            .order_by(CV.is_default.desc(), CV.updated_at.desc(), CV.id.desc())
             .all()
         )
 

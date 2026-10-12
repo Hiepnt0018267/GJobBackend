@@ -1,0 +1,51 @@
+{
+  "approved_job_count": 30,
+  "candidate_count": 10,
+  "canonical_content_sha256": {
+    "candidates": "483d101ae3fb9321d81d61d8d678015f350c6d91a04fd2e47a8913959a4d8cc4",
+    "jobs": "3892e6e1da9442a7c96a3752edb96067f034fadcfa6b1025fcf0281f149a8738"
+  },
+  "canonical_version": "matching-canonical-v3-explicit-identity-contract",
+  "controlled_missingness": {
+    "candidate_status": {
+      "15000000-0000-0000-0000-000000000008": "unavailable"
+    },
+    "evidence_type": "diagnostic mask, not an observed BGE failure",
+    "job_status_by_candidate": {
+      "15000000-0000-0000-0000-000000000001": {
+        "15200000-0000-0000-0000-000000000009": "unavailable"
+      },
+      "15000000-0000-0000-0000-000000000002": {
+        "15200000-0000-0000-0000-000000000017": "pending",
+        "15200000-0000-0000-0000-000000000024": "unavailable"
+      },
+      "15000000-0000-0000-0000-000000000004": {
+        "15200000-0000-0000-0000-000000000024": "error"
+      }
+    }
+  },
+  "created_at": "2026-10-11T00:00:00+07:00",
+  "dataset_version": "job-recommendation-v1",
+  "files": {
+    "candidates.jsonl": {
+      "sha256": "94d9bfca9c26502840910ec59af8148dcf44825b1d33c7603a36c4fcad864c5d"
+    },
+    "jobs.jsonl": {
+      "sha256": "9e8f1843c51add5f8b5412d4170940810656fc15cf47c743a087a27b06fb2d89"
+    },
+    "labels.csv": {
+      "sha256": "dfb553c8c933d71b0c0d5225cc448bdc6964913565af238616dadb02fdea4bcd"
+    }
+  },
+  "job_count": 32,
+  "pair_count": 290,
+  "random_seed": 42,
+  "relevance_schema": {
+    "0": "irrelevant",
+    "1": "weak or peripheral fit",
+    "2": "plausible or moderate fit",
+    "3": "strong fit",
+    "binary_relevant": "relevance >= 2"
+  },
+  "schema_version": "job-recommendation-evaluation-schema-v1"
+}
