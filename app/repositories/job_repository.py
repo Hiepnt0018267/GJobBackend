@@ -239,6 +239,12 @@ class JobRepository:
         self.db.refresh(job)
         return job
 
+    def add(self, job: Job) -> Job:
+        """Stage a job inside a caller-owned transaction."""
+        self.db.add(job)
+        self.db.flush()
+        return job
+
     # ── Recruiter management ─────────────────────────────────────────────────
 
     def get_for_recruiter(self, job_id: uuid.UUID, recruiter_id: uuid.UUID) -> Optional[Job]:
@@ -267,6 +273,12 @@ class JobRepository:
         self.db.add(job)
         self.db.commit()
         self.db.refresh(job)
+        return job
+
+    def flush(self, job: Job) -> Job:
+        """Flush a job update without committing the caller-owned transaction."""
+        self.db.add(job)
+        self.db.flush()
         return job
 
     def delete(self, job: Job) -> None:

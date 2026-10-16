@@ -11,12 +11,11 @@ from app.models.admin_audit_log import AdminAuditLog
 from app.models.application import JobApplication, JobApplicationStatus
 from app.models.application_status_history import ApplicationStatusHistory
 from app.models.cv import CV, CVSourceType
-from app.models.job import Job, JobStatus, SalaryType
+from app.models.job import Job, JobStatus
 from app.models.notification import Notification, NotificationTargetType, NotificationType
 from app.models.user import User, UserRole
 from app.repositories.notification_repository import NotificationRepository
 from app.schemas.application import JobApplicationCreate
-from app.schemas.job import JobCreateRequest, JobUpdateRequest
 from app.services.admin_job_service import AdminJobService
 from app.services.application_service import ApplicationService
 from app.services.candidate_application_service import CandidateApplicationService
@@ -25,7 +24,6 @@ from app.services.notification_event_service import (
     build_job_notification,
 )
 from app.services.recruiter_application_service import RecruiterApplicationService
-from app.services.recruiter_job_service import RecruiterJobService
 
 
 EMAIL_PREFIX = "task16b_"
@@ -404,7 +402,7 @@ def test_invalid_application_transitions_and_duplicate_submit_create_no_notifica
     assert _notification_count() == initial_count
 
 
-def test_job_moderation_events_missing_owner_and_no_admin_pending_broadcast():
+def test_job_moderation_events_notify_owner_and_ignore_missing_owner():
     context = _base_context()
     db = SessionLocal()
     try:
@@ -468,30 +466,6 @@ def test_job_moderation_events_missing_owner_and_no_admin_pending_broadcast():
         finally:
             db.close()
         assert _notification_count() == before_repeat
-
-    db = SessionLocal()
-    try:
-        recruiter = db.get(User, context["recruiter"])
-        RecruiterJobService(db).create_job(
-            recruiter,
-            JobCreateRequest(
-                title=f"{JOB_PREFIX} Pending no broadcast",
-                description="No admin notification",
-                company_name="Task 16B Labs",
-                vacancies=1,
-                salary_type=SalaryType.NEGOTIABLE,
-                requirements="Synthetic requirements",
-            ),
-        )
-        RecruiterJobService(db).update_job(
-            recruiter,
-            context["job"],
-            JobUpdateRequest(description="Updated and returned to moderation"),
-        )
-    finally:
-        db.close()
-    assert _notification_rows(context["admin"]) == []
-
 
 def _force_notification_failure(monkeypatch):
     def fail_create(*args, **kwargs):

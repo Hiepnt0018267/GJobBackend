@@ -1,6 +1,7 @@
 import re
 import uuid
 from dataclasses import dataclass
+from typing import Literal
 
 from sqlalchemy.orm import Session
 
@@ -73,10 +74,41 @@ def build_application_notification(
     raise ValueError("unsupported application notification type")
 
 
+def build_registration_notification(
+    notification_type: NotificationType,
+) -> NotificationCopy:
+    if notification_type is NotificationType.CANDIDATE_REGISTERED:
+        return NotificationCopy(
+            title="Ứng viên mới đăng ký",
+            message="Có một tài khoản ứng viên mới vừa đăng ký.",
+        )
+    if notification_type is NotificationType.RECRUITER_REGISTERED:
+        return NotificationCopy(
+            title="Nhà tuyển dụng mới đăng ký",
+            message="Có một tài khoản nhà tuyển dụng mới vừa đăng ký.",
+        )
+    raise ValueError("unsupported registration notification type")
+
+
 def build_job_notification(
-    notification_type: NotificationType, job_title: str
+    notification_type: NotificationType,
+    job_title: str,
+    *,
+    pending_source: Literal["create", "update"] | None = None,
 ) -> NotificationCopy:
     safe_title = _safe_job_title(job_title)
+    if notification_type is NotificationType.JOB_PENDING_REVIEW:
+        if pending_source == "create":
+            return NotificationCopy(
+                title="Có tin tuyển dụng mới chờ duyệt",
+                message="Nhà tuyển dụng vừa đăng một tin tuyển dụng mới cần được xét duyệt.",
+            )
+        if pending_source == "update":
+            return NotificationCopy(
+                title="Tin tuyển dụng đã được chỉnh sửa",
+                message="Một tin tuyển dụng vừa được chỉnh sửa và đang chờ xét duyệt lại.",
+            )
+        raise ValueError("pending job notification source is required")
     if notification_type is NotificationType.JOB_APPROVED:
         return NotificationCopy(
             title="Tin tuyển dụng đã được duyệt",
@@ -136,6 +168,40 @@ class NotificationEventService:
             ),
             NotificationTargetType.APPLICATION,
             application_id,
+        )
+
+    def create_registration_admin_notifications(
+        self,
+        notification_type: NotificationType,
+    ) -> int:
+        copy = build_registration_notification(notification_type)
+        return self.notification_service.create_notifications_for_existing_recipients(
+            self.user_repository.list_active_admin_ids(),
+            notification_type,
+            copy.title,
+            copy.message,
+        )
+
+    def create_job_pending_review_admin_notifications(
+        self,
+        job_id: uuid.UUID,
+        job_title: str,
+        *,
+        pending_source: Literal["create", "update"],
+    ) -> int:
+        notification_type = NotificationType.JOB_PENDING_REVIEW
+        copy = build_job_notification(
+            notification_type,
+            job_title,
+            pending_source=pending_source,
+        )
+        return self.notification_service.create_notifications_for_existing_recipients(
+            self.user_repository.list_active_admin_ids(),
+            notification_type,
+            copy.title,
+            copy.message,
+            NotificationTargetType.JOB,
+            job_id,
         )
 
     def create_job_notification(

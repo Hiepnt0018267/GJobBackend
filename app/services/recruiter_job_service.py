@@ -12,11 +12,14 @@ from app.schemas.job import (
     JobCreateRequest, JobUpdateRequest, RecruiterJobListResponse, RecruiterJobResponse,
     RecruiterJobSortOption, validate_effective_salary,
 )
+from app.services.notification_event_service import NotificationEventService
 
 
 class RecruiterJobService:
     def __init__(self, db: Session) -> None:
+        self.db = db
         self.repository = JobRepository(db)
+        self.notification_events = NotificationEventService(db)
 
     @staticmethod
     def _owned_or_404(job_id: uuid.UUID, recruiter_id: uuid.UUID, repository: JobRepository) -> Job:
@@ -39,7 +42,19 @@ class RecruiterJobService:
 
     def create_job(self, user: User, payload: JobCreateRequest) -> Job:
         job = Job(**payload.model_dump(), recruiter_id=user.id, status=JobStatus.PENDING)
-        return self.repository.create(job)
+        try:
+            self.repository.add(job)
+            self.notification_events.create_job_pending_review_admin_notifications(
+                job.id,
+                job.title,
+                pending_source="create",
+            )
+            self.db.commit()
+            self.db.refresh(job)
+            return job
+        except Exception:
+            self.db.rollback()
+            raise
 
     def update_job(self, user: User, job_id: uuid.UUID, payload: JobUpdateRequest) -> Job:
         job = self.get_job(user, job_id)
@@ -58,11 +73,23 @@ class RecruiterJobService:
             validate_effective_salary(effective_salary)
         except ValueError as exc:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
-        for field, value in changes.items():
-            setattr(job, field, value)
-        # Any editable non-closed state returns to moderation.
-        job.status = JobStatus.PENDING
-        return self.repository.save(job)
+        try:
+            for field, value in changes.items():
+                setattr(job, field, value)
+            # Any editable non-closed state returns to moderation.
+            job.status = JobStatus.PENDING
+            self.repository.flush(job)
+            self.notification_events.create_job_pending_review_admin_notifications(
+                job.id,
+                job.title,
+                pending_source="update",
+            )
+            self.db.commit()
+            self.db.refresh(job)
+            return job
+        except Exception:
+            self.db.rollback()
+            raise
 
     def delete_job(self, user: User, job_id: uuid.UUID) -> None:
         job = self.get_job(user, job_id)

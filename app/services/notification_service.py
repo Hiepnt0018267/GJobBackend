@@ -68,6 +68,38 @@ class NotificationService:
             )
         )
 
+    def create_notifications_for_existing_recipients(
+        self,
+        recipient_user_ids: list[uuid.UUID],
+        notification_type: NotificationType,
+        title: str,
+        message: str,
+        target_type: NotificationTargetType | None = None,
+        target_id: uuid.UUID | None = None,
+    ) -> int:
+        """Create a caller-owned atomic broadcast for pre-verified recipients."""
+        unique_recipient_ids = list(dict.fromkeys(recipient_user_ids))
+        for recipient_user_id in unique_recipient_ids:
+            data = NotificationCreate(
+                recipient_user_id=recipient_user_id,
+                type=notification_type,
+                title=title,
+                message=message,
+                target_type=target_type,
+                target_id=target_id,
+            )
+            self.repository.create(
+                Notification(
+                    user_id=data.recipient_user_id,
+                    type=data.type,
+                    title=data.title,
+                    message=data.message,
+                    target_type=data.target_type,
+                    target_id=data.target_id,
+                )
+            )
+        return len(unique_recipient_ids)
+
     def list_notifications(
         self,
         current_user: User,
