@@ -9,7 +9,9 @@ from app.core.database import get_db
 from app.core.dependencies import require_role
 from app.models.user import User, UserRole
 from app.schemas.matching import CandidateMatchRequest, CVJobMatchResponse
+from app.schemas.subscription import RecruiterFeature
 from app.services.cv_job_match_service import CVJobMatchService
+from app.services.recruiter_entitlement_service import RecruiterEntitlementService
 
 
 router = APIRouter(tags=["Matching"])
@@ -43,6 +45,9 @@ async def match_recruiter_application(
     current_user: User = Depends(require_role(UserRole.RECRUITER)),
     db: Session = Depends(get_db),
 ) -> CVJobMatchResponse:
+    RecruiterEntitlementService(db).require_feature(
+        current_user, RecruiterFeature.DETAILED_CV_JD_MATCH
+    )
     return await CVJobMatchService(db).match_for_recruiter_application(
         current_user,
         application_id,

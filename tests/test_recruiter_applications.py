@@ -335,6 +335,8 @@ def test_opt_in_global_ai_paging_authorization_and_no_business_writes(monkeypatc
     from app.services.ranking_cache import RankingCache
     from app.services.cv_structured_extraction_service import CVStructuredExtractionService
     from app.services import ranking_cache
+    from app.services.recruiter_entitlement_service import RecruiterEntitlementService
+    monkeypatch.setattr(RecruiterEntitlementService, "require_feature", lambda *args: None)
     recruiter_token, recruiter_id = _token(UserRole.RECRUITER, "AI Synthetic Owner")
     other_token, other_id = _token(UserRole.RECRUITER, "AI Synthetic Other")
     ids = [uuid.UUID(recruiter_id), uuid.UUID(other_id)]
@@ -430,6 +432,8 @@ def test_opt_in_global_ai_paging_authorization_and_no_business_writes(monkeypatc
 
 def test_robustness_invalid_params_and_unauthorized_job_do_no_ai_work(monkeypatch):
     from app.services.applicant_ranking_service import ApplicantRankingService
+    from app.services.recruiter_entitlement_service import RecruiterEntitlementService
+    monkeypatch.setattr(RecruiterEntitlementService, "require_feature", lambda *args: None)
     token,user_id=_token(UserRole.RECRUITER,"Robustness Synthetic Recruiter")
     def forbidden(*args,**kwargs): raise AssertionError("Invalid/unauthorized request performed AI work")
     monkeypatch.setattr(ApplicantRankingService,"list",forbidden)

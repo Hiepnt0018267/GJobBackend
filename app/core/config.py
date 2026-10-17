@@ -9,6 +9,13 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    SEPAY_WEBHOOK_SECRET: str | None = None
+    SEPAY_BANK_NAME: str | None = None
+    SEPAY_BANK_BIN: str | None = None
+    SEPAY_BANK_ACCOUNT: str | None = None
+    SEPAY_ACCOUNT_NAME: str | None = None
+    SEPAY_PAYMENT_CODE_PREFIX: str = "GJOB"
+    PAYMENT_ORDER_TTL_MINUTES: int = Field(default=30, ge=5, le=120)
     CV_UPLOAD_STORAGE_ROOT: str = "uploads"
     CV_UPLOAD_MAX_BYTES: int = 10 * 1024 * 1024
     CV_EXTRACTED_TEXT_MAX_CHARACTERS: int = Field(default=200_000, ge=1_000, le=2_000_000)
@@ -52,6 +59,16 @@ class Settings(BaseSettings):
         if not isinstance(value, str) or not value.strip():
             raise ValueError("Embedding settings cannot be blank.")
         return value.strip()
+
+    @field_validator("SEPAY_PAYMENT_CODE_PREFIX", mode="before")
+    @classmethod
+    def validate_payment_code_prefix(cls, value: object) -> str:
+        if not isinstance(value, str):
+            raise ValueError("SEPAY_PAYMENT_CODE_PREFIX must be a string.")
+        normalized = value.strip().upper()
+        if not normalized or not normalized.isalnum() or len(normalized) > 12:
+            raise ValueError("SEPAY_PAYMENT_CODE_PREFIX must be 1-12 uppercase letters or digits.")
+        return normalized
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -562,6 +562,9 @@ def _headers(user: User) -> dict[str, str]:
 
 
 def test_match_routes_enforce_roles_and_return_typed_components(monkeypatch) -> None:
+    from app.services.recruiter_entitlement_service import RecruiterEntitlementService
+
+    monkeypatch.setattr(RecruiterEntitlementService, "require_feature", lambda *args: None)
     db = SessionLocal()
     try:
         candidate, recruiter, cv, job = _seed_pair(db)

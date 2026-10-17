@@ -88,7 +88,9 @@ def test_public_endpoint_contract_and_validation_without_db(tmp_path, monkeypatc
     from app.routers import recruiter_applications as routes
     from app.core.database import get_db
     from app.services.recruiter_application_service import RecruiterApplicationService
+    from app.services.recruiter_entitlement_service import RecruiterEntitlementService
     from app.services import applicant_ranking_service as ranking
+    monkeypatch.setattr(RecruiterEntitlementService, "require_feature", lambda *args: None)
     rows = applicants(3)
     s = service(tmp_path, rows, {1: .5, 3: .9}, monkeypatch)
     monkeypatch.setattr(ranking, "ApplicantRankingService", lambda db: s)

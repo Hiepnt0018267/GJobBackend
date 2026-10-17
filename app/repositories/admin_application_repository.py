@@ -29,6 +29,7 @@ class AdminApplicationRepository:
         search: str | None,
         job_id: uuid.UUID | None,
         candidate_id: uuid.UUID | None,
+        recruiter_id: uuid.UUID | None,
         page: int,
         page_size: int,
     ) -> tuple[list[JobApplication], int]:
@@ -39,9 +40,17 @@ class AdminApplicationRepository:
             query = query.filter(JobApplication.job_id == job_id)
         if candidate_id is not None:
             query = query.filter(JobApplication.candidate_id == candidate_id)
+        if recruiter_id is not None:
+            query = query.join(Job, Job.id == JobApplication.job_id).filter(
+                Job.recruiter_id == recruiter_id
+            )
         if search:
             search_pattern = f"%{search}%"
-            query = query.join(JobApplication.candidate).join(JobApplication.job).filter(
+            if recruiter_id is None:
+                query = query.join(JobApplication.candidate).join(JobApplication.job)
+            else:
+                query = query.join(JobApplication.candidate)
+            query = query.filter(
                 or_(
                     User.full_name.ilike(search_pattern),
                     User.email.ilike(search_pattern),

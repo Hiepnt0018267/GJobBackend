@@ -9,7 +9,11 @@ from app.models.job import JobStatus
 from app.models.user import User, UserRole
 from app.schemas.admin_dashboard import AdminDashboardResponse
 from app.schemas.admin_job import AdminJobListResponse, AdminJobResponse
-from app.schemas.admin_user import AdminUserDetailResponse, AdminUserListResponse
+from app.schemas.admin_user import (
+    AdminUserDetailResponse,
+    AdminUserListResponse,
+    AdminUserRoleOverviewResponse,
+)
 from app.services.admin_dashboard_service import AdminDashboardService
 from app.services.admin_job_service import AdminJobService
 from app.services.admin_user_service import AdminUserService
@@ -48,6 +52,19 @@ def get_user_for_admin(
     return AdminUserService(db).get_user(user_id)
 
 
+@router.get(
+    "/users/{user_id}/overview",
+    response_model=AdminUserRoleOverviewResponse,
+    summary="Get role-aware user activity overview",
+)
+def get_user_overview_for_admin(
+    user_id: uuid.UUID,
+    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    db: Session = Depends(get_db),
+):
+    return AdminUserService(db).get_user_overview(user_id)
+
+
 @router.patch("/users/{user_id}/activate", response_model=AdminUserDetailResponse, summary="Activate a user account")
 def activate_user_for_admin(
     user_id: uuid.UUID,
@@ -70,12 +87,13 @@ def deactivate_user_for_admin(
 def list_jobs_for_admin(
     job_status: JobStatus | None = Query(default=None, alias="status"),
     search: str | None = Query(default=None, max_length=200),
+    recruiter_id: uuid.UUID | None = Query(default=None),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=10, ge=1, le=100),
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminJobService(db).list_jobs(job_status, search, page, page_size)
+    return AdminJobService(db).list_jobs(job_status, search, recruiter_id, page, page_size)
 
 
 @router.get("/jobs/{job_id}", response_model=AdminJobResponse, summary="Get a job for admin moderation")

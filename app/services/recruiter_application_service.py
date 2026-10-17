@@ -16,6 +16,7 @@ from app.schemas.recruiter_application import (
     RecruiterApplicationSort,
     ApplicantRankingMode,
 )
+from app.schemas.subscription import RecruiterFeature
 from app.services.cv_storage_service import CVStorageService
 from app.services.notification_event_service import NotificationEventService
 
@@ -74,6 +75,11 @@ class RecruiterApplicationService:
         validate_ranking_options(ranking_mode, top_n)
         normalized_search = " ".join(search.split()) if search else None
         if sort == RecruiterApplicationSort.ai_match:
+            from app.services.recruiter_entitlement_service import RecruiterEntitlementService
+
+            RecruiterEntitlementService(self.db).require_feature(
+                current_user, RecruiterFeature.AI_CANDIDATE_RANKING
+            )
             if job_id is not None:
                 self._job_or_404(job_id, current_user.id, self.repository)
             # Full owner-filtered query FIRST; no AI before authorization.

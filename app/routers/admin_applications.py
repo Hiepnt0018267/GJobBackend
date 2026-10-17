@@ -20,12 +20,15 @@ def list_applications_for_admin(
     application_status: JobApplicationStatus | None = Query(default=None, alias="status"),
     job_id: uuid.UUID | None = Query(default=None),
     candidate_id: uuid.UUID | None = Query(default=None),
+    recruiter_id: uuid.UUID | None = Query(default=None),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=10, ge=1, le=100),
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    return AdminApplicationService(db).list_applications(application_status, search, job_id, candidate_id, page, page_size)
+    return AdminApplicationService(db).list_applications(
+        application_status, search, job_id, candidate_id, recruiter_id, page, page_size
+    )
 
 
 @router.get("/{application_id}", response_model=AdminApplicationDetail, summary="Get an application for read-only admin audit")

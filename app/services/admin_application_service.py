@@ -17,9 +17,9 @@ class AdminApplicationService:
     def __init__(self, db: Session) -> None:
         self.repository = AdminApplicationRepository(db)
 
-    def list_applications(self, application_status: JobApplicationStatus | None, search: str | None, job_id: uuid.UUID | None, candidate_id: uuid.UUID | None, page: int, page_size: int) -> AdminApplicationListResponse:
+    def list_applications(self, application_status: JobApplicationStatus | None, search: str | None, job_id: uuid.UUID | None, candidate_id: uuid.UUID | None, recruiter_id: uuid.UUID | None, page: int, page_size: int) -> AdminApplicationListResponse:
         normalized_search = search.strip() if search else None
-        items, total = self.repository.list_applications(application_status, normalized_search, job_id, candidate_id, page, page_size)
+        items, total = self.repository.list_applications(application_status, normalized_search, job_id, candidate_id, recruiter_id, page, page_size)
         return AdminApplicationListResponse(items=[AdminApplicationListItem.model_validate(item) for item in items], page=page, page_size=page_size, total=total, total_pages=math.ceil(total / page_size) if total else 0)
 
     def get_application(self, application_id: uuid.UUID) -> AdminApplicationDetail:

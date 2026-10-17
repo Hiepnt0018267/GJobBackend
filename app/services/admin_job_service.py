@@ -25,11 +25,14 @@ class AdminJobService:
         self,
         job_status: JobStatus | None,
         search: str | None,
+        recruiter_id: uuid.UUID | None,
         page: int,
         page_size: int,
     ) -> AdminJobListResponse:
         normalized_search = search.strip() if search else None
-        items, total = self.repository.list_jobs(job_status, normalized_search, page, page_size)
+        items, total = self.repository.list_jobs(
+            job_status, normalized_search, recruiter_id, page, page_size
+        )
         return AdminJobListResponse(
             items=self._to_responses(items),
             page=page,

@@ -16,12 +16,15 @@ class AdminJobRepository:
         self,
         job_status: JobStatus | None,
         search: str | None,
+        recruiter_id: uuid.UUID | None,
         page: int,
         page_size: int,
     ) -> tuple[list[Job], int]:
         query = self.db.query(Job)
         if job_status is not None:
             query = query.filter(Job.status == job_status)
+        if recruiter_id is not None:
+            query = query.filter(Job.recruiter_id == recruiter_id)
         if search:
             search_pattern = f"%{search}%"
             query = query.filter(

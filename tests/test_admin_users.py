@@ -1,5 +1,6 @@
 """Task 10C: ADMIN-only user management integration tests."""
 import uuid
+from datetime import datetime, timezone
 
 import pytest
 from fastapi import HTTPException
@@ -9,8 +10,10 @@ from sqlalchemy import select
 from app.core.database import SessionLocal
 from app.core.security import hash_password
 from app.main import app
-from app.models.application import JobApplication
-from app.models.cv import CV
+from app.models.application import JobApplication, JobApplicationStatus
+from app.models.cv import CV, CVSourceType
+from app.models.job import Job, JobStatus
+from app.models.saved_job import SavedJob
 from app.models.user import User, UserRole
 from app.services.admin_user_service import AdminUserService
 
@@ -68,10 +71,14 @@ def _cleanup_task_records() -> None:
             db.scalars(select(User.id).where(User.email.like("task10c_%@example.com")))
         )
         if user_ids:
+            db.query(SavedJob).filter(SavedJob.candidate_id.in_(user_ids)).delete(
+                synchronize_session=False
+            )
             db.query(JobApplication).filter(JobApplication.candidate_id.in_(user_ids)).delete(
                 synchronize_session=False
             )
             db.query(CV).filter(CV.candidate_id.in_(user_ids)).delete(synchronize_session=False)
+            db.query(Job).filter(Job.recruiter_id.in_(user_ids)).delete(synchronize_session=False)
             db.query(User).filter(User.id.in_(user_ids)).delete(synchronize_session=False)
         db.commit()
     finally:
@@ -180,6 +187,109 @@ def test_admin_views_safe_user_detail_and_handles_missing_user():
     assert body["bio"] == "Recruiter support detail"
     assert "password_hash" not in body
     assert client.get(f"{BASE}/{uuid.uuid4()}", headers=_headers(_admin_token())).status_code == 404
+
+
+def test_admin_user_overview_is_role_aware_and_read_only():
+    candidate = _create_user(UserRole.CANDIDATE)
+    recruiter = _create_user(UserRole.RECRUITER)
+    administrator = _create_user(UserRole.ADMIN)
+    admin_token = _admin_token()
+
+    candidate_response = client.get(
+        f"{BASE}/{candidate.id}/overview", headers=_headers(admin_token)
+    )
+    assert candidate_response.status_code == 200, candidate_response.text
+    candidate_body = candidate_response.json()
+    assert candidate_body["role"] == "CANDIDATE"
+    assert candidate_body["candidate"]["cv_total"] == 0
+    assert candidate_body["candidate"]["application_total"] == 0
+    assert candidate_body["candidate"]["saved_job_total"] == 0
+    assert candidate_body["recruiter"] is None
+
+    recruiter_response = client.get(
+        f"{BASE}/{recruiter.id}/overview", headers=_headers(admin_token)
+    )
+    assert recruiter_response.status_code == 200, recruiter_response.text
+    recruiter_body = recruiter_response.json()
+    assert recruiter_body["role"] == "RECRUITER"
+    assert recruiter_body["recruiter"]["job_total"] == 0
+    assert recruiter_body["recruiter"]["current_plan"]["code"] == "FREE"
+    assert recruiter_body["recruiter"]["revenue"] == "0"
+    assert recruiter_body["candidate"] is None
+
+    admin_response = client.get(
+        f"{BASE}/{administrator.id}/overview", headers=_headers(admin_token)
+    )
+    assert admin_response.status_code == 200, admin_response.text
+    assert admin_response.json()["administrator"]["audit_action_total"] == 0
+
+    assert client.get(f"{BASE}/{candidate.id}/overview").status_code == 401
+    assert client.get(
+        f"{BASE}/{candidate.id}/overview", headers=_headers(_token(UserRole.CANDIDATE))
+    ).status_code == 403
+    assert client.get(
+        f"{BASE}/{uuid.uuid4()}/overview", headers=_headers(admin_token)
+    ).status_code == 404
+
+
+def test_role_overview_counts_candidate_and_recruiter_activity() -> None:
+    candidate = _create_user(UserRole.CANDIDATE)
+    recruiter = _create_user(UserRole.RECRUITER)
+    admin_token = _admin_token()
+    db = SessionLocal()
+    try:
+        cv = CV(
+            candidate_id=candidate.id,
+            source_type=CVSourceType.UPLOADED,
+            title="Overview CV",
+            is_default=True,
+            storage_key=f"tests/{uuid.uuid4().hex}.pdf",
+            original_filename="overview.pdf",
+            mime_type="application/pdf",
+            file_size=100,
+            uploaded_at=datetime.now(timezone.utc),
+        )
+        job = Job(
+            recruiter_id=recruiter.id,
+            title="Overview Job",
+            description="Role overview test",
+            company_name="Overview Company",
+            status=JobStatus.APPROVED,
+        )
+        db.add_all([cv, job])
+        db.flush()
+        db.add_all(
+            [
+                JobApplication(
+                    candidate_id=candidate.id,
+                    job_id=job.id,
+                    cv_id=cv.id,
+                    status=JobApplicationStatus.HIRED,
+                ),
+                SavedJob(candidate_id=candidate.id, job_id=job.id),
+            ]
+        )
+        db.commit()
+    finally:
+        db.close()
+
+    candidate_body = client.get(
+        f"{BASE}/{candidate.id}/overview", headers=_headers(admin_token)
+    ).json()["candidate"]
+    assert candidate_body["cv_total"] == 1
+    assert candidate_body["uploaded_cv_total"] == 1
+    assert candidate_body["application_total"] == 1
+    assert candidate_body["hired_total"] == 1
+    assert candidate_body["saved_job_total"] == 1
+    assert candidate_body["recent_cvs"][0]["title"] == "Overview CV"
+
+    recruiter_body = client.get(
+        f"{BASE}/{recruiter.id}/overview", headers=_headers(admin_token)
+    ).json()["recruiter"]
+    assert recruiter_body["job_total"] == 1
+    assert recruiter_body["approved_job_total"] == 1
+    assert recruiter_body["received_application_total"] == 1
+    assert recruiter_body["recent_jobs"][0]["application_total"] == 1
 
 
 def test_admin_deactivates_and_reactivates_account_and_old_token_is_denied():

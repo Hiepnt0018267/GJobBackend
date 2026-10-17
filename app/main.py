@@ -20,6 +20,8 @@ from app.routers.saved_jobs import router as saved_jobs_router
 from app.routers.matches import router as matches_router
 from app.routers.job_recommendations import router as job_recommendations_router
 from app.routers.notifications import router as notifications_router
+from app.routers.subscriptions import router as subscriptions_router
+from app.routers.payments import router as payments_router
 
 app = FastAPI(
     title="GJob Backend API",
@@ -60,6 +62,8 @@ app.include_router(saved_jobs_router, prefix="/api/v1")
 app.include_router(matches_router, prefix="/api/v1")
 app.include_router(job_recommendations_router, prefix="/api/v1")
 app.include_router(notifications_router, prefix="/api/v1")
+app.include_router(subscriptions_router, prefix="/api/v1")
+app.include_router(payments_router, prefix="/api/v1")
 
 
 
